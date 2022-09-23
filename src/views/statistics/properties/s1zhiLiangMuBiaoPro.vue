@@ -1,0 +1,108 @@
+<template>
+    <el-dialog
+      :visible.sync="visible"
+      ref="dialog"
+      :title="title+'详情'"
+      width="100%"
+      lock-scroll
+      append-to-body
+      fullscreen
+      close-on-press-escape
+      destroy-on-close
+      v-if="visible"
+      @close="handleClose">
+
+      <div>
+
+    <el-container>
+      <!-- 放统计内容-->
+      <el-aside style="border:0px;width: 13%;"></el-aside>
+      <el-aside style="border:0px;width: 50%;">
+          <s5zhiLiangMuBiaoItem
+            :data="data"
+            width="95%"
+            :height="height"
+            id="s5zhiLiangMuBiaoPro"
+            click="false"
+          />
+      </el-aside>
+        <!-- 参数页面列 -->
+        <el-aside style="border:0px;width: 37%;">
+           <div class="dataCont" style="font-size: 14px;">
+          <el-divider content-position="left">2021 年度</el-divider>
+            投诉处理率 ：<el-tag>90%</el-tag>
+            <el-divider content-position="left">2022 年度</el-divider>
+            投诉处理率 ：<el-tag type="danger">91%</el-tag>
+             <el-divider content-position="left">2021 年度</el-divider>
+            满意度 ：<el-tag>95%</el-tag>
+            <el-divider content-position="left">2022 年度</el-divider>
+              满意度 ：<el-tag type="danger">96%</el-tag>
+            <el-divider content-position="left">2021 年度</el-divider>
+            培训完成率 ：<el-tag>92%</el-tag>
+            <el-divider content-position="left">2022 年度</el-divider>
+              培训完成率 ：<el-tag type="danger">94%</el-tag>
+           </div>
+
+        </el-aside>
+
+      </el-container>
+
+
+      </div>
+    </el-dialog>
+</template>
+
+<script>
+  export default {
+    props:{
+        dialogOff:{ //当前表单示例
+            type: Boolean,
+            default:false,
+          },
+        title:{ type:String},
+        data:{
+          type:Object
+        },
+        height:{
+          type:String,
+          default:window.screen.height * 0.75 +'px'
+        }
+      },
+      beforeCreate: function () {
+          // 官方文档给出的是require
+           this.$options.components.s5zhiLiangMuBiaoItem = () => import('../item/s1zhiLiangMuBiao.vue')
+          },
+
+    watch:{
+     dialogOff: {
+       handler: function(val, oldVal) {
+        this.visible = JSON.parse(JSON.stringify(val));
+        this.itemShow = true
+        },
+        immediate: true
+      }
+    },
+    data() {
+      return {
+        visible:false,
+        itemShow:false,
+
+      }
+    },
+    methods:{
+       // 关闭窗口
+      handleClose(){
+       this.$emit('close', false)
+      }
+    }
+  }
+</script>
+
+<style scoped>
+  .dataCont{
+    border:0px;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+    height: calc(100vh * 0.85);
+    padding:20px;
+  }
+</style>
