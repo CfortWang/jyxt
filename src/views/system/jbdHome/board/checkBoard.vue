@@ -25,12 +25,16 @@
                     <dv-border-box-8>返回</dv-border-box-8>
                 </div>
             </div>
-            <top-bar :data="topBarData" />
+            <!-- topBar -->
+            <dv-border-box-1>
+                <top-bar :data="topBarData" />
+            </dv-border-box-1>
         </dv-full-screen-container>
     </div>
 </template>
 <script>
     import screenfull from 'screenfull'
+    import curdPost from '@/business/platform/form/utils/custom/joinCURD.js'
     export default {
         name: 'checkBoard',
         components: {
@@ -39,7 +43,7 @@
         data() {
             return {
                 titleName: '检测综合信息查询',
-                checkDate: '',
+                checkDate: new Date().toJSON().slice(0, 7),
                 topBarData: {
                     label: 'test',
                     value: 'test value'
@@ -66,9 +70,16 @@
             },
             updateAll() {
                 console.log('update all')
+                this.getTopBarData()
             },
+            // 获取topBar数据
             getTopBarData() {
-                console.log('get topBar data')
+                const sql = `select * from t_mjwtsqb`
+                console.log(sql)
+                curdPost('sql', sql).then(res => {
+                    let { data } = res.variables
+                    console.log(data)
+                })
             }
         }
     }
