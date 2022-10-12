@@ -1,19 +1,19 @@
 <template>
-  <div>
-    <label for="uploadTxt" :class="$style.upload">
-      <el-tooltip class="item" effect="dark" content="请选择格式为txt的原始数据文件" placement="top">
-        <div :class="$style.btn"><i class="el-icon-upload" />选择文件</div>
-      </el-tooltip>
-      <span :class="$style.file">{{ fileName }}</span>
-      <input
-        id="uploadTxt"
-        type="file"
-        accept=".txt"
-        hidden
-        @change="onChange"
-      >
-    </label>
-  </div>
+    <div>
+        <label for="uploadTxt" :class="$style.upload">
+            <el-tooltip class="item" effect="dark" content="请选择格式为txt的原始数据文件" placement="top">
+                <div :class="$style.btn"><i class="el-icon-upload"/>选择文件</div>
+            </el-tooltip>
+            <span :class="$style.file">{{ fileName }}</span>
+            <input
+                id="uploadTxt"
+                type="file"
+                accept=".txt"
+                hidden
+                @change="onChange"
+            >
+        </label>
+    </div>
 </template>
 <script>
     export default {
