@@ -1,7 +1,11 @@
 {
+    "eslintIntegration": true,
     "tabWidth": 4,
+    "printWidth": 80,
+    "proseWrap": "preserve",
     "semi": false,
     "singleQuote": true,
     "trailingComma": "none",
-    "vueIndentScriptAndStyle": true
+    "vueIndentScriptAndStyle": true,
+    "arrowParens": "avoid"
 }
