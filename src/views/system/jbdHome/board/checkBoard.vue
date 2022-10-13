@@ -28,6 +28,10 @@
             <dv-border-box-1>
                 <!-- topBar -->
                 <top-bar v-if="topBarData.length" :info="topBarData" />
+                <!-- middleCard -->
+                <middle-card/>
+                <!-- bottomCard -->
+                <bottom-card/>
             </dv-border-box-1>
         </dv-full-screen-container>
     </div>
@@ -38,7 +42,9 @@
     export default {
         name: 'checkBoard',
         components: {
-            topBar: () => import('./component/topBar')
+            topBar: () => import('./component/topBar'),
+            middleCard: () => import('./component/middleCard'),
+            bottomCard: () => import('./component/bottomCard')
         },
         data() {
             return {
@@ -68,7 +74,6 @@
                 this.$router.back(-1)
             },
             updateAll(e) {
-                console.log(e)
                 this.getTopBarData()
             },
             // 获取topBar数据
@@ -83,42 +88,32 @@
                     curdPost('sql', sql1),
                     curdPost('sql', sql2),
                     curdPost('sql', sql3)
-                ])
-                    .then(([res1, res2, res3]) => {
-                        const data1 = res1.variables.data
-                        const data2 = res2.variables.data
-                        const data3 = res3.variables.data
+                ]).then(([res1, res2, res3]) => {
+                    const data1 = res1.variables.data
+                    const data2 = res2.variables.data
+                    const data3 = res3.variables.data
 
-                        if (
-                            data1 &&
-                            data2 &&
-                            data3 &&
-                            data1.length &&
-                            data2.length &&
-                            data3.length
-                        ) {
-                            let value = [
-                                data1[0].total,
-                                data1[0].accepted,
-                                data2[0].task,
-                                data3[0].report
-                            ]
-                            let result = []
+                    if (data1 && data2 && data3 && data1.length && data2.length && data3.length) {
+                        let value = [
+                            data1[0].total,
+                            data1[0].accepted,
+                            data2[0].task,
+                            data3[0].report
+                        ]
+                        let result = []
 
-                            this.label.forEach((item, index) => {
-                                let obj = {
-                                    title: item,
-                                    value: value[index]
-                                }
-                                result.push(obj)
-                            })
-                            this.topBarData = result
-                            console.log(this.topBarData)
-                        }
-                    })
-                    .catch(error => {
-                        console.log(error)
-                    })
+                        this.label.forEach((item, index) => {
+                            let obj = {
+                                title: item,
+                                value: value[index]
+                            }
+                            result.push(obj)
+                        })
+                        this.topBarData = result
+                    }
+                }).catch(error => {
+                    console.log(error)
+                })
             }
         }
     }

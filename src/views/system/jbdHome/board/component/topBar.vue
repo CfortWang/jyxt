@@ -30,47 +30,33 @@
             }
         },
         components: {},
-        // watch: {
-        //     topBarData(v){
-        //         if (!v || v.length === 0){
-        //             this.pull({
-        //                 startTime: null,
-        //                 endTime: null
-        //             })
-        //         }
-        //     }
-        // },
+        watch: {
+            info(v){
+                console.log(v)
+                this.update()
+            }
+        },
         data() {
             return {
                 topBarData: [],
                 fontColor: [
-                    '#4d99fc',
-                    '#40faee',
-                    '#D39745',
-                    '#4d99fc',
-                    '#f46827',
-                    '#40faee'
+                    '#d20962',
+                    '#f47721',
+                    '#7ac143',
+                    '#00a78e',
+                    '#00bce4',
+                    '#7d3f98',
+                    '#037ef3',
+                    '#f85a40',
+                    '#00c16e',
+                    '#ffd900',
+                    '#0cb9c1',
+                    '#7552cc'
                 ]
             }
         },
         created() {
-            this.info.forEach((item, index) => {
-                const obj = {
-                    title: item.title,
-                    data: {
-                        number: [item.value],
-                        content: '{nt}',
-                        textAlign: 'right',
-                        style: {
-                            fill: this.fontColor[index],
-                            fontWeight: 'bold'
-                        }
-                    },
-                    unit: '件'
-                }
-                this.topBarData.push(obj)
-            })
-            console.log(this.topBarData)
+            this.update()
         },
         methods: {
             //随机颜色
@@ -78,11 +64,30 @@
                 if (arguments.length === 1) {
                     return parseInt(Math.random() * minNum + 1, 10)
                 } else {
-                    return parseInt(
-                        Math.random() * (maxNum - minNum + 1) + minNum,
-                        10
-                    )
+                    return parseInt(Math.random() * (maxNum - minNum + 1) + minNum,10)
                 }
+            },
+            // 数据更新
+            update() {
+                let temp = []
+                this.info.forEach((item, index) => {
+                    const obj = {
+                        title: item.title,
+                        data: {
+                            number: [item.value],
+                            content: '{nt}',
+                            textAlign: 'right',
+                            style: {
+                                fill: this.fontColor[this.getRandom(0, 11)],
+                                fontWeight: 'bold'
+                            }
+                        },
+                        unit: '件'
+                    }
+                    temp.push(obj)
+                })
+                this.topBarData = JSON.parse(JSON.stringify(temp))
+                
             }
         }
     }

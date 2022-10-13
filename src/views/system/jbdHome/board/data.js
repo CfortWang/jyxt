@@ -178,7 +178,7 @@ export const pieOption = {
     }
 }
 
-export const barOption = {
+export const chartData1 = {
     // 图表标题
     title: {
         show: true,
@@ -193,22 +193,34 @@ export const barOption = {
     },
     xAxis: {
         type: 'category',
-        data: [],
-        axisTick: {
-            alignWithLabel: true
-        },
-        axisLabel: {
-            rotate: 45
-        },
-        axisLine: {
-            lineStyle: {
-                color: '#535353'
-            }
-        }
+        data: ['理化','微生物','细胞活率','残留检测','细胞鉴别'],
+        // axisTick: {
+        //     alignWithLabel: true
+        // },
+        // axisLabel: {
+        //     inside: true,
+        //     color: "#000",
+        // },
+        // axisLine: {
+        //     lineStyle: {
+        //         color: '#535353'
+        //     }
+        // },
+          axisLabel: {
+            inside: true,
+            color: "#000",
+          },
+          axisTick: {
+            show: true,
+          },
+          axisLine: {
+            show: true,
+          },
+          z: 10,
     },
     yAxis: {
         type: 'value',
-        name: '投标量',
+        name: '',
         nameTextStyle: {
             color: '#535353',
             fontSize: 14
@@ -224,12 +236,81 @@ export const barOption = {
     },
     series: [{
         type: 'bar',
-        name: '当月投标数',
-        data: [],
+        name: '',
+        data: [100, 200, 300, 400, 500],
         barMaxWidth: '35px',
-        itemStyle: {
-            color: '#3a86ff'
+        // itemStyle: {
+        //     color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+        //         { offset: 0, color: "#83bff6" },
+        //         { offset: 0.5, color: "#188df0" },
+        //         { offset: 1, color: "#188df0" },
+        //     ])
+        // },
+        // emphasis: {
+        //     itemStyle: {
+        //         color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+        //             { offset: 0, color: "#2378f7" },
+        //             { offset: 0.7, color: "#2378f7" },
+        //             { offset: 1, color: "#83bff6" },
+        //         ])
+        //     }
+        // }
+    }],
+    tooltip: {
+        show: true,
+        trigger: 'item'
+    }
+}
+export const chartData2 = {
+    // 图表标题
+    title: {
+        show: true,
+        text: '',
+        textStyle: {
+            color: '#535353',
+            fontSize: 14,
+            fontWeight: '600'
+        },
+        textAlign: 'center',
+        left: '50%'
+    },
+    xAxis: {
+        type: 'category',
+        data: ['已委托未收到样品数量','收到样品数量','已收到不合格样品数量','留样数量','人员检测工作量'],
+        axisTick: {
+            alignWithLabel: true
+        },
+        axisLabel: {
+            inside: true,
+            color: "#000",
+        },
+        axisLine: {
+            lineStyle: {
+                color: '#535353'
+            }
         }
+    },
+    yAxis: {
+        type: 'value',
+        name: '',
+        nameTextStyle: {
+            color: '#535353',
+            fontSize: 14
+        },
+        splitLine: {
+            show: false
+        },
+        axisLine: {
+            lineStyle: {
+                color: '#535353'
+            }
+        }
+    },
+    series: [{
+        type: 'bar',
+        name: '',
+        data: [],
+        barMaxWidth: '35px'
     }],
     tooltip: {
         show: true,
