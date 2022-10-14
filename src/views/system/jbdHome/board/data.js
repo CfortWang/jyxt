@@ -1,36 +1,50 @@
-export const lineOption = {
+import echarts from "echarts"
+
+export const acceptOption = {
     // 图表标题
     title: {
         show: true,
-        text: '未来12个月的项目投标时间分布预测',
+        text: '检测受理类型',
         textStyle: {
-            color: '#535353',
-            fontSize: 14,
+            color: '#fff',
+            fontSize: 20,
             fontWeight: '600'
         },
         textAlign: 'center',
-        left: '50%'
+        left: '50%',
+        top: '20px'
     },
     xAxis: {
         type: 'category',
-        data: [],
+        data: ['理化', '微生物', '细胞活率', '残留检测', '细胞鉴别'],
         axisTick: {
             alignWithLabel: true
         },
         axisLabel: {
-            rotate: 45
+
         },
         axisLine: {
             lineStyle: {
-                color: '#535353'
+                color: '#fff'
             }
-        }
+        },
+        // axisLabel: {
+        //     inside: true,
+        //     color: "#000",
+        // },
+        // axisTick: {
+        //     show: true,
+        // },
+        // axisLine: {
+        //     show: true,
+        // },
+        // z: 10
     },
     yAxis: {
         type: 'value',
-        name: '预计投标量',
+        name: '',
         nameTextStyle: {
-            color: '#535353',
+            color: '#fff',
             fontSize: 14
         },
         splitLine: {
@@ -38,69 +52,344 @@ export const lineOption = {
         },
         axisLine: {
             lineStyle: {
-                color: '#535353'
+                color: '#fff'
             }
         }
     },
-    series: [
-        {
-            name: '预计投标数',
-            data: [],
-            type: 'line',
-            smooth: true,
-            lineStyle: {
-                color: '#1890ff'
-            },
+    series: [{
+        type: 'bar',
+        name: '',
+        data: [100, 200, 300, 400, 500],
+        barMaxWidth: '35px',
+        itemStyle: {
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                { offset: 0, color: "#83bff6" },
+                { offset: 0.5, color: "#188df0" },
+                { offset: 1, color: "#188df0" },
+            ])
+        },
+        emphasis: {
             itemStyle: {
-                color: '#1890ff'
-            },
-            areaStyle: {
-                normal: {
-                    color: {
-                        type: 'linear',
-                        x: 0,
-                        y: 0,
-                        x2: 0,
-                        y2: 1,
-                        colorStops: [
-                            {
-                                offset: 0,
-                                color: 'rgba(58,134,255,1)'
-                            },
-                            {
-                                offset: 1,
-                                color: 'rgba(58,134,255,0)'
-                            }
-                        ],
-                        globalCoord: false
-                    }
-                }
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                    { offset: 0, color: "#2378f7" },
+                    { offset: 0.7, color: "#2378f7" },
+                    { offset: 1, color: "#83bff6" },
+                ])
             }
         }
-    ],
+    }],
     tooltip: {
         show: true,
-        trigger: 'axis',
-        // triggerOn: 'click'
-        axisPointer: {
-            type: 'none'
-        }
-        // formatter: '预计投标数<br />{b}：{c}'
+        trigger: 'axis'
     }
 }
 
-export const pieOption = {
+export const taskOption = {
     // 图表标题
     title: {
         show: true,
-        text: '今年截止至9月份项目投标结果分布',
+        text: '检测任务情况',
         textStyle: {
-            color: '#535353',
-            fontSize: 14,
+            color: '#fff',
+            fontSize: 20,
             fontWeight: '600'
         },
         textAlign: 'center',
-        left: '50%'
+        left: '50%',
+        top: '20px'
+    },
+    xAxis: {
+        type: 'category',
+        data: ['委托', '受理', '任务分配', '报告'],
+        axisTick: {
+            alignWithLabel: true
+        },
+        axisLabel: {
+            // rotate: 25
+        },
+        axisLine: {
+            lineStyle: {
+                color: '#fff'
+            }
+        },
+    },
+    yAxis: {
+        type: 'value',
+        name: '',
+        nameTextStyle: {
+            color: '#fff',
+            fontSize: 14
+        },
+        splitLine: {
+            show: false
+        },
+        axisLine: {
+            lineStyle: {
+                color: '#fff'
+            }
+        }
+    },
+    series: [{
+        type: 'bar',
+        name: '',
+        data: [25, 5, 2, 1],
+        barMaxWidth: '35px',
+        itemStyle: {
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                { offset: 0, color: "#83bff6" },
+                { offset: 0.5, color: "#188df0" },
+                { offset: 1, color: "#188df0" },
+            ])
+        },
+        emphasis: {
+            itemStyle: {
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                    { offset: 0, color: "#2378f7" },
+                    { offset: 0.7, color: "#2378f7" },
+                    { offset: 1, color: "#83bff6" },
+                ])
+            }
+        }
+    }],
+    tooltip: {
+        show: true,
+        trigger: 'axis'
+    }
+}
+
+export const trustOption = {
+    // 图表标题
+    title: {
+        show: true,
+        text: '检测任务情况',
+        textStyle: {
+            color: '#fff',
+            fontSize: 20,
+            fontWeight: '600'
+        },
+        textAlign: 'center',
+        left: '50%',
+        top: '20px'
+    },
+    xAxis: {
+        type: 'category',
+        data: ['委托', '受理', '任务分配', '报告'],
+        axisTick: {
+            alignWithLabel: true
+        },
+        axisLabel: {
+            // rotate: 25
+        },
+        axisLine: {
+            lineStyle: {
+                color: '#fff'
+            }
+        }
+    },
+    yAxis: {
+        type: 'value',
+        name: '',
+        nameTextStyle: {
+            color: '#fff',
+            fontSize: 14
+        },
+        splitLine: {
+            show: false
+        },
+        axisLine: {
+            lineStyle: {
+                color: '#fff'
+            }
+        }
+    },
+    series: [{
+        type: 'bar',
+        name: '',
+        data: [25, 5, 2, 1],
+        barMaxWidth: '35px',
+        itemStyle: {
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                { offset: 0, color: "#83bff6" },
+                { offset: 0.5, color: "#188df0" },
+                { offset: 1, color: "#188df0" },
+            ])
+        },
+        emphasis: {
+            itemStyle: {
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                    { offset: 0, color: "#2378f7" },
+                    { offset: 0.7, color: "#2378f7" },
+                    { offset: 1, color: "#83bff6" },
+                ])
+            }
+        }
+    }],
+    tooltip: {
+        show: true,
+        trigger: 'axis'
+    }
+}
+
+export const sampleOption = {
+    // 图表标题
+    title: {
+        show: true,
+        text: '样品受理情况',
+        textStyle: {
+            color: '#fff',
+            fontSize: 20,
+            fontWeight: '600'
+        },
+        textAlign: 'center',
+        left: '50%',
+        top: '20px'
+    },
+    xAxis: {
+        type: 'category',
+        data: ['已委托未收样', '已收样', '已收不合格', '留样', '人员检测工作量'],
+        axisTick: {
+            alignWithLabel: true
+        },
+        axisLabel: {
+            // rotate: 25
+        },
+        axisLine: {
+            lineStyle: {
+                color: '#fff'
+            }
+        }
+    },
+    yAxis: {
+        type: 'value',
+        name: '',
+        nameTextStyle: {
+            color: '#fff',
+            fontSize: 14
+        },
+        splitLine: {
+            show: false
+        },
+        axisLine: {
+            lineStyle: {
+                color: '#fff'
+            }
+        }
+    },
+    series: [{
+        type: 'bar',
+        name: '',
+        data: [25, 5, 2, 1],
+        barMaxWidth: '35px',
+        itemStyle: {
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                { offset: 0, color: "#83bff6" },
+                { offset: 0.5, color: "#188df0" },
+                { offset: 1, color: "#188df0" },
+            ])
+        },
+        emphasis: {
+            itemStyle: {
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                    { offset: 0, color: "#2378f7" },
+                    { offset: 0.7, color: "#2378f7" },
+                    { offset: 1, color: "#83bff6" },
+                ])
+            }
+        }
+    }],
+    tooltip: {
+        show: true,
+        trigger: 'axis'
+    }
+}
+
+export const monthOption = {
+    // 图表标题
+    title: {
+        show: true,
+        text: '检测月度完成量',
+        textStyle: {
+            color: '#fff',
+            fontSize: 20,
+            fontWeight: '600'
+        },
+        textAlign: 'center',
+        left: '50%',
+        top: '20px'
+    },
+    xAxis: {
+        type: 'category',
+        data: ['委托', '受理', '任务分配', '报告'],
+        axisTick: {
+            alignWithLabel: true
+        },
+        axisLabel: {
+            // rotate: 25
+        },
+        axisLine: {
+            lineStyle: {
+                color: '#fff'
+            }
+        },
+        z: 10
+    },
+    yAxis: {
+        type: 'value',
+        name: '',
+        nameTextStyle: {
+            color: '#fff',
+            fontSize: 14
+        },
+        splitLine: {
+            show: false
+        },
+        axisLine: {
+            lineStyle: {
+                color: '#fff'
+            }
+        }
+    },
+    series: [{
+        type: 'bar',
+        name: '',
+        data: [25, 5, 2, 1],
+        barMaxWidth: '35px',
+        itemStyle: {
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                { offset: 0, color: "#83bff6" },
+                { offset: 0.5, color: "#188df0" },
+                { offset: 1, color: "#188df0" },
+            ])
+        },
+        emphasis: {
+            itemStyle: {
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                    { offset: 0, color: "#2378f7" },
+                    { offset: 0.7, color: "#2378f7" },
+                    { offset: 1, color: "#83bff6" },
+                ])
+            }
+        }
+    }],
+    tooltip: {
+        show: true,
+        trigger: 'axis'
+    }
+}
+
+export const yearOption = {
+    // 图表标题
+    title: {
+        show: true,
+        text: '检测年度完成量',
+        textStyle: {
+            color: '#fff',
+            fontSize: 20,
+            fontWeight: '600'
+        },
+        textAlign: 'center',
+        left: '50%',
+        top: '20px'
     },
     legend: {
         orient: 'horizontal',
@@ -113,31 +402,13 @@ export const pieOption = {
         itemGap: 10,
         data: [
             {
-                name: '未入围',
-                textStyle: {
-                    color: '#ffd700'
-                }
-            },
-            {
-                name: '未中标',
+                name: '未完成',
                 textStyle: {
                     color: '#ff6347'
                 }
             },
             {
-                name: '重新招标',
-                textStyle: {
-                    color: '#69f'
-                }
-            },
-            {
-                name: '放弃投标',
-                textStyle: {
-                    color: '#33ffff'
-                }
-            },
-            {
-                name: '已中标',
+                name: '已完成',
                 textStyle: {
                     color: '#3f3'
                 }
@@ -170,150 +441,10 @@ export const pieOption = {
             }
         }
     ],
-    color: ['#ffd700', '#ff6347', '#69f', '#33ffff', '#3f3'],
+    color: ['#ff6347', '#3f3'],
     tooltip: {
         show: true,
         trigger: 'item',
-        formatter: '投标结果<br/>{b}：{c}<br/>占比：{d}%'
-    }
-}
-
-export const chartData1 = {
-    // 图表标题
-    title: {
-        show: true,
-        text: '',
-        textStyle: {
-            color: '#535353',
-            fontSize: 14,
-            fontWeight: '600'
-        },
-        textAlign: 'center',
-        left: '50%'
-    },
-    xAxis: {
-        type: 'category',
-        data: ['理化','微生物','细胞活率','残留检测','细胞鉴别'],
-        // axisTick: {
-        //     alignWithLabel: true
-        // },
-        // axisLabel: {
-        //     inside: true,
-        //     color: "#000",
-        // },
-        // axisLine: {
-        //     lineStyle: {
-        //         color: '#535353'
-        //     }
-        // },
-          axisLabel: {
-            inside: true,
-            color: "#000",
-          },
-          axisTick: {
-            show: true,
-          },
-          axisLine: {
-            show: true,
-          },
-          z: 10,
-    },
-    yAxis: {
-        type: 'value',
-        name: '',
-        nameTextStyle: {
-            color: '#535353',
-            fontSize: 14
-        },
-        splitLine: {
-            show: false
-        },
-        axisLine: {
-            lineStyle: {
-                color: '#535353'
-            }
-        }
-    },
-    series: [{
-        type: 'bar',
-        name: '',
-        data: [100, 200, 300, 400, 500],
-        barMaxWidth: '35px',
-        // itemStyle: {
-        //     color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-        //         { offset: 0, color: "#83bff6" },
-        //         { offset: 0.5, color: "#188df0" },
-        //         { offset: 1, color: "#188df0" },
-        //     ])
-        // },
-        // emphasis: {
-        //     itemStyle: {
-        //         color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-        //             { offset: 0, color: "#2378f7" },
-        //             { offset: 0.7, color: "#2378f7" },
-        //             { offset: 1, color: "#83bff6" },
-        //         ])
-        //     }
-        // }
-    }],
-    tooltip: {
-        show: true,
-        trigger: 'item'
-    }
-}
-export const chartData2 = {
-    // 图表标题
-    title: {
-        show: true,
-        text: '',
-        textStyle: {
-            color: '#535353',
-            fontSize: 14,
-            fontWeight: '600'
-        },
-        textAlign: 'center',
-        left: '50%'
-    },
-    xAxis: {
-        type: 'category',
-        data: ['已委托未收到样品数量','收到样品数量','已收到不合格样品数量','留样数量','人员检测工作量'],
-        axisTick: {
-            alignWithLabel: true
-        },
-        axisLabel: {
-            inside: true,
-            color: "#000",
-        },
-        axisLine: {
-            lineStyle: {
-                color: '#535353'
-            }
-        }
-    },
-    yAxis: {
-        type: 'value',
-        name: '',
-        nameTextStyle: {
-            color: '#535353',
-            fontSize: 14
-        },
-        splitLine: {
-            show: false
-        },
-        axisLine: {
-            lineStyle: {
-                color: '#535353'
-            }
-        }
-    },
-    series: [{
-        type: 'bar',
-        name: '',
-        data: [],
-        barMaxWidth: '35px'
-    }],
-    tooltip: {
-        show: true,
-        trigger: 'item'
+        formatter: '任务情况<br/>{b}：{c}<br/>占比：{d}%'
     }
 }

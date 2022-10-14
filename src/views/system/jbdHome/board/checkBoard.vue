@@ -29,9 +29,9 @@
                 <!-- topBar -->
                 <top-bar v-if="topBarData.length" :info="topBarData" />
                 <!-- middleCard -->
-                <middle-card/>
+                <middle-card v-if="middleCardData" :info="middleCardData" />
                 <!-- bottomCard -->
-                <bottom-card/>
+                <bottom-card />
             </dv-border-box-1>
         </dv-full-screen-container>
     </div>
@@ -51,14 +51,26 @@
                 titleName: '检测综合信息查询',
                 checkDate: new Date().toJSON().slice(0, 7),
                 label: ['委托', '受理', '任务发放', '报告'],
-                topBarData: []
+                topBarData: [],
+                middleCardData: {
+                    tableData: {
+                        header: [
+                            '检测任务',
+                            '检测类型',
+                            '计划完成时间',
+                            '当前状态',
+                            '人员'
+                        ],
+                        data: []
+                    }
+                }
             }
         },
         created() {
             if (screenfull.isEnabled && !screenfull.isFullscreen) {
                 this.allView()
             }
-            this.getTopBarData()
+            this.updateAll()
         },
         beforeDestroy() {
             if (screenfull.isFullscreen) {
@@ -75,6 +87,7 @@
             },
             updateAll(e) {
                 this.getTopBarData()
+                this.getTableData()
             },
             // 获取topBar数据
             getTopBarData() {
@@ -88,31 +101,58 @@
                     curdPost('sql', sql1),
                     curdPost('sql', sql2),
                     curdPost('sql', sql3)
-                ]).then(([res1, res2, res3]) => {
-                    const data1 = res1.variables.data
-                    const data2 = res2.variables.data
-                    const data3 = res3.variables.data
+                ])
+                    .then(([res1, res2, res3]) => {
+                        const data1 = res1.variables.data
+                        const data2 = res2.variables.data
+                        const data3 = res3.variables.data
 
-                    if (data1 && data2 && data3 && data1.length && data2.length && data3.length) {
-                        let value = [
-                            data1[0].total,
-                            data1[0].accepted,
-                            data2[0].task,
-                            data3[0].report
-                        ]
-                        let result = []
+                        if (
+                            data1 &&
+                            data2 &&
+                            data3 &&
+                            data1.length &&
+                            data2.length &&
+                            data3.length
+                        ) {
+                            let value = [
+                                data1[0].total,
+                                data1[0].accepted,
+                                data2[0].task,
+                                data3[0].report
+                            ]
+                            let result = []
 
-                        this.label.forEach((item, index) => {
-                            let obj = {
-                                title: item,
-                                value: value[index]
-                            }
-                            result.push(obj)
+                            this.label.forEach((item, index) => {
+                                let obj = {
+                                    title: item,
+                                    value: value[index]
+                                }
+                                result.push(obj)
+                            })
+                            this.topBarData = result
+                        }
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
+            },
+            // 获取滚动表数据
+            getTableData() {
+                // 获取检测数据
+                const sql1 = `select tm.jian_ce_xiang_mu_, tm.jian_ce_lei_bie_, IFNULL(tj.qi_wang_wan_cheng, '') as qi_wang_wan_cheng, tj.jian_ce_zhuang_ta, ipe.NAME_ from t_jchzb tj,ibps_party_employee ipe,t_mjjcnlfw tm where tj.jian_ce_yuan_ = ipe.ID_ and tj.jian_ce_xiang_mu_ = tm.id_ and tj.create_time_ like '%${this.checkDate}%'`
+                curdPost('sql', sql1).then(res => {
+                    let { data } = res.variables
+                    let td = []
+                    console.log(data)
+                    data.forEach(item => {
+                        let tr = []
+                        Object.keys(item).forEach(key => {
+                            tr.push(item[key])
                         })
-                        this.topBarData = result
-                    }
-                }).catch(error => {
-                    console.log(error)
+                        td.push(tr)
+                    })
+                    this.middleCardData.tableData.data = td
                 })
             }
         }

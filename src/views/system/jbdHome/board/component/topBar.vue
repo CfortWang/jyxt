@@ -31,7 +31,7 @@
         },
         components: {},
         watch: {
-            info(v){
+            info(v) {
                 console.log(v)
                 this.update()
             }
@@ -64,7 +64,10 @@
                 if (arguments.length === 1) {
                     return parseInt(Math.random() * minNum + 1, 10)
                 } else {
-                    return parseInt(Math.random() * (maxNum - minNum + 1) + minNum,10)
+                    return parseInt(
+                        Math.random() * (maxNum - minNum + 1) + minNum,
+                        10
+                    )
                 }
             },
             // 数据更新
@@ -87,7 +90,6 @@
                     temp.push(obj)
                 })
                 this.topBarData = JSON.parse(JSON.stringify(temp))
-                
             }
         }
     }
@@ -95,7 +97,7 @@
 <style lang="scss" module>
     .bar {
         position: relative;
-        height: 10%;
+        height: 150px;
         margin: 20px 2%;
         display: flex;
         // flex-shrink: 0;
