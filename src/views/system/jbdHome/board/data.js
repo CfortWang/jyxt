@@ -21,13 +21,15 @@ export const acceptOption = {
             alignWithLabel: true
         },
         axisLabel: {
-
+            style: {
+                fill: '#fff'
+            }
         },
         axisLine: {
             lineStyle: {
                 color: '#fff'
             }
-        },
+        }
         // axisLabel: {
         //     inside: true,
         //     color: "#000",
@@ -59,7 +61,7 @@ export const acceptOption = {
     series: [{
         type: 'bar',
         name: '',
-        data: [100, 200, 300, 400, 500],
+        data: [],
         barMaxWidth: '35px',
         itemStyle: {
             color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
@@ -100,18 +102,20 @@ export const taskOption = {
     },
     xAxis: {
         type: 'category',
-        data: ['委托', '受理', '任务分配', '报告'],
+        data: ['委托', '检测', '任务发放', '报告'],
         axisTick: {
             alignWithLabel: true
         },
         axisLabel: {
-            // rotate: 25
+            style: {
+                fill: '#fff'
+            }
         },
         axisLine: {
             lineStyle: {
                 color: '#fff'
             }
-        },
+        }
     },
     yAxis: {
         type: 'value',
@@ -132,7 +136,7 @@ export const taskOption = {
     series: [{
         type: 'bar',
         name: '',
-        data: [25, 5, 2, 1],
+        data: [],
         barMaxWidth: '35px',
         itemStyle: {
             color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
@@ -158,10 +162,29 @@ export const taskOption = {
 }
 
 export const trustOption = {
-    // 图表标题
+    legend: {
+        data: [
+            {
+                name: '委托',
+                itemStyle: {
+                    color: '#00baff'
+                }
+            },
+            {
+                name: '受理',
+                itemStyle: {
+                    color: '#f5d94e'
+                }
+            }
+        ],
+        textStyle: {
+            color: '#fff',
+        },
+        bottom: 10
+    },
     title: {
         show: true,
-        text: '检测任务情况',
+        text: '检测委托受理量',
         textStyle: {
             color: '#fff',
             fontSize: 20,
@@ -173,12 +196,14 @@ export const trustOption = {
     },
     xAxis: {
         type: 'category',
-        data: ['委托', '受理', '任务分配', '报告'],
+        data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
         axisTick: {
             alignWithLabel: true
         },
         axisLabel: {
-            // rotate: 25
+            style: {
+                fill: '#fff'
+            }
         },
         axisLine: {
             lineStyle: {
@@ -196,34 +221,59 @@ export const trustOption = {
         splitLine: {
             show: false
         },
+        axisLabel: {
+            style: {
+                fill: '#fff'
+            }
+        },
         axisLine: {
             lineStyle: {
                 color: '#fff'
             }
         }
     },
-    series: [{
-        type: 'bar',
-        name: '',
-        data: [25, 5, 2, 1],
-        barMaxWidth: '35px',
-        itemStyle: {
-            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                { offset: 0, color: "#83bff6" },
-                { offset: 0.5, color: "#188df0" },
-                { offset: 1, color: "#188df0" },
-            ])
-        },
-        emphasis: {
+    series: [
+        {
+            type: 'bar',
+            name: '委托',
+            data: [],
+            barMaxWidth: '35px',
+            barStyle: {
+                fill: 'rgba(0, 186, 255, 0.4)'
+            },
             itemStyle: {
                 color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                    { offset: 0, color: "#2378f7" },
-                    { offset: 0.7, color: "#2378f7" },
-                    { offset: 1, color: "#83bff6" },
+                    { offset: 0, color: "#83bff6" },
+                    { offset: 0.5, color: "#188df0" },
+                    { offset: 1, color: "#188df0" },
                 ])
+            },
+            emphasis: {
+                itemStyle: {
+                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                        { offset: 0, color: "#2378f7" },
+                        { offset: 0.7, color: "#2378f7" },
+                        { offset: 1, color: "#83bff6" },
+                    ])
+                }
+            }
+        },
+        {
+            type: 'line',
+            name: '受理',
+            data: [],
+            symbol: 'circle',
+            symbolSize: 10,
+            lineArea: {
+                show: true,
+                gradient: ['rgba(245, 217, 79, 0.8)', 'rgba(245, 217, 79, 0.2)']
+            },
+            itemStyle: {
+                color: '#f5d94e'
             }
         }
-    }],
+        
+    ],
     tooltip: {
         show: true,
         trigger: 'axis'
@@ -231,7 +281,6 @@ export const trustOption = {
 }
 
 export const sampleOption = {
-    // 图表标题
     title: {
         show: true,
         text: '样品受理情况',
@@ -246,12 +295,14 @@ export const sampleOption = {
     },
     xAxis: {
         type: 'category',
-        data: ['已委托未收样', '已收样', '已收不合格', '留样', '人员检测工作量'],
+        data: ['已委托未收样', '已收样', '已收不合格', '留样'],
         axisTick: {
             alignWithLabel: true
         },
         axisLabel: {
-            // rotate: 25
+            style: {
+                fill: '#fff'
+            }
         },
         axisLine: {
             lineStyle: {
@@ -278,7 +329,7 @@ export const sampleOption = {
     series: [{
         type: 'bar',
         name: '',
-        data: [25, 5, 2, 1],
+        data: [],
         barMaxWidth: '35px',
         itemStyle: {
             color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
@@ -304,10 +355,29 @@ export const sampleOption = {
 }
 
 export const monthOption = {
-    // 图表标题
+    legend: {
+        data: [
+            {
+                name: '任务总数',
+                itemStyle: {
+                    color: '#00baff'
+                }
+            },
+            {
+                name: '已完成',
+                itemStyle: {
+                    color: '#f5d94e'
+                }
+            }
+        ],
+        textStyle: {
+            color: '#fff',
+        },
+        bottom: 10
+    },
     title: {
         show: true,
-        text: '检测月度完成量',
+        text: '检测任务月度完成量',
         textStyle: {
             color: '#fff',
             fontSize: 20,
@@ -319,19 +389,20 @@ export const monthOption = {
     },
     xAxis: {
         type: 'category',
-        data: ['委托', '受理', '任务分配', '报告'],
+        data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
         axisTick: {
             alignWithLabel: true
         },
         axisLabel: {
-            // rotate: 25
+            style: {
+                fill: '#fff'
+            }
         },
         axisLine: {
             lineStyle: {
                 color: '#fff'
             }
-        },
-        z: 10
+        }
     },
     yAxis: {
         type: 'value',
@@ -343,34 +414,59 @@ export const monthOption = {
         splitLine: {
             show: false
         },
+        axisLabel: {
+            style: {
+                fill: '#fff'
+            }
+        },
         axisLine: {
             lineStyle: {
                 color: '#fff'
             }
         }
     },
-    series: [{
-        type: 'bar',
-        name: '',
-        data: [25, 5, 2, 1],
-        barMaxWidth: '35px',
-        itemStyle: {
-            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                { offset: 0, color: "#83bff6" },
-                { offset: 0.5, color: "#188df0" },
-                { offset: 1, color: "#188df0" },
-            ])
-        },
-        emphasis: {
+    series: [
+        {
+            type: 'bar',
+            name: '任务总数',
+            data: [],
+            barMaxWidth: '35px',
+            barStyle: {
+                fill: 'rgba(0, 186, 255, 0.4)'
+            },
             itemStyle: {
                 color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                    { offset: 0, color: "#2378f7" },
-                    { offset: 0.7, color: "#2378f7" },
-                    { offset: 1, color: "#83bff6" },
+                    { offset: 0, color: "#83bff6" },
+                    { offset: 0.5, color: "#188df0" },
+                    { offset: 1, color: "#188df0" },
                 ])
+            },
+            emphasis: {
+                itemStyle: {
+                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                        { offset: 0, color: "#2378f7" },
+                        { offset: 0.7, color: "#2378f7" },
+                        { offset: 1, color: "#83bff6" },
+                    ])
+                }
+            }
+        },
+        {
+            type: 'line',
+            name: '已完成',
+            data: [],
+            symbol: 'circle',
+            symbolSize: 10,
+            lineArea: {
+                show: true,
+                gradient: ['rgba(245, 217, 79, 0.8)', 'rgba(245, 217, 79, 0.2)']
+            },
+            itemStyle: {
+                color: '#f5d94e'
             }
         }
-    }],
+        
+    ],
     tooltip: {
         show: true,
         trigger: 'axis'
@@ -378,10 +474,9 @@ export const monthOption = {
 }
 
 export const yearOption = {
-    // 图表标题
     title: {
         show: true,
-        text: '检测年度完成量',
+        text: '检测任务年度完成量',
         textStyle: {
             color: '#fff',
             fontSize: 20,
@@ -395,7 +490,7 @@ export const yearOption = {
         orient: 'horizontal',
         show: true,
         left: 'center',
-        bottom: '0%',
+        bottom: 10,
         z: 3,
         itemWidth: 25,
         itemHeight: 14,
@@ -404,23 +499,23 @@ export const yearOption = {
             {
                 name: '未完成',
                 textStyle: {
-                    color: '#ff6347'
+                    color: '#00baff'
                 }
             },
             {
                 name: '已完成',
                 textStyle: {
-                    color: '#3f3'
+                    color: '#f5d94e'
                 }
             }
         ]
     },
     series: [
         {
-            name: '投标结果',
+            name: '任务完成情况',
             type: 'pie',
             radius: '55%',
-            center: ['50%', '45%'],
+            center: ['50%', '50%'],
             data: [],
             itemStyle: {
                 emphasis: {
@@ -430,18 +525,22 @@ export const yearOption = {
                 },
                 normal: {
                     label: {
-                        show: false,
-                        position: 'inner',
-                        formatter: '{d}%'
+                        show: true,
+                        position: 'outer',
+                        // formatter: '{d}%'
+                        formatter: `占比：{d}%\n\n\r{b}:{c}`,
+                        // formatter: `{b}:{c}\n\n\r占比：{d}%`,
+                        fontSize: 12,
+                        // padding: [0, 5]
                     },
                     labelLine: {
-                        show: false
+                        show: true
                     }
                 }
             }
         }
     ],
-    color: ['#ff6347', '#3f3'],
+    color: ['#00baff', '#f5d94e'],
     tooltip: {
         show: true,
         trigger: 'item',

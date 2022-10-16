@@ -1,5 +1,5 @@
 <template>
-    <div id="middle-card">
+    <div id="bottom-card">
         <div :class="$style.chart_box">
             <div
                 v-for="(item, index) in cards"
@@ -24,9 +24,11 @@
         },
         components: {},
         watch: {
-            info(v) {
-                console.log(v)
-                this.update()
+            info: {
+                handler() {
+                    this.init()
+                },
+                deep: true
             }
         },
         data() {
@@ -44,6 +46,15 @@
                 const sample = echarts.init(document.getElementById('sample'))
                 const month = echarts.init(document.getElementById('month'))
                 const year = echarts.init(document.getElementById('year'))
+
+                // 设置图表数据
+                trustOption.series[0].data = this.info.trust
+                trustOption.series[1].data = this.info.accepted
+                monthOption.series[0].data = this.info.task
+                monthOption.series[1].data = this.info.complete
+                yearOption.series[0].data = this.info.year
+
+                // 渲染
                 trust.setOption(trustOption)
                 sample.setOption(sampleOption)
                 month.setOption(monthOption)
@@ -56,19 +67,20 @@
     .chart_box {
         position: relative;
         display: flex;
-        width: 96%;
-        height: 350px;
-        padding: 0 2% 20px;
+        justify-content: space-between;
+        width: 100%;
+        height: 100%;
         .item {
-            width: 30%;
+            width: 24%;
             height: 100%;
-            // height: 250px;
             background-color: rgba(6, 30, 93, 0.5);
-            &:last-child {
-                width: 40%;
-            }
-            .title {
-            }
+        }
+    }
+    :global {
+        #bottom-card {
+            width: 96%;
+            height: calc((100% - 240px) / 2);
+            padding: 0 2%;
         }
     }
 </style>

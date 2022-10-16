@@ -9,7 +9,7 @@
                 <div :class="$style.title">{{ titleName }}</div>
                 <div :class="$style.time">
                     <el-date-picker
-                        v-model="checkDate"
+                        v-model="month"
                         type="month"
                         value-format="yyyy-MM"
                         format="yyyy-MM"
@@ -29,14 +29,21 @@
                 <!-- topBar -->
                 <top-bar v-if="topBarData.length" :info="topBarData" />
                 <!-- middleCard -->
-                <middle-card v-if="middleCardData" :info="middleCardData" />
+                <middle-card v-if="middleCardData.flag" :info="middleCardData" />
                 <!-- bottomCard -->
-                <bottom-card />
+                <bottom-card v-if="bottomCardData.flag" :info="bottomCardData" />
             </dv-border-box-1>
         </dv-full-screen-container>
     </div>
 </template>
 <script>
+    // const sql1 = `select wt.total as wtTotal, wt.accepted as aaccepted, jc.total as jcTotal, jc.finished as jcFinish, rw.task as task, rw.finished as rwFinish, bg.report as report, bg.process as process,bg.approval as approval
+    // from
+    // (select count(id_) as total, count(zhuang_tai_ = '委托结束' or null) as accepted, count(create_time_ like '${today}' or null) as today from t_mjwtsqb where create_time_ LIKE '${month}%') wt,
+    // (select count(id_) as total, count(jian_ce_zhuang_ta = '已完成' or null) as finished from t_jchzb where create_time_ LIKE '${month}%') jc,
+    // (select count(id_) as task, count(zhuang_tai_ = '任务已完成' or null) as finished from t_rwfpb where create_time_ LIKE '${month}%') rw,
+    // (select count(id_) as report, count(zhuang_tai_ = '报告待审核' or null) as process, count(zhuang_tai_ = '报告待审批' or null) as approval from t_mjjcbg where create_time_ LIKE '${month}%') bg`
+
     import screenfull from 'screenfull'
     import curdPost from '@/business/platform/form/utils/custom/joinCURD.js'
     export default {
@@ -47,9 +54,12 @@
             bottomCard: () => import('./component/bottomCard')
         },
         data() {
+            const d = new Date()
             return {
                 titleName: '检测综合信息查询',
-                checkDate: new Date().toJSON().slice(0, 7),
+                year: d.toJSON().slice(0, 4),
+                month: d.toJSON().slice(0, 7),
+                today: d.toJSON().slice(0, 10),
                 label: ['委托', '受理', '任务发放', '报告'],
                 topBarData: [],
                 middleCardData: {
@@ -61,11 +71,27 @@
                             '当前状态',
                             '人员'
                         ],
-                        data: []
-                    }
+                        data: [],
+                        rowNum: 7,
+                        columnWidth: ['300','100','150','100','100']
+                    },
+                    acceptData:[],
+                    taskData: [],
+                    flag: false
+                },
+                bottomCardData: {
+                    flag: false
                 }
             }
         },
+        // beforeRouteEnter(to, from, next){
+        //     Promise.all([  ]).done(([ res ]) => {
+        //         console.log(res)
+        //     }).then(err => {
+        //         window.observer.trigger('error', err)
+        //         next()
+        //     })
+        // },
         created() {
             if (screenfull.isEnabled && !screenfull.isFullscreen) {
                 this.allView()
@@ -87,72 +113,195 @@
             },
             updateAll(e) {
                 this.getTopBarData()
-                this.getTableData()
+                this.getMiddleData()
+                this.getBottomData()
             },
             // 获取topBar数据
+            /**
+             *  委托——t_mjwtsqb
+             *  检测——t_jchzb
+             *  任务——t_rwfpb
+             *  报告——t_mjjcbg
+             */
             getTopBarData() {
                 // 获取委托数及受理数
-                const sql1 = `select count(id_ or null) as total, count(zhuang_tai_ = '委托结束' or null) as accepted from t_mjwtsqb where create_time_ like '%${this.checkDate}%'`
-                // 获取任务分配数
-                const sql2 = `select count(id_ or null) as task from t_rwfpb where create_time_ like '%${this.checkDate}%'`
-                // 获取产生报告数
-                const sql3 = `select count(id_ or null) as report from t_mjjcbg where create_time_ like '%${this.checkDate}%'`
+                const sql = `select wt.total as wtTotal, wt.today as today, wt.accepted as accepted, jc.total as jcTotal, jc.finished as jcFinish, rw.task as task, rw.finished as rwFinish, bg.report as report, bg.process as process,bg.approval as approval
+                from
+                (select count(id_) as total, count(zhuang_tai_ = '委托结束' or null) as accepted, count(create_time_ like '${this.today}' or null) as today from t_mjwtsqb where create_time_ LIKE '${this.month}%') wt,
+                (select count(id_) as total, count(jian_ce_zhuang_ta = '已完成' or null) as finished from t_jchzb where create_time_ LIKE '${this.month}%') jc,
+                (select count(id_) as task, count(zhuang_tai_ = '任务已完成' or null) as finished from t_rwfpb where create_time_ LIKE '${this.month}%') rw,
+                (select count(id_) as report, count(zhuang_tai_ = '报告待审核' or null) as process, count(zhuang_tai_ = '报告待审批' or null) as approval from t_mjjcbg where create_time_ LIKE '${this.month}%') bg`
+                
+                curdPost('sql', sql).then(res => {
+                    const data = res.variables.data
+                    console.log(data)
+                    
+                    if ( data && data.length ) {
+                        const { accepted, approval, jcFinish, jcTotal, process, report, rwFinish, task, today, wtTotal } = data[0]
+                        this.middleCardData.taskData = [wtTotal, jcTotal, task, report]
+                        let result = [
+                            {
+                                title: '委托',
+                                children: [
+                                    {
+                                        label: '总数',
+                                        value: wtTotal
+                                    },
+                                    {
+                                        label: '受理',
+                                        value: accepted
+                                    },
+                                    {
+                                        label: '今日',
+                                        value: today
+                                    }
+                                ]
+                            },
+                            {
+                                title: '检测',
+                                children: [
+                                    {
+                                        label: '总数',
+                                        value: jcTotal
+                                    },
+                                    {
+                                        label: '已完成',
+                                        value: jcFinish
+                                    },
+                                    {
+                                        label: '未完成',
+                                        value: jcTotal - jcFinish
+                                    }
+                                ]
+                            },
+                            {
+                                title: '任务发放',
+                                children: [
+                                    {
+                                        label: '总数',
+                                        value: task
+                                    },
+                                    {
+                                        label: '已完成',
+                                        value: rwFinish
+                                    },
+                                    {
+                                        label: '未完成',
+                                        value: task - rwFinish
+                                    }
+                                ]
+                            },
+                            {
+                                title: '报告',
+                                children: [
+                                    {
+                                        label: '总数',
+                                        value: report
+                                    },
+                                    {
+                                        label: '已完成',
+                                        value: report - approval - process
+                                    },
+                                    {
+                                        label: '待审批',
+                                        value: approval
+                                    },
+                                    {
+                                        label: '待审核',
+                                        value: process
+                                    }
+                                ]
+                            }
+                        ]
+                        
+                        this.topBarData = result
+                    }
+                }).catch(error => {
+                    console.log(error)
+                })
+            },
+            // 获取中间图表数据
+            getMiddleData() {
+                // 获取检测数据
+                const sql1 = `select tm.jian_ce_xiang_mu_, tm.jian_ce_lei_bie_, IFNULL(rw.qi_wang_wan_cheng, '') as qi_wang_wan_cheng, rw.zhuang_tai_, ipe.NAME_ from t_rwfpb rw, ibps_party_employee ipe, t_mjjcnlfw tm where rw.jian_ce_yuan_ = ipe.ID_ and rw.jian_ce_xiang_mu_ = tm.id_ and rw.create_time_ like '${this.month}%'`
+                // 获取检测受理类型数据
+                const sql2 = `select count(tm.jian_ce_lei_bie_ = '理化' or null) as lh, count(tm.jian_ce_lei_bie_ = '微生物' or null) as wsw, count(tm.jian_ce_lei_bie_ = '细胞活率' or null) as xbhl, count(tm.jian_ce_lei_bie_ = '残留检测' or null) as cljc, count(tm.jian_ce_lei_bie_ = '细胞鉴别' or null) as xbjb from t_jchzb tj, t_mjjcnlfw tm where tj.jian_ce_xiang_mu_ = tm.id_ and tj.create_time_ like '${this.month}%'`
+
                 Promise.all([
                     curdPost('sql', sql1),
-                    curdPost('sql', sql2),
-                    curdPost('sql', sql3)
-                ])
-                    .then(([res1, res2, res3]) => {
-                        const data1 = res1.variables.data
-                        const data2 = res2.variables.data
-                        const data3 = res3.variables.data
+                    curdPost('sql', sql2)
+                ]).then(([res1, res2]) => {
+                    const data1 = res1.variables.data
+                    const data2 = res2.variables.data
+                    // console.log(data1, data2)
 
-                        if (
-                            data1 &&
-                            data2 &&
-                            data3 &&
-                            data1.length &&
-                            data2.length &&
-                            data3.length
-                        ) {
-                            let value = [
-                                data1[0].total,
-                                data1[0].accepted,
-                                data2[0].task,
-                                data3[0].report
-                            ]
-                            let result = []
+                    this.middleCardData.tableData.data = []
+                    data1.forEach(item => {
+                        this.middleCardData.tableData.data.push(Object.values(item))
+                    })
 
-                            this.label.forEach((item, index) => {
-                                let obj = {
-                                    title: item,
-                                    value: value[index]
-                                }
-                                result.push(obj)
-                            })
-                            this.topBarData = result
-                        }
-                    })
-                    .catch(error => {
-                        console.log(error)
-                    })
+                    this.middleCardData.acceptData = Object.values(data2[0])
+                    this.middleCardData.flag = true
+                }).catch(error => {
+                    console.log(error)
+                })
             },
-            // 获取滚动表数据
-            getTableData() {
-                // 获取检测数据
-                const sql1 = `select tm.jian_ce_xiang_mu_, tm.jian_ce_lei_bie_, IFNULL(tj.qi_wang_wan_cheng, '') as qi_wang_wan_cheng, tj.jian_ce_zhuang_ta, ipe.NAME_ from t_jchzb tj,ibps_party_employee ipe,t_mjjcnlfw tm where tj.jian_ce_yuan_ = ipe.ID_ and tj.jian_ce_xiang_mu_ = tm.id_ and tj.create_time_ like '%${this.checkDate}%'`
-                curdPost('sql', sql1).then(res => {
-                    let { data } = res.variables
-                    let td = []
-                    console.log(data)
-                    data.forEach(item => {
-                        let tr = []
-                        Object.keys(item).forEach(key => {
-                            tr.push(item[key])
-                        })
-                        td.push(tr)
+            // 获取底部图表数据
+            getBottomData() {
+                // 获取检测委托受理情况数据
+                const sql1 = `select tm.zhuang_tai_ as state, DATE_FORMAT(tm.create_time_, '%Y-%m-%d %H:%i:%s') as time from t_mjwtsqb tm where tm.create_time_ like '${this.year}%'`
+                // 获取检测月度年度任务完成情况数据
+                const sql2 = `select rw.zhuang_tai_ as state, DATE_FORMAT(rw.create_time_, '%Y-%m-%d %H:%i:%s') as time from t_rwfpb rw where rw.create_time_ like '${this.year}%'`
+                // 获取样品受理情况数据
+                const sql3 = ``
+                Promise.all([
+                    curdPost('sql', sql1),
+                    curdPost('sql', sql2)
+                ]).then(([res1, res2]) => {
+                    const data1 = res1.variables.data
+                    const data2 = res2.variables.data
+                    // console.log(data1, data2)
+
+                    let trust = new Array(12).fill(0)
+                    let accepted = new Array(12).fill(0)
+                    let task = new Array(12).fill(0)
+                    let complete = new Array(12).fill(0)
+                    data1.forEach(item => {
+                        const index = parseInt(item.time.slice(5,7)) - 1
+                        if (item.state === '委托结束') {
+                            accepted[index]++
+                        }
+                        trust[index]++
                     })
-                    this.middleCardData.tableData.data = td
+                    data2.forEach(item => {
+                        const index = parseInt(item.time.slice(5,7)) - 1
+                        if (item.state === '任务已完成') {
+                            complete[index]++
+                        }
+                        task[index]++
+                    })
+                    let taskCount = task.reduce((pre, cur) => pre + cur)
+                    let completeCount = complete.reduce((pre, cur) => pre + cur)
+                    let year = [
+                        {
+                            name: '未完成',
+                            value: taskCount - completeCount
+                        },
+                        {
+                            name: '已完成',
+                            value: completeCount
+                        }
+                    ]
+                    this.bottomCardData.trust = trust
+                    this.bottomCardData.accepted = accepted
+                    this.bottomCardData.task = task
+                    this.bottomCardData.complete = complete
+                    this.bottomCardData.year = year
+                    this.bottomCardData.flag = true
+
+                    // console.log(this.bottomCardData)
+                }).catch(error => {
+                    console.log(error)
                 })
             }
         }

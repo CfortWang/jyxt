@@ -12,10 +12,6 @@
                     <span>检测任务情况</span>
                 </div> -->
                 <div id="task" style="min-width: 300px; height: 100%"></div>
-                <!-- <dv-conical-column-chart
-                    :config="taskData"
-                    style="width: 100%; height: 100%; min-height: 120px"
-                /> -->
             </div>
             <div :class="$style.item">
                 <dv-scroll-board
@@ -25,6 +21,7 @@
                 />
             </div>
         </div>
+        <!-- <dv-decoration-4 :reverse="true" :dur="10" style="width:100%;height:5px;" /> -->
     </div>
 </template>
 <script>
@@ -42,40 +39,18 @@
         watch: {
             info: {
                 handler() {
-                    this.updata()
+                    this.init()
                 },
                 deep: true
             }
         },
         data() {
             return {
-                cardData: ['test1', 'test2', 'test3'],
-                taskData: {
-                    data: [
-                        {
-                            name: '委托',
-                            value: 25
-                        },
-                        {
-                            name: '受理',
-                            value: 5
-                        },
-                        {
-                            name: '任务分配',
-                            value: 2
-                        },
-                        {
-                            name: '报告',
-                            value: 1
-                        }
-                    ],
-                    showValue: true
-                },
                 tableData: {}
             }
         },
         created() {
-            this.tableData = this.info.tableData
+            // this.init()
         },
         mounted() {
             this.init()
@@ -84,11 +59,15 @@
             init() {
                 const accept = echarts.init(document.getElementById('accept'))
                 const task = echarts.init(document.getElementById('task'))
+                
+                // 设置图表数据
+                acceptOption.series[0].data = this.info.acceptData
+                taskOption.series[0].data = this.info.taskData
+                this.tableData = JSON.parse(JSON.stringify(this.info.tableData))
+
+                //渲染
                 accept.setOption(acceptOption)
                 task.setOption(taskOption)
-            },
-            updata() {
-                this.tableData = JSON.parse(JSON.stringify(this.info.tableData))
             }
         }
     }
@@ -97,19 +76,24 @@
     .chart_box {
         position: relative;
         display: flex;
-        width: 96%;
-        height: 350px;
-        padding: 20px 2%;
+        justify-content: space-between;
+        width: 100%;
+        height: 100%;
         .item {
-            width: 30%;
+            width: 24%;
             height: 100%;
-            // height: 250px;
             background-color: rgba(6, 30, 93, 0.5);
             &:last-child {
-                width: 40%;
+                width: 49%;
             }
-            .title {
-            }
+        }
+    }
+    :global {
+        #middle-card {
+            width: 96%;
+            height: calc((100% - 240px) / 2);
+            padding: 0 2%;
+            margin: 20px 0;
         }
     }
 </style>

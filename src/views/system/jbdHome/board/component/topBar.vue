@@ -7,13 +7,19 @@
                 :class="$style.item"
             >
                 <div :class="$style.title">{{ item.title }}</div>
-                <div :class="$style.count">
-                    <dv-digital-flop
-                        :config="item.data"
-                        :class="$style.flop"
-                        :style="`color:${fontColor[index]}`"
-                    />
-                    <div :class="$style.unit">{{ item.unit }}</div>
+                <div
+                    v-for="(v, i) in item.children"
+                    :key="i"
+                    :class="$style.box"
+                >
+                    <div :class="$style.label">{{ v.label }}</div>
+                    <div :class="$style.count">
+                        <dv-digital-flop
+                            :config="v.data"
+                            :class="$style.flop"
+                        />
+                        <div :class="$style.unit">{{ v.unit }}</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -72,24 +78,21 @@
             },
             // 数据更新
             update() {
-                let temp = []
-                this.info.forEach((item, index) => {
-                    const obj = {
-                        title: item.title,
-                        data: {
-                            number: [item.value],
+                this.info.forEach(item => {
+                    item.children.forEach(i => {
+                        i.data = {
+                            number: [i.value],
                             content: '{nt}',
                             textAlign: 'right',
                             style: {
                                 fill: this.fontColor[this.getRandom(0, 11)],
                                 fontWeight: 'bold'
                             }
-                        },
-                        unit: '件'
-                    }
-                    temp.push(obj)
+                        }
+                        i.unit = '件'
+                    })
                 })
-                this.topBarData = JSON.parse(JSON.stringify(temp))
+                this.topBarData = JSON.parse(JSON.stringify(this.info))
             }
         }
     }
@@ -97,7 +100,7 @@
 <style lang="scss" module>
     .bar {
         position: relative;
-        height: 150px;
+        height: 90%;
         margin: 20px 2%;
         display: flex;
         // flex-shrink: 0;
@@ -105,32 +108,51 @@
         align-items: center;
         background-color: rgba(6, 30, 93, 0.5);
         .item {
-            width: 25%;
+            width: 23%;
+            // width: calc(100% / 13);
             height: 60%;
-            padding: 20px;
+            padding: 12px 20px;
             border-left: 5px solid rgb(6, 30, 93);
+            &:last-child{
+                width: 31%;
+                .box{
+                    width: 25%;
+                }
+            }
             .title {
                 text-align: center;
-                font-size: 16px;
-                margin: 10px 0 24px;
+                font-size: 18px;
+                font-weight: bold;
+                margin-bottom: 20px;
             }
-            .count {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                .flop {
-                    width: 80px;
-                    height: 50px;
-                    font-size: 18px;
+            .box{
+                display: inline-block;
+                width: 33%;
+                .label{
+                    text-align: center;
+                    font-size: 14px;
                 }
-                .unit {
-                    margin-left: 10px;
-                    box-sizing: border-box;
+                .count {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    .flop {
+                        width: 60px;
+                        height: 40px;
+                        font-size: 18px;
+                    }
+                    .unit {
+                        margin-left: 10px;
+                        box-sizing: border-box;
+                    }
                 }
             }
         }
     }
     :global {
+        #top-bar{
+            height: 150px;
+        }
         .dv-decoration-10 {
             width: 96%;
             margin: 0 2%;
