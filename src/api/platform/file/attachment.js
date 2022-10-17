@@ -1,7 +1,12 @@
 import request from '@/utils/request'
 import axios from 'axios'
-import { getToken } from '@/utils/auth'
-import { BASE_API, SYSTEM_URL } from '@/api/baseUrl'
+import {
+  getToken
+} from '@/utils/auth'
+import {
+  BASE_API,
+  SYSTEM_URL
+} from '@/api/baseUrl'
 import store from '@/store'
 
 import qs from 'qs'
@@ -132,7 +137,7 @@ export function uploadFile(file, uploadFileVo) {
  */
 export function previewFile(attachmentId) {
   return BASE_API() + SYSTEM_URL() + '/file/preview?attachmentId=' +
-      attachmentId + '&access_token=' + getToken() + '&tenantId=' + store.getters.tenantid
+    attachmentId + '&access_token=' + getToken() + '&tenantId=' + store.getters.tenantid
 }
 
 /**
@@ -141,7 +146,7 @@ export function previewFile(attachmentId) {
  */
 export function getImage(attachmentId) {
   return BASE_API() + SYSTEM_URL() + '/file/getImage?attachmentId=' +
-      attachmentId + '&access_token=' + getToken() + '&tenantId=' + store.getters.tenantid
+    attachmentId + '&access_token=' + getToken() + '&tenantId=' + store.getters.tenantid
 }
 
 /**
@@ -164,6 +169,7 @@ export function fileUrl(fileId) {
  * @param {*} params
  */
 export function snapshoot(params) {
+
   return request({
     url: SYSTEM_URL() + '/file/upload/runQianUpload',
     method: 'post',
@@ -171,30 +177,58 @@ export function snapshoot(params) {
   })
 }
 /* 脚本对文件盖章 */
-export function seal(url,fileType,type) {
+export function seal(url, fileType, type) {
   let Base64 = require('js-base64').Base64
   let data = {
-   "signKey": "V1FTMjAyMTEyMjFkOTVjNWM=",
+    "signKey": "V1FTMjAyMTEyMjFkOTVjNWM=",
     "signSecret": "YWQwMmY3ZjQ4ZDJmMmYwNDA=",
     "sealUser": "YWRtaW4=",
     "password": "MTIzNA==",
     //"ruleName": "6aqR57yd56ug6KeE5YiZLOmmlumhteeblueroA==",
     "ruleName": type,
     "provideSigFile": Base64.encode(url),
-    "fileKey":Base64.encode(generateUUID()+'.'+fileType)
-    }
-    return axios({
-      url: this.$form.$getSealUploadingFile,
-      method: 'post',
-      data: data
-    })
+    "fileKey": Base64.encode(generateUUID() + '.' + fileType)
+  }
+  return axios({
+    url: this.$form.$getSealUploadingFile,
+    method: 'post',
+    data: data
+  })
 }
- function generateUUID() {
-      var d = new Date().getTime();
-      var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = (d + Math.random()*16)%16 | 0;
-        d = Math.floor(d/16);
-        return (c=='x' ? r : (r&0x3|0x8)).toString(16);
-      });
-      return uuid;
-      };
+
+/* 脚本对文件进行手动盖章-预处理 */
+export function sealPre(url, fileKey) {
+  let Base64 = require('js-base64').Base64
+  let data = {
+    "signKey": "V1FTMjAyMTEyMjFkOTVjNWM=",
+    "signSecret": "YWQwMmY3ZjQ4ZDJmMmYwNDA=",
+    "sealUser": "YWRtaW4=",
+    "password": "MTIzNA==",
+    "provideSigFile": Base64.encode(url),
+    // "getSigFile":  Base64.encode(this.$form.$getSigFile),
+    "getSigFile":  Base64.encode('https://www.szjyxt.com'),
+
+    "fileKey": Base64.encode(fileKey),
+  }
+  return axios({
+    url: this.$form.$getSealPreFile,
+    method: 'post',
+    data: data
+  })
+}
+
+/* 脚本对文件进行手动盖章-手动签章页面的url */
+export function getSigPageUrl(sigFile) {
+  let sigUrl = this.$form.$getSealPageFile+'?signKey=V1FTMjAyMTEyMjFkOTVjNWM=&signSecret=YWQwMmY3ZjQ4ZDJmMmYwNDA=&sigFile='+sigFile;
+  return  sigUrl
+}
+
+export function generateUUID() {
+  var d = new Date().getTime();
+  var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    var r = (d + Math.random() * 16) % 16 | 0;
+    d = Math.floor(d / 16);
+    return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+  });
+  return uuid;
+};

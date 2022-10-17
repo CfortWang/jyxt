@@ -24,7 +24,9 @@ import sticky from '@/directives/sticky'
 // 加载更多
 import loadMore from '@/directives/load-more'
 
-import { getToken } from '@/utils/auth'
+import {
+  getToken
+} from '@/utils/auth'
 // 通用组件
 import '@/components'
 // svg 图标
@@ -54,22 +56,29 @@ export default {
     Vue.prototype.$buildTime = env.VUE_APP_BUILD_TIME
 
     Vue.prototype.$ibpsUrl = env.VUE_APP_BASE_API_0_0_TEST
-	/* 中汇瑞德检测中心 */
-	let downloadReport = (src,where)=> {
-		return  'https://www.szjyxt.com/demo/reportServlet?action=6&file='+encodeURIComponent(src)+'.rpx&columns=0&srcType=file&paramString='+encodeURIComponent(where)
-	}
+    /* 中汇瑞德检测中心 */
+    let downloadReport = (src, where) => {
+      return 'https://www.szjyxt.com/demo/reportServlet?action=6&file=' + encodeURIComponent(src) + '.rpx&columns=0&srcType=file&paramString=' + encodeURIComponent(where)
+    }
     let timer = setInterval(() => { //定时循环添加参数
-          if (getToken()) {
-              Vue.prototype.$reportPash = 'https://www.szjyxt.com/demo/reportJsp/showReport.jsp?access_token = '+getToken()+'&rpx=中汇瑞德检测中心/' //报表路径
-              Vue.prototype.$getReportFile = downloadReport //通过方法函数，拼接url，并将字符串格式化
-              Vue.prototype.$getSealUri = 'https://www.szjyxt.com/getSealFile/' //微签 回显获取文件地址
-              Vue.prototype.$getFileDow = 'https://www.szjyxt.com/ibps/platform/v3/file/download?attachmentId=' //文件下载地址
-              Vue.prototype.$getSealUploadingFile='https://www.szjyxt.com/doSeal/' //微签 上传地址
-           clearInterval(timer) //添加成功后即删除定时任务
-            }
+      if (getToken()) {
+        Vue.prototype.$reportPash = 'https://www.szjyxt.com/demo/reportJsp/showReport.jsp?access_token = ' + getToken() + '&rpx=中汇瑞德检测中心/' //报表路径
+        Vue.prototype.$getReportFile = downloadReport //通过方法函数，拼接url，并将字符串格式化
+        // Vue.prototype.$getSealUri = 'https://www.szjyxt.com/getSealFile/' //微签 回显获取文件地址
+        Vue.prototype.$getSealUri = ' http://120.77.249.241:9999/no/getSealFile/' //微签 回显获取文件地址
+
+        Vue.prototype.$getFileDow = 'https://www.szjyxt.com/ibps/platform/v3/file/download?attachmentId=' //文件下载地址
+        Vue.prototype.$getSealUploadingFile = 'https://www.szjyxt.com/doSeal/' //微签 上传地址
+        Vue.prototype.$getSealPreFile = 'https://www.szjyxt.com/preprocess/' //微签 手动签章-预处理
+        // Vue.prototype.$getSealPageFile = 'https://www.szjyxt.com/manualSigPage/' //微签 手动签章-页面接口
+        Vue.prototype.$getSealPageFile = 'http://120.77.249.241:9999/manualSig/manualSigPage/' //微签 手动签章-页面接口（ 微签服务器地址，非nginx转发）
+        Vue.prototype.$getSigFile = 'http://120.77.249.241:8080/doSeal/getSigFile/' //微签 手动签章-页面接口-签章页面完成按钮回调接口
+
+        clearInterval(timer) //添加成功后即删除定时任务
+      }
     }, 500)
 
-	// 获得用户设置的全局尺寸
+    // 获得用户设置的全局尺寸
     const size = await store.dispatch('ibps/db/get', {
       dbName: 'sys',
       path: 'size.value',

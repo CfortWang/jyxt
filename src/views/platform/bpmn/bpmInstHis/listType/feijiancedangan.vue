@@ -2,14 +2,22 @@
   <div>
     <div class="heads">非CNAS/CMA检测档案</div>
     <div class="top-box">
-      <span class="t-span">检测申请单号</span
+      <span class="t-span">年份</span
+      ><el-input
+        class="inp"
+        v-model="nianfen"
+        placeholder="请输入内容"
+        clearable
+      >
+      </el-input>
+      <!-- <span class="t-span">检测委托单号</span
       ><el-input
         class="inp"
         v-model="shenqingdanid"
         placeholder="请输入内容"
         clearable
       >
-      </el-input>
+      </el-input> -->
       <!-- <span class="t-span">委托单位</span
       ><el-input
         class="inp"
@@ -41,56 +49,64 @@
         background: '#a7d6f8 !important',
       }"
     >
-      <el-table-column type="selection" width="55"> </el-table-column>
+      <!-- <el-table-column type="selection" width="55"> </el-table-column> -->
+      <el-table-column prop="chu_ju_bao_gao_sh" label="年份" width="80">
+        <template slot-scope="scope">
+              {{ scope.row.chu_ju_bao_gao_sh | yeare("年") }}
+        </template>
+      </el-table-column>
       <el-table-column prop="he_tong_bian_hao_" label="合同编号" width="100">
         <template slot-scope="scope">
           {{scope.row.he_tong_bian_hao_|returnHetong(hetong)}}
         </template>
       </el-table-column>
-      <el-table-column prop="bao_gao_bian_hao_" label="报告编号" width="180"> 
+      <el-table-column prop="bao_gao_bian_hao_" label="报告编号" width="150"> 
       </el-table-column>
-      <el-table-column prop="jian_ce_shen_qing" label="检测申请单号" width="180">
+      <el-table-column prop="jian_ce_kai_shi_s" label="检测时间" width="150">
+      </el-table-column>
+      <el-table-column prop="jian_ce_shen_qing" label="检测委托单号" width="150">
       </el-table-column>
       <!-- <el-table-column prop="wei_tuo_dan_wei_" label="委托单位">
       </el-table-column> -->
-      <el-table-column prop="wei_tuo_ri_qi_" label="委托日期">
+      <el-table-column prop="wei_tuo_ri_qi_" label="委托日期" width="100">
       </el-table-column>
-      <el-table-column prop="yang_pin_bian_hao" label="样品编号">
+      <el-table-column prop="yang_pin_bian_hao" label="样品编号" width="150">
       </el-table-column>
-      <el-table-column prop="yang_pin_ming_che" label="样品名称">
+      <el-table-column prop="yang_pin_ming_che" label="样品名称" width="150">
       </el-table-column>
       <!-- <el-table-column prop="lian_xi_ren_" label="联系人">
       </el-table-column>
       <el-table-column prop="lian_xi_dian_hua_" label="联系电话">
       </el-table-column> -->
-       <el-table-column prop="lei_bie_qu_fen_yu" label="类别">
+       <!-- <el-table-column prop="lei_bie_qu_fen_yu" label="类别">
          <template slot-scope="scope">
            {{scope.row.lei_bie_qu_fen_yu}}CNAS/CMA
          </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-popover placement="left" width="200" trigger="click">
             <div slot="reference" class="more">
-              <i class="el-icon-caret-bottom"></i>更多            
+              <i class="el-icon-caret-bottom"></i>查阅          
             </div>
-            <div class="item" style="color: #85ce61">
+            <!-- <div class="item" style="color: #85ce61">
               <i class="el-icon-s-order"></i> 合同
+            </div> -->
+
+            <div class="item" style="color: #85ce61" @click="alertReport(reports.jianceshenqingdan, scope.row.id_)">
+              <i class="el-icon-s-order"></i> 检测委托单
             </div>
             <div class="item" style="color: #85ce61" @click="alertReport(reports.hetongpingshen, scope.row.id_)">
               <i class="el-icon-s-order"></i> 合同评审
             </div>
-            <div class="item" style="color: #85ce61" @click="alertReport(reports.jianceshenqingdan, scope.row.id_)">
-              <i class="el-icon-s-order"></i> 检测申请单
-            </div>
             <div>
               <el-popover placement="left" width="200" trigger="click">
                 <div class="div_test item" style="color: #85ce61" slot="reference" @click="juTiItem(scope.row)">
-                  <i class="el-icon-s-order"></i> 检测原始记录               
+                  <i class="el-icon-s-order"></i> 检测记录               
                 </div>
                 <div class="three-item">
                   <div style="color: #85ce61; cursor: pointer" v-for="it in itemInfo" :key="it.id_" @click="formEvent(it.jian_ce_xiang_mu_)">
-                    {{ it.jian_ce_xiang_mu_ }}
+                    {{ it.jian_ce_xiang_mu_ }}记录
                   </div>
                 </div>
               </el-popover>
@@ -98,9 +114,31 @@
             <div class="item" style="color: #85ce61" @click="alertReport(reports.baogaoshenpibiao, scope.row.id_)">
               <i class="el-icon-s-order"></i> 检测报告审批表
             </div>
-            <div class="item" style="color: #85ce61" @click="alertReport(reports.yubaogao, scope.row.id_)">
-              <i class="el-icon-s-order"></i> 预报告
+            <div v-if="false">
+              <el-popover placement="left" width="200" trigger="triggerType">
+                <div
+                  class="div_test item"
+                  style="color: #85ce61"
+                  slot="reference"
+                  @click="YubaogaoItem(scope.row)"
+                >
+                  <i class="el-icon-s-order"></i> 预报告
+                </div>
+                <div class="three-item">
+                  <div
+                    style="color: #85ce61; cursor: pointer"
+                    v-for="it in yubaogaoitem"
+                    :key="it.id_"
+                    @click="yuReports(reports.yubaogao,it.id)"
+                  >
+                  {{ it.jian_ce_xiang_mu_ }}预报告记录
+                  </div>
+                </div>
+              </el-popover>
             </div>
+            <!-- <div class="item" style="color: #85ce61" @click="alertReport(reports.yubaogao, scope.row.id_)">
+              <i class="el-icon-s-order"></i> 预报告
+            </div> -->
             <div class="item" style="color: #85ce61" @click="alertReport(reports.jiancebaogao, scope.row.id_)">
               <i class="el-icon-s-order"></i>检测报告
             </div>
@@ -162,11 +200,14 @@ export default {
         jiancebaogao: "42明鉴/吴/明鉴细胞专业技术检测报告.rpx",
       },
       shenqingdanid:"",
+      nianfen:'',
       danwei:"",
       bianhao:"",
       tableData: [],
       itemInfo: [], // 列表内容
+      yubaogaoitem:[],
       hetong:[],
+      triggerType:"click"
     };
   },
   mixins: [GetReport],
@@ -176,6 +217,15 @@ export default {
         if(arr[i].id_ == value){
           return arr[i].he_tong_bian_hao_;
         }
+      }
+    },
+    yeare(value,dedal){
+      if(dedal=="年"){
+        return value.split("-")[0]
+      }else if(dedal=="月"){
+        return value.split("-")[0] + value.split("-")[1]
+      }else{
+        value
       }
     }
   },
@@ -349,11 +399,46 @@ export default {
         );
       }
     },
+    YubaogaoItem(info) {
+      let itemId;
+      let this_ = this;
+      var sql =
+        "select b.id_ ,c.jian_ce_xiang_mu2 FROM t_mjjcbg a JOIN t_jchzb b ON a.jian_ce_shen_qing = b.shen_qing_dan_id_ JOIN t_mjypb c ON a.jian_ce_shen_qing = c.wai_jian_ WHERE a.id_ = '" +
+        info.id_ +
+        "'";
+      curdPost("sql", sql).then((res) => {
+        itemId = res.variables.data;
+        this_.runqianId = itemId[0].id_;
+        var itemSql =
+          "select * FROM t_mjjcnlfw WHERE id_ IN(" +
+          itemId[0].jian_ce_xiang_mu2 +
+          ")";
+        curdPost("sql", itemSql).then((res) => {
+          this_.itemInfo = res.variables.data;
+          for (var i = 0; i++; i < this_itemInfo) {
+            if (this_itemInfo[i].shi_fou_yu_bao_ga =="是") {
+              this_.yubaogaoitem.push(it);
+            }
+          }
+          if (this_.yubaogaoitem.length == 0) {
+            this_.triggerType = "";
+            alert("此条报告没有预报告记录");
+            return;
+          }
+        });
+      });
+    },
+    yuReports(url,id){
+      this.alertReport(
+         url,
+         id
+    );
+    },
     // pin凑sql
     selectSplit() {
       var q1,q2,q3;
-      if (this.shenqingdanid) {
-        q1 = "jian_ce_shen_qing ='"+this.shenqingdanid+"' ";
+      if (this.nianfen) {
+        q1 = "chu_ju_bao_gao_sh like'" +"%" +this.nianfen +"%"+"' ";
       }
       if (this.danwei){
         q2 = "wei_tuo_dan_wei_  = '"+this.danwei+"' ";
@@ -361,38 +446,41 @@ export default {
       if(this.bianhao){
         q3 = "bao_gao_bian_hao_ = '"+this.bianhao+"'";
       }
-      if(this.shenqingdanid&&this.danwei&&this.bianhao){
+      if(this.nianfen&&this.danwei&&this.bianhao){
         return "where " + '"+q1+"' +" and " + q2 + " and " + q3 + " and ";
-      }else if(this.shenqingdanid&&this.danwei&&!this.bianhao){
+      }else if(this.nianfen&&this.danwei&&!this.bianhao){
         return "where " + q1 +" and " + q2  + " and ";
-      }else if(!this.shenqingdanid&&this.danwei&&this.bianhao){
+      }else if(!this.nianfen&&this.danwei&&this.bianhao){
         return "where " + q2 + " and " + q3 + " and ";
-      }else if(this.shenqingdanid&&!this.danwei&&this.bianhao){
+      }else if(this.nianfen&&!this.danwei&&this.bianhao){
         return "where " + q1 +" and " + q3 + " and ";
-      }else if(this.shenqingdanid&&!this.danwei&&!this.bianhao){
+      }else if(this.nianfen&&!this.danwei&&!this.bianhao){
         return "where " + q1 + " and ";
-      }else if(!this.shenqingdanid&&this.danwei&&!this.bianhao){
+      }else if(!this.nianfen&&this.danwei&&!this.bianhao){
         return "where " + q2 + " and ";
-      }else if(!this.shenqingdanid&&!this.danwei&&this.bianhao){
+      }else if(!this.nianfen&&!this.danwei&&this.bianhao){
         return "where " + q3 + " and ";
-      }else if(!this.shenqingdanid&&!this.danwei&&!this.bianhao){
+      }else if(!this.nianfen&&!this.danwei&&!this.bianhao){
         return "WHERE"
       }
     },
     search() {
       let moreSql = this.selectSplit()
         var sql = "select * from t_mjjcbg " + moreSql+" shi_fou_yu_bao_ga ='否' and lei_bie_qu_fen_yu = '非' ORDER BY create_time_ DESC limit 0,20"
-      this.loadData(sql);
+     console.log(sql,"gengd")
+     this.loadData(sql);
     },
     handleSizeChange(value) {
       this.currentPage4 = 1;
       let sql =
-        "select * from t_mjjcbg WHERE shi_fou_yu_bao_ga='否' and lei_bie_qu_fen_yu ='非' ORDER BY create_time_ DESC limit 0,'"+value+"'" ;
+        "select * from t_mjjcbg WHERE shi_fou_yu_bao_ga='否' and lei_bie_qu_fen_yu ='非' ORDER BY create_time_ DESC limit 0,"+value;
       this.loadData(sql);
     },
     handleCurrentChange(value) {
       let sql =
-        "select * from t_mjjcbg WHERE shi_fou_yu_bao_ga!='否' and lei_bie_qu_fen_yu ='非' ORDER BY create_time_ DESC limit '"+value+"', 20";
+        "select * from t_mjjcbg WHERE shi_fou_yu_bao_ga='否' and lei_bie_qu_fen_yu ='非' ORDER BY create_time_ DESC limit "+value+", 20";
+
+        console.log(sql,"sql")
       this.loadData(sql);
     },
   },

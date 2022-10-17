@@ -74,31 +74,33 @@
           <div class="show-demo" v-for="(item, index) in listData" :key="index">
             <div>
               <div class="goods-level">
-                <div class="level-dsc">第{{ index }}层</div>
+                <div class="level-dsc">第{{ index | indexfilter(listData) }}层</div>
                 <div class="goods-list">
                   <div
                     v-for="(it, index) in listData[index]"
                     :key="index"
                     class="goods-dsc"
                     :style="{
-                      background: it.zhuang_tai_ == '空余' ? '' : '#67c23a',
+                      background: it.cun_fang_wei_zhi_ == '空' ? '' : '#67c23a',
                     }"
                   >
                     <div class="top-dsc">
                       <div class="position">
-                        <p>位置：{{ it.wei_zhi_ }}</p>
-                        <p>类型:{{ it.lei_xing_ }}</p>
-                        <p>编号：{{ it.wu_pin_bian_hao | bian_hao_Filters }}</p>
+                        <p>名称：{{ it.cun_fang_wei_zhi_ }}</p>
+                        <p>编码：{{ it.wu_liao_bian_ma_ || "空" }}</p>
+                        <p>位置：{{ it.cun_fang_wei_zhi_ || "空" }}</p>
+                        <p>货号:{{ it.huo_hao_ || "空" }}</p>
                       </div>
                       <div class="right-content">
-                        <p>存储条件:{{ it.cun_chu_tiao_jian }}</p>
-                        <p>有效期:{{ it.you_xiao_qi_ }}</p>
-                        <p>批号:{{ it.pi_hao_ }}</p>
+                        <p>入库批号:{{ it.ru_ku_pi_hao_ || "空" }}</p>
+                        <p>存储条件:{{ it.cun_chu_yao_qiu_ || "空" }}</p>
+                        <p>有效期:{{ it.you_xiao_qi_ || "空" }}</p>
+                        <p>库存量：{{ it.ku_cun_liang_ || "空" }}</p>
                       </div>
                       <!-- <div class="condition">{{ it.cun_chu_tiao_jian }}</div> -->
                     </div>
                     <div class="bottom-dsc">
-                      {{ it.wu_pin_ming_cheng | specimenFilters }}
+                      <!-- {{ it.wu_pin_ming_cheng | specimenFilters }} -->
                     </div>
                   </div>
                 </div>
@@ -116,6 +118,19 @@
 
 <script>
 import curdPost from "@/business/platform/form/utils/custom/joinCURD.js";
+// import curdPost from "@/business/platform/form/utils/custom/joinCURD.js";
+/*
+[
+  1:{  //第一层
+  1: {[{item:1},{item2:2}]} //第一个区域
+  2:{[{item:1},{item2:2}]} //第二个区域
+  },
+  2:{  //第二层
+   1：{[{item:1},{item2:2}]} //第一个区域
+   2：{[{item:1},{item2:2}]} //第二个区域
+  }
+]
+*/
 export default {
   data() {
     return {
@@ -148,6 +163,17 @@ export default {
     };
   },
   filters: {
+    indexfilter: function (value,data) {
+      console.log(value,data)
+      if (data[0]) {
+        return value + 1;
+      } else {
+        return value;
+      }
+    },
+    laySlice: function (value) {
+      return value.split("-")[2];
+    },
     freezerFilters: function (value) {
       if (value.includes("冷藏柜")) {
         return value.replace("冷藏柜", "冰箱");
@@ -175,7 +201,7 @@ export default {
   mounted() {
     this.loadQueryData();
     this.firstLoadViewData();
-    this.firstLoadQuyu("耗材库");
+    this.firstLoadQuyu("试剂库1");
   },
   methods: {
     firstLoadQuyu(cang_ku) {
@@ -189,14 +215,32 @@ export default {
       });
     },
     firstLoadViewData() {
-      //首次加载视图数据 默认中心仓库 耗材区
-      this.formInline.cang_ku_ming_chen_value = "耗材库";
-      this.formInline.qu_yu_value = "1号 货架";
+      //首次加载视图数据 默认中心仓库 耗材区   
+      this.formInline.cang_ku_ming_chen_value = "试剂库1";
+      this.formInline.qu_yu_value = "1号试剂柜";
       this.selectActive = 1;
       this.firstLoadActive = true;
-      this.quyuShow = "1号 货架";
-      var sqlString = `select * from t_ck where cang_ku_ming_chen = '${this.formInline.cang_ku_ming_chen_value}' and qu_yu_ = '${this.formInline.qu_yu_value}'`;
-      this.queryLoad(sqlString);
+      this.quyuShow = "1号试剂柜";
+      var sqlString =
+        "select * from t_mjwlgl where cun_fang_wei_zhi_ like" +
+        "'%" +
+        "SJG1" +
+        "%'";
+      this.queryLoad(sqlString, "SJG1");
+    },
+    sqlSlice(value) {
+      // let py = value.split("号")[1];
+
+      switch (value) {
+        case "货架":
+          return "HJ";
+        case "试剂柜":
+          return "SJG";
+        case "冰箱":
+          return "BX";
+        default:
+          "";
+      }
     },
     loadQueryData() {
       //查询选择仓库数据查询
@@ -214,35 +258,101 @@ export default {
     onSubmits() {
       this.desShow = false;
       //头部按钮查询事
-      var sqlString = `select * from t_ck where cang_ku_ming_chen = '${this.formInline.cang_ku_ming_chen_value}' and qu_yu_ = '${this.formInline.qu_yu_value}'`;
-      this.queryLoad(sqlString);
+      // var sqlString = `select * from t_mjwlgl where cang_ku_ming_chen = '${this.formInline.cang_ku_ming_chen_value}' and qu_yu_ = '${this.formInline.qu_yu_value}'`;
+      let py = this.formInline.qu_yu_value.split("号")[1].replace(/^\s*/g, "");
+      let num = this.formInline.qu_yu_value.split("号")[0];
+      let quyu = this.sqlSlice(py);
+      let type = (quyu + num).replace(/^\s*/g, "");
+      var sqlString =
+        `select * from t_mjwlgl where cun_fang_wei_zhi_ like ` +
+        "'%" +
+        type +
+        "%'";
+      console.log(sqlString);
+      this.queryLoad(sqlString, type);
     },
-    queryLoad(sql) {
+    queryLoad(sql, py) {
       var datas = [];
       this.cenghao = [];
       const labelsMap = {}; // map存储
-      curdPost("sql", sql).then((res) => {
-        datas = res.variables.data;
-        datas.forEach((item) => { 
-          if (!labelsMap[item.ceng_hao_]) {
-            labelsMap[item.ceng_hao_] = [];
+      let typeData = [];
+      var sqltype =
+        `select DISTINCT SUBSTR(wei_zhi_,1,6) as wei_zhi_ from t_ck where wei_zhi_ like ` +
+        "'%" +
+        py +
+        "%'" +
+        "ORDER BY wei_zhi_ ASC ";
+      console.log(sqltype, sql);
+      curdPost("sql", sqltype).then((res) => {
+        typeData = res.variables.data;
+        console.log(sqltype, sql);
+        curdPost("sql", sql).then((res) => {
+          datas = res.variables.data;
+          typeData.forEach((item) => {
+            let num = item.wei_zhi_.split("-")[1];
+            labelsMap[num] = [];
+          });
+          if (datas.length == 0) {
+            for (var prop in labelsMap) {
+              labelsMap[prop].push({ cun_fang_wei_zhi_: "空" });
+            }
+
+            this.listData = labelsMap;
+            return;
           }
-          this.desString = `${item.cang_ku_ming_chen} ${item.qu_yu_}`;
-          labelsMap[item.ceng_hao_].push(item);
+          datas.forEach((item) => {
+            let props1 = item.cun_fang_wei_zhi_.split("-")[1];
+            for (var prop in labelsMap) {
+              if (labelsMap.hasOwnProperty(prop)) {
+                if (prop == props1) {
+                  labelsMap[prop].push(item);
+                }
+                if (prop != props1 && labelsMap[prop].length == 0) {
+                  labelsMap[prop].push({ cun_fang_wei_zhi_: "空" });
+                }
+              }
+            }
+          });
+
+          let newarr = [];
+          for (var prop in labelsMap) {
+            if (labelsMap.hasOwnProperty(prop)) {
+              if (labelsMap[prop].length > 1) {
+                var item = labelsMap[prop].slice(1);
+                // delete labelsMap[0]
+                console.log(item);
+                newarr.push(item);
+              } else {
+                console.log(labelsMap[prop]);
+                newarr.push(labelsMap[prop]);
+              }
+            }
+          }
+          this.listData = newarr;
+          console.log(this.listData, "listData");
         });
-        this.listData = labelsMap;
-        console.log(this.listData,"listData")
       });
     },
     qu_yu_Event(e) {
+      //点击区域事件，加载可视化视图
       let value = e.target.innerText;
       if (value.includes("(")) {
         let index = value.indexOf("(");
         value = value.slice(0, index);
       }
-      let sqlString = `select * from t_ck where cang_ku_ming_chen = '${this.formInline.cang_ku_ming_chen_value}' and qu_yu_ = '${value}' `;
-      this.queryLoad(sqlString);
-      // var this_ = this;
+      let num = value.slice(0, 1);
+      console.log(value, "类型");
+      let py = value.split("号")[1].replace(/^\s*/g, "");
+      // let num = this.formInline.qu_yu_value.split("号")[0];
+      let quyu = this.sqlSlice(py);
+      let type = (quyu + num).replace(/^\s*/g, "");
+      var sqlString =
+        `select * from t_mjwlgl where cun_fang_wei_zhi_ like ` +
+        "'%" +
+        type +
+        "%'";
+      console.log(sqlString);
+      this.queryLoad(sqlString, type);
       this.formInline.qu_yu_value = value;
       this.quyuShow = value;
     },
@@ -251,8 +361,9 @@ export default {
     },
   },
   watch: {
-    //监控仓库名称变化
+    //监控仓库名称变化 触发第一次加载数据
     "formInline.cang_ku_ming_chen_value": async function (newdata) {
+      console.log(newdata);
       this.firstLoadQuyu(newdata);
     },
     "formInline.qu_yu_value": function (newdata) {

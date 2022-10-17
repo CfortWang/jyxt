@@ -23,8 +23,9 @@ export default {
     },
 
     alertReport(vlues,id_) {
-      console.log(vlues,id_,"11111");
+      
       this.srcUrl= this.$reportPash.replace("show", "pdf") +vlues+"&id_="+id_;
+      console.log(this.srcUrl,"11111");
       // 42明鉴/吴/MJT-QP-7.1-01-R02合同评审表.rpx&id_='+ "1001804667832762368";
       // this.srcUrl= this.$reportPash.replace("show", "pdf") +'36内部审核程序/SGJS-CX-36-01B 年度内部审核计划.rpx&id_=969264116109672448';
       this.visible=true;

@@ -55,18 +55,18 @@
           <el-form-item
             v-show="!leixingcare"
             style="margin-left: 50px"
-            label="挂架号："
+            label="挂件号："
           >
             <el-select
               v-model="formInline.gua_jia_value"
-              placeholder="请选择挂架号"
+              placeholder="请选择挂件号"
             >
               <el-option
                 v-for="(item, index) in gua_jia_arr"
                 :key="index"
                 placeholder="区域"
-                :label="item.gua_jia_hao_ + '号' + '挂架'"
-                :value="item.gua_jia_hao_ + '号' + '挂架'"
+                :label="item.gua_jia_hao_ + '号' + '挂件'"
+                :value="item.gua_jia_hao_ + '号' + '挂件'"
               ></el-option>
             </el-select>
           </el-form-item>
@@ -128,7 +128,7 @@
               class="list-item huojia-item"
               :style="{
                 background:
-                  guajiashow == item.gua_jia_hao_ + '号挂架'
+                  guajiashow == item.gua_jia_hao_ + '号挂件'
                     ? '#FF9900'
                     : '#e5baba',
               }"
@@ -136,7 +136,7 @@
               v-for="(item, index) in gua_jia_arr"
               :key="index"
             >
-              {{ item.gua_jia_hao_ }}号挂架
+              {{ item.gua_jia_hao_ }}号挂件
             </li>
           </ul>
         </div>
@@ -162,16 +162,14 @@
                   >
                     <div class="top-dsc">
                       <div class="position">
-                        <p>位置：{{ it.shi_fou_liu_yang_?	liu_yang_wei_zhi_:it.wei_zhi_bian_hao_}}</p>
+                        <p>位置：{{ it.wei_zhi_bian_hao_ }}</p>
                         <p>样品编号：{{ it.yang_pin_bian_hao }}</p>
                         <p>
                           存储条件：{{
                             it.cun_chu_tiao_jian || it.cun_chu_yao_qiu_
                           }}
                         </p>
-                        <p >收样日期：{{ it.shou_yang_ri_qi_}}</p>
-                        <p v-if="it.shi_fou_liu_yang_ =='是'">留样期限：{{ it.liu_yang_qi_xian_}}</p>
-                        
+                        <p>留样期限：{{ it.liu_yang_qi_xian_ }}</p>
                         <!-- <p>编号:{{it.yang_pin_bian_hao}}</p> -->
                         <!-- <p>批次:</p>
                         <p>有效期:</p> -->
@@ -186,6 +184,8 @@
                             it.cun_chu_tiao_jian || it.cun_chu_yao_qiu_
                           }}
                         </p>
+                        <p v-if="false">留样期限：{{ it.liu_yang_qi_xian_ }}</p>
+                        <!-- <p>类型：{{ it.cun_fang_lei_xing }}</p> -->
                       </div>
                       <div class="right-content">
                         <p>
@@ -201,13 +201,13 @@
                 </div>
               </div>
             </div>
+            <div class="goodshelf-name" v-if="index == 1">
+              {{ desString }}
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <!-- <div class="goodshelf-name">
-      {{ desString }}
-    </div> -->
   </div>
 </template>
 
@@ -275,27 +275,19 @@ export default {
     },
     loadQueryData() {
       //查询选择数据查询
-      var sqlString =
-        "select distinct fang_jian_lei_xin from t_mjypcfwz WHERE fang_jian_lei_xin !=''";
+      var sqlString = "select distinct fang_jian_lei_xin from t_mjypcfwz WHERE fang_jian_lei_xin !=''";
       // var sqlString = "select * from t_mjypcfwz";
       var this_ = this;
       curdPost("sql", sqlString)
         .then((response) => {
           this_.sampleOption = response.variables.data;
-
-          // this_.sampleOption.pop();
-          console.log(this_.sampleOption, "11111111111122");
+          
+          this_.sampleOption.pop();
+          console.log(this_.sampleOption,"11111111111122")
         })
         .catch((err) => {
           console.log(err, "err------>");
         });
-    },
-    describeFn() {
-      this.desString =
-        this.formInline.fang_jian_hao_value +
-        this.formInline.qu_yu_value +
-        this.formInline.huo_jia_value +
-        this.formInline.gua_jia_value;
     },
     onSubmits(sql) {
       var fang_jian_ = this.formInline.fang_jian_hao_value;
@@ -307,7 +299,7 @@ export default {
       );
       var gua_jia_hao = this.formInline.gua_jia_value.substr(0, 1);
       var sql;
-      if (qu_yu != "") {
+      if (qu_yu != "") {;
         sql = `select * from t_mjypcfwz where fang_jian_lei_xin = '${fang_jian_}' and qu_yu_ = '${qu_yu}' and huo_jia_lei_xing_ = '${huo_jia_lei_xing_}' and huo_jia_hao_ = '${huo_jia_hao_}'`;
       } else {
         if (huo_jia_lei_xing_.includes("冰箱")) {
@@ -316,7 +308,7 @@ export default {
           sql = `select * from t_mjypcfwz where fang_jian_lei_xin = '${fang_jian_}' and huo_jia_lei_xing_ = '${huo_jia_lei_xing_}'  and huo_jia_hao_ = '${huo_jia_hao_}' and gua_jia_hao_= '${gua_jia_hao}'`;
         }
       }
-      this.describeFn();
+      // this.desString = fang_jian_ + qu_yu + huo_jia_hao_;
       this.queryLoad(sql);
     },
     queryLoad(sql) {
@@ -327,7 +319,7 @@ export default {
       this_.listData = [];
       curdPost("sql", sql).then((res) => {
         datas = res.variables.data;
-        console.log(datas, "2222222222 ");
+        console.log(datas,"2222222222 ")
         datas.forEach((item) => {
           if (!labelsMap[item.ceng_hao_]) {
             //没有就创建
@@ -349,10 +341,10 @@ export default {
               labelsMap[item.ceng_hao_].push(item);
             }
           });
-          console.log(labelsMap, "3333333333");
+            console.log(labelsMap,"3333333333")
         });
         // this.loading = true;
-
+        
         this_.listData = labelsMap;
       });
     },
@@ -369,7 +361,6 @@ export default {
       curdPost("sql", sqlString).then((response) => {
         this_.huo_jia_arr = response.variables.data;
       });
-      this.describeFn();
     },
     huo_jia_hao_Event(e) {
       //货架 冰箱 液氮罐点击事件
@@ -388,9 +379,9 @@ export default {
         //如果是冰箱 请求样品货位配置信息 ->查询登记表
         var sql = `select * from t_mjypcfwz where fang_jian_lei_xin = '${this.formInline.fang_jian_hao_value}' and qu_yu_ = '${this.formInline.qu_yu_value}' and  huo_jia_lei_xing_ = '${huojialeixing}' and huo_jia_hao_ = '${huojiaNum}'`;
         this.queryLoad(sql);
-        this.formInline.gua_jia_value = "";
+        //  alert("冰箱");
       } else if (selectText.includes("液氮罐")) {
-        //液氮罐 查询该液氮罐下所有的挂架
+        //液氮罐 查询该液氮罐下所有的挂件
         console.log(huojiaNum);
         let sqlString = `select distinct gua_jia_hao_ from t_mjypcfwz where huo_jia_lei_xing_ = '液氮罐' and huo_jia_hao_ = '${huojiaNum}'  order by gua_jia_hao_ asc`;
         var this_ = this;
@@ -398,13 +389,11 @@ export default {
           this_.gua_jia_arr = response.variables.data;
         });
       }
-      this.describeFn();
       this.formInline.huo_jia_value = selectText;
     },
     gua_jia_Event(e) {
-      //液氮罐挂架号点击事件 查询该液氮罐下该挂架的货位位置信息;
+      //液氮罐挂件号点击事件 查询该液氮罐下该挂件的货位位置信息;
       let selectText = e.target.innerText;
-      this.formInline.gua_jia_value = selectText;
       this.guajiashow = selectText;
       let hguajiaNum = selectText.substr(0, 1);
       var fang_jian_hao_value = this.formInline.fang_jian_hao_value;
@@ -413,10 +402,10 @@ export default {
         0,
         1
       )}' and gua_jia_hao_= '${hguajiaNum}'`;
-      this.describeFn();
+      this.desString = fang_jian_hao_value + huo_jia_value + selectText;
       this.queryLoad(sql);
     },
-    huo_jia_arrEvent(quyu) {
+    huo_jia_arrEvent(quyu){
       let sqlString = `select distinct huo_jia_hao_,huo_jia_lei_xing_ from t_mjypcfwz where fang_jian_lei_xin = '${this.formInline.fang_jian_hao_value}' and qu_yu_ = '${quyu}'   order by huo_jia_hao_ asc`;
       var this_ = this;
       curdPost("sql", sqlString).then((response) => {
@@ -430,9 +419,9 @@ export default {
     guajiaarrEvent(huojiaweizhi) {
       let huojiaNum = huojiaweizhi.substr(0, 1);
       let huojialeixing = huojiaweizhi.substr(2, huojiaweizhi.length);
-      if (huojiaweizhi.includes("冰箱")) {
-        this.gua_jia_arr = [];
-        return;
+      if(huojiaweizhi.includes("冰箱")){
+        this.gua_jia_arr =[];
+        return
       }
       let sqlString = `select distinct gua_jia_hao_ from t_mjypcfwz where fang_jian_lei_xin = '留样间' and huo_jia_lei_xing_ = '${huojialeixing}' and huo_jia_hao_ = '${huojiaNum}'   order by gua_jia_hao_`;
       var this_ = this;
@@ -447,16 +436,13 @@ export default {
       this.huo_jia_arr = [];
       let sqlString = `select distinct qu_yu_ ,huo_jia_hao_ from t_mjypcfwz where fang_jian_lei_xin = '${newdata}' `;
       var this_ = this;
-      this_.formInline.qu_yu_value = "";
-      this_.formInline.gua_jia_value = "";
-      this_.formInline.huo_jia_value = "";
-      this_.describeFn();
       curdPost("sql", sqlString).then((response) => {
         this_.quyu_arr = response.variables.data;
         this_.quyu_arr.forEach((item) => {
-          //待优化 事实上是一个用来判断F
+          //待优化 事实上是一个用来判断
           if (item.qu_yu_ == "") {
             this_.leixingcare = false;
+            this_.formInline.qu_yu_value = "";
             let sql = `select distinct huo_jia_hao_,huo_jia_lei_xing_ from t_mjypcfwz where fang_jian_lei_xin = '${newdata}'  order by huo_jia_hao_ asc`;
             curdPost("sql", sql).then((res) => {
               this_.huo_jia_arr = res.variables.data;
@@ -471,59 +457,30 @@ export default {
         }
       });
     },
-    "formInline.qu_yu_value": function (newdata, olddata) {
-      //监控区域变化 input 输入框数据变化 来改变区域和货架信息（input）
-      this.quyuShow = newdata;
-      this.huo_jia_arrEvent(newdata);
-      this.huojiashow = "";
-      this.guajiashow = "";
-      let sqlString = `select distinct huo_jia_hao_,huo_jia_lei_xing_ from t_mjypcfwz where fang_jian_lei_xin = '${this.formInline.fang_jian_hao_value}' and qu_yu_ = '${e.target.innerText}' order by huo_jia_hao_ asc`;
-      var this_ = this;
-      this.qu_yu_value = newdata;
-      this.quyuShow = newdatat;
-      this.formInline.qu_yu_value = newdata;
-      curdPost("sql", sqlString).then((response) => {
-        this_.huo_jia_arr = response.variables.data;
-      });
-      this.describeFn();
-    },
-    "formInline.gua_jia_value": function (newdata, olddata) {
-      //监控挂架变化 input 输入框数据变化 来改变区域和货架信息（input）
-      this.guajiashow = newdata;
-    },
-    "formInline.huo_jia_value": function (newdata, olddata) {
-      //监控货架变化 input 输入框数据变化 来改变区域和货架信息（input）
-      this.huojiashow = newdata;
-      //货架 冰箱 液氮罐点击事件
-      this.guajiashow = "";
-      let selectText = newdata;
-      this.guajiaarrEvent(selectText);
-      this.huojiashow = selectText;
-      let huojiaNum = selectText.substr(0, 1);
-      this.formInline.huo_jia_value = selectText;
-      this.formInline.gua_jia_value = "";
-      // let huojialeixing = this.formInline.huo_jia_value.substr(
-      //   2,
-      //   this.formInline.huo_jia_value.length
-      // );
-      //区分是冰箱和液氮罐的点击事件
-      if (selectText.includes("冰箱")) {
-        //如果是冰箱 请求样品货位配置信息 ->查询登记表
-        // var sql = `select * from t_mjypcfwz where fang_jian_lei_xin = '${this.formInline.fang_jian_hao_value}' and qu_yu_ = '${this.formInline.qu_yu_value}' and  huo_jia_lei_xing_ = '${huojialeixing}' and huo_jia_hao_ = '${huojiaNum}'`;
-        // this.queryLoad(sql);
-        // this.formInline.gua_jia_value = "";
-      } else if (selectText.includes("液氮罐")) {
-        //液氮罐 查询该液氮罐下所有的挂架
-        console.log(huojiaNum);
-        let sqlString = `select distinct gua_jia_hao_ from t_mjypcfwz where huo_jia_lei_xing_ = '液氮罐' and huo_jia_hao_ = '${huojiaNum}'  order by gua_jia_hao_ asc`;
-        var this_ = this;
-        curdPost("sql", sqlString).then((response) => {
-          this_.gua_jia_arr = response.variables.data;
-        });
-      }
-      this.describeFn();
-      this.formInline.huo_jia_value = selectText;
-    },
+    // "formInline.qu_yu_value": function (newdata, olddata) {
+    //   let sqlString = `select distinct huo_jia_hao_,huo_jia_lei_xing_ from t_mjypcfwz where fang_jian_lei_xin = '${this.formInline.fang_jian_hao_value}' and qu_yu_ = '${newdata}'   order by huo_jia_hao_ asc`;
+    //   var this_ = this;
+    //   curdPost("sql", sqlString).then((response) => {
+    //     this_.huo_jia_arr = response.variables.data;
+    //     if (!this_.firstLoadActive) {
+    //       this_.formInline.huo_jia_value = "";
+    //     }
+    //     this_.firstLoadActive = false;
+    //   });
+    // },
+    // "formInline.huo_jia_value": function (newdata, olddata) {
+    //   console.log(newdata.substr(0, 1), "货架监听");
+    //   let sqlString = `select distinct gua_jia_hao_ from t_mjypcfwz where fang_jian_lei_xin = '留样间' and huo_jia_lei_xing_ = '液氮罐' and huo_jia_hao_ = '${newdata.substr(
+    //     0,
+    //     1
+    //   )}'   order by gua_jia_hao_`;
+    //   var this_ = this;
+    //   console.log(sqlString, "件数");
+    //   curdPost("sql", sqlString).then((response) => {
+    //     this_.gua_jia_arr = response.variables.data;
+    //     console.log(this_.gua_jia_arr, "挂件数");
+    //   });
+    // },
   },
 };
 </script>

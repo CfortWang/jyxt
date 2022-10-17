@@ -24,7 +24,10 @@ export default {
     dynamicParams: {
       type: Object
     },
-    templateId: String,
+    templateId: {
+      type: String,
+      default: ''
+    },
   },
   data() {
     return {
@@ -68,6 +71,9 @@ export default {
       immediate: true
     } */
   },
+  // created(){
+  //   this.loadDataTemplate()
+  // },
   methods: {
     loadDataTemplate() {
       const loading = this.$loading({

@@ -97,7 +97,7 @@ export default {
                   this_.$message.error("你要留样的话，存放位置不能为空哦!")
                   return;
                 }
-                if(ypInfoList[yp].shou_yang_wei_zhi != null){
+                if(ypInfoList[yp].shou_yang_wei_zhi != undefined && ypInfoList[yp].shou_yang_wei_zhi != ''){
                   this_.$message.error("你要留样的话，就不要选收样存放位置!")
                   return;
                 }
@@ -118,7 +118,7 @@ export default {
                   this_.$message.error("你正常收样的话，样品存放位置不能为空哦!")
                   return;
                 }
-                if(ypInfoList[yp].liu_yang_wei_zhi_ != null){
+                if(ypInfoList[yp].liu_yang_wei_zhi_ != undefined && ypInfoList[yp].liu_yang_wei_zhi_ != ''){
                   this_.$message.error("你正常收样的话，就不要选择留样存放位置!")
                   return;
                 }
@@ -204,19 +204,41 @@ export default {
                   repostCurd('updates','{"tableName":"t_mjwtsqb","paramWhere":['+mjypbWJ+'],"paramCond":{"zhuang_tai_":"委托结束"}}')
                  let mjwtsqbAllResult = []
                  let mjwtsqbIdList = []
+                 let mjfbbList = []
+                 let mjfbbWJList = []
                 for(let i in wjAllList){
                   repostCurd('select','{"tableName":"t_mjwtsqb","paramWhere":'+wjAllList[i]+'}').then(response=>{
+                         mjfbbWJList.push('{"wei_tuo_wai_jian_":"' + response.variables.data[0].id_ + '"}')
                          mjwtsqbAllResult.push(response.variables.data[0])
                          mjwtsqbIdList.push('{"id_":"' + response.variables.data[0].id_ + '"}')
                         })
                 }
 
+                setTimeout(()=>{
+                  let narr = []
+                  for(let a of mjfbbWJList){
+                    narr.push(a)
+                  }
+                  repostCurd('selects','{"tableName":"t_mjfbb","paramWhere":['+narr+']}').then(response=>{
+                    mjfbbList.push(response.variables.data)
+                 })
+                }, 1000)
              setTimeout(()=>{
+               /* 分包
+                repostCurd('select','{"tableName":"t_mjfbb","paramWhere":'+mjwtsqbIdList[i]+'}').then(response=>{
+               	 console.log(response.variables.data)
+                	mjfbbList.push(response.variables.data)
+                })*/
                let rwb = []
+               let index = 0
+               if(mjypbList != null && mjypbList.length >= 1){
+                 index = mjypbList[0].jian_ce_xiang_mu2.split(",").length - 1
+               }
                for(var i in mjypbList){
                 let str =  mjypbList[i].jian_ce_xiang_mu2.split(",")
                   for(var p in str){
-                  let rwzb = {}
+                   let temp = index - p
+                   let rwzb = {}
                     let wz_ = ypInfoList[i].shi_fou_liu_yang_ == "是" ? ypInfoList[i].liu_yang_wei_zhi_ : ypInfoList[i].shou_yang_wei_zhi   	  //	对应的样品存放位置
                     rwzb["jian_ce_xiang_mu_"] = str[p] 			  	                //	取当前检测项目
                     rwzb["yang_pin_bian_hao"] = mjypbList[i].yang_pin_bian_hao 	//	取对应的样品编号
@@ -233,8 +255,13 @@ export default {
                     rwzb["bao_gao_jian_ce_s"] =  this_.dateFormat()   //检测时间
                     rwzb["zhan_shi_biao_wai"] = mjwtsqbAllResult[i].ye_mian_zong_zhua
                     rwzb["zhuang_tai_"] = "任务待分配"			//	状态
+                    rwzb["shi_fou_fen_bao_"] = mjfbbList[i].shi_fou_fen_bao_			// 是否分包
+                    rwzb["qi_wang_wan_cheng"] = mjfbbList[i].wan_cheng_shi_jia 			// 期望完成时间
+                    rwzb["shi_fou_fen_bao_"] = mjfbbList[0][temp].shi_fou_fen_bao_			// 是否分包
+                    rwzb["qi_wang_wan_cheng"] = mjfbbList[0][temp].wan_cheng_shi_jia 			// 期望完成时间
                     rwb.push(rwzb)
                   }
+                    index += str.length
                }
                repostCurd('updates', '{"tableName":"t_mjwtsqb","paramWhere":['+mjwtsqbIdList+'],"paramCond":{"jian_ce_kai_shi_s":"' + this_.dateFormat() + '"}}')
                let uidList = []
@@ -308,10 +335,7 @@ export default {
         var year=date.getFullYear();
         var month= date.getMonth()+1<10 ? "0"+(date.getMonth()+1) : date.getMonth()+1;
         var day=date.getDate()<10 ? "0"+date.getDate() : date.getDate();
-        var hours=date.getHours()<10 ? "0"+date.getHours() : date.getHours();
-        var minutes=date.getMinutes()<10 ? "0"+date.getMinutes() : date.getMinutes();
-        var seconds=date.getSeconds()<10 ? "0"+date.getSeconds() : date.getSeconds();
-        return year+"-"+month+"-"+day+" ";
+        return year+"-"+month+"-"+day;
     },
 
 
