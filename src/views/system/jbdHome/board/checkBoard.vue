@@ -252,15 +252,21 @@
                 const sql1 = `select tm.zhuang_tai_ as state, DATE_FORMAT(tm.create_time_, '%Y-%m-%d %H:%i:%s') as time from t_mjwtsqb tm where tm.create_time_ like '${this.year}%'`
                 // 获取检测月度年度任务完成情况数据
                 const sql2 = `select rw.zhuang_tai_ as state, DATE_FORMAT(rw.create_time_, '%Y-%m-%d %H:%i:%s') as time from t_rwfpb rw where rw.create_time_ like '${this.year}%'`
-                // 获取样品受理情况数据
-                const sql3 = ``
+                // 获取已委托样品数量
+                const sql3 = `select count(yp.id_) as unReceive from t_mjypb yp, t_mjwtsqb wt where yp.wai_jian_ = wt.id_ and yp.create_time_ like '${this.month}%'`
+                // 获取样品 收样/留样/不合格数量
+                const sql4 = `select count(id_) as receive, count(shi_fou_liu_yang_ = '是' or null) as keep, count(yan_shou_zhuang_t = '残缺' or null) as incomplete from t_mjypdjb where create_time_ like '${this.month}%'`
                 Promise.all([
                     curdPost('sql', sql1),
-                    curdPost('sql', sql2)
-                ]).then(([res1, res2]) => {
+                    curdPost('sql', sql2),
+                    curdPost('sql', sql3),
+                    curdPost('sql', sql4),
+                ]).then(([ res1, res2, res3, res4]) => {
                     const data1 = res1.variables.data
                     const data2 = res2.variables.data
-                    // console.log(data1, data2)
+                    const data3 = res3.variables.data
+                    const data4 = res4.variables.data
+                    // console.log(data1, data2, data3, data4)
 
                     let trust = new Array(12).fill(0)
                     let accepted = new Array(12).fill(0)
@@ -292,11 +298,13 @@
                             value: completeCount
                         }
                     ]
+                    let sample = [data3[0].unReceive - data4[0].receive, data4[0].receive, data4[0].incomplete, data4[0].keep]
                     this.bottomCardData.trust = trust
                     this.bottomCardData.accepted = accepted
                     this.bottomCardData.task = task
                     this.bottomCardData.complete = complete
                     this.bottomCardData.year = year
+                    this.bottomCardData.sample = sample
                     this.bottomCardData.flag = true
 
                     // console.log(this.bottomCardData)

@@ -52,6 +52,7 @@
                 trustOption.series[1].data = this.info.accepted
                 monthOption.series[0].data = this.info.task
                 monthOption.series[1].data = this.info.complete
+                sampleOption.series[0].data = this.info.sample
                 yearOption.series[0].data = this.info.year
 
                 // 渲染
