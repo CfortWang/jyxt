@@ -7,12 +7,14 @@
                 </div> -->
                 <div id="accept" style="width: 100%; height: 100%"></div>
             </div>
+            <dv-decoration-2 :reverse="true" style="width:5px;height:100%;" />
             <div :class="$style.item">
                 <!-- <div :class="$style.title">
                     <span>检测任务情况</span>
                 </div> -->
                 <div id="task" style="min-width: 300px; height: 100%"></div>
             </div>
+            <dv-decoration-2 :reverse="true" :dur="10" style="width:5px;height:100%;" />
             <div :class="$style.item">
                 <dv-scroll-board
                     v-if="tableData.data && tableData.data.length"
@@ -21,7 +23,7 @@
                 />
             </div>
         </div>
-        <!-- <dv-decoration-4 :reverse="true" :dur="10" style="width:100%;height:5px;" /> -->
+        <dv-decoration-10 :dur="15"/>
     </div>
 </template>
 <script>
@@ -93,7 +95,12 @@
             width: 96%;
             height: calc((100% - 240px) / 2);
             padding: 0 2%;
-            margin: 20px 0;
+            margin: 15px 0 30px;
+            .dv-decoration-10 {
+                width: 100%;
+                margin: 12px 0;
+                height: 5px;
+            }
         }
     }
 </style>

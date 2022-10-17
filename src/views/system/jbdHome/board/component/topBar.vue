@@ -155,7 +155,7 @@
         }
         .dv-decoration-10 {
             width: 96%;
-            margin: 0 2%;
+            margin: -7px 2% 0;
             height: 5px;
         }
     }

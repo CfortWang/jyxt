@@ -1,12 +1,27 @@
 <template>
     <div id="bottom-card">
         <div :class="$style.chart_box">
-            <div
+            <!-- <div
                 v-for="(item, index) in cards"
                 :key="index"
                 :class="$style.item"
             >
                 <div :id="item" style="width: 100%; height: 100%"></div>
+            </div> -->
+            <div :class="$style.item">
+                <div id="trust"></div>
+            </div>
+            <dv-decoration-2 :reverse="true" :dur="4" style="width:5px;height:100%;" />
+            <div :class="$style.item">
+                <div id="sample"></div>
+            </div>
+            <dv-decoration-2 :reverse="true" :dur="6" style="width:5px;height:100%;" />
+            <div :class="$style.item">
+                <div id="month"></div>
+            </div>
+            <dv-decoration-2 :reverse="true" :dur="8" style="width:5px;height:100%;" />
+            <div :class="$style.item">
+                <div id="year"></div>
             </div>
         </div>
     </div>
@@ -75,6 +90,10 @@
             width: 24%;
             height: 100%;
             background-color: rgba(6, 30, 93, 0.5);
+            > div {
+                width: 100%;
+                height: 100%;
+            }
         }
     }
     :global {
