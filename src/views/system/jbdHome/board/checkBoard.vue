@@ -81,7 +81,8 @@
                 },
                 bottomCardData: {
                     flag: false
-                }
+                },
+                timer: null
             }
         },
         // beforeRouteEnter(to, from, next){
@@ -96,12 +97,22 @@
             if (screenfull.isEnabled && !screenfull.isFullscreen) {
                 this.allView()
             }
+
             this.updateAll()
+
+            if (this.timer){
+                clearInterval(this.timer)
+            }
+
+            this.timer = setInterval(() => {
+                this.updateAll()
+            },600000)
         },
         beforeDestroy() {
             if (screenfull.isFullscreen) {
                 screenfull.toggle()
             }
+            clearInterval(this.timer)
         },
         methods: {
             allView() {
