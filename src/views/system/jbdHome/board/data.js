@@ -29,7 +29,31 @@ export const acceptOption = {
             lineStyle: {
                 color: '#fff'
             }
-        }
+        },
+        // formatter: function (params) {
+        //     var newParamsName = ''
+        //     var paramsNameNumber = params.length
+        //     //一行显示几个字
+        //     var provideNumber = 2
+        //     var rowNumber = Math.ceil(paramsNameNumber / provideNumber)
+        //     if (paramsNameNumber > provideNumber) {
+        //         for (var p = 0; p < rowNumber; p++) {
+        //             var tempStr = ""
+        //             var start = p * provideNumber
+        //             var end = start + provideNumber
+        //             if (p == rowNumber - 1) {
+        //                 tempStr = params.substring(start, paramsNameNumber);
+        //             } else {
+        //                 tempStr = params.substring(start, end) + "\n"
+        //             }
+        //             newParamsName += tempStr
+        //         }
+
+        //     } else {
+        //         newParamsName = params
+        //     }
+        //     return newParamsName
+        // }
         // axisLabel: {
         //     inside: true,
         //     color: "#000",
@@ -102,7 +126,7 @@ export const taskOption = {
     },
     xAxis: {
         type: 'category',
-        data: ['委托', '检测', '任务发放', '报告'],
+        data: ['委托', '任务分配', '检测', '报告'],
         axisTick: {
             alignWithLabel: true
         },
@@ -295,7 +319,7 @@ export const sampleOption = {
     },
     xAxis: {
         type: 'category',
-        data: ['已委托未收样', '已收样', '已收不合格', '留样'],
+        data: ['已委托未收样1', '已收样', '已收不合格', '留样'],
         axisTick: {
             alignWithLabel: true
         },
@@ -308,6 +332,30 @@ export const sampleOption = {
             lineStyle: {
                 color: '#fff'
             }
+        },
+        formatter: function (params) {
+            var newParamsName = ''
+            var paramsNameNumber = params.length
+            //一行显示几个字
+            var provideNumber = 2
+            var rowNumber = Math.ceil(paramsNameNumber / provideNumber)
+            if (paramsNameNumber > provideNumber) {
+                for (var p = 0; p < rowNumber; p++) {
+                    var tempStr = ''
+                    var start = p * provideNumber
+                    var end = start + provideNumber
+                    if (p == rowNumber - 1) {
+                        tempStr = params.substring(start, paramsNameNumber);
+                    } else {
+                        tempStr = params.substring(start, end) + "\n"
+                    }
+                    newParamsName += tempStr
+                }
+
+            } else {
+                newParamsName = params
+            }
+            return newParamsName
         }
     },
     yAxis: {

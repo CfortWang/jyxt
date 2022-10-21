@@ -169,6 +169,23 @@
                                 ]
                             },
                             {
+                                title: '任务分配',
+                                children: [
+                                    {
+                                        label: '总数',
+                                        value: task
+                                    },
+                                    {
+                                        label: '已完成',
+                                        value: rwFinish
+                                    },
+                                    {
+                                        label: '未完成',
+                                        value: task - rwFinish
+                                    }
+                                ]
+                            },
+                            {
                                 title: '检测',
                                 children: [
                                     {
@@ -182,23 +199,6 @@
                                     {
                                         label: '未完成',
                                         value: jcTotal - jcFinish
-                                    }
-                                ]
-                            },
-                            {
-                                title: '任务发放',
-                                children: [
-                                    {
-                                        label: '总数',
-                                        value: task
-                                    },
-                                    {
-                                        label: '已完成',
-                                        value: rwFinish
-                                    },
-                                    {
-                                        label: '未完成',
-                                        value: task - rwFinish
                                     }
                                 ]
                             },
