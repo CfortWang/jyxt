@@ -23,37 +23,37 @@ export const acceptOption = {
         axisLabel: {
             style: {
                 fill: '#fff'
+            },
+            formatter: function (params) {
+                let result = ''
+                //一行显示几个字
+                let rowMax = 2
+                let rowNumber = Math.ceil(params.length / rowMax)
+                // 超过 3 个字换行
+                if (params.length > 3) {
+                    for (let p = 0; p < rowNumber; p++) {
+                        let tempStr = ''
+                        let start = p * rowMax
+                        let end = start + rowMax
+                        if (p == rowNumber - 1) {
+                            tempStr = params.substring(start, params.length);
+                        } else {
+                            tempStr = params.substring(start, end) + '\n'
+                        }
+                        result += tempStr
+                    }
+    
+                } else {
+                    result = params
+                }
+                return result
             }
         },
         axisLine: {
             lineStyle: {
                 color: '#fff'
             }
-        },
-        // formatter: function (params) {
-        //     var newParamsName = ''
-        //     var paramsNameNumber = params.length
-        //     //一行显示几个字
-        //     var provideNumber = 2
-        //     var rowNumber = Math.ceil(paramsNameNumber / provideNumber)
-        //     if (paramsNameNumber > provideNumber) {
-        //         for (var p = 0; p < rowNumber; p++) {
-        //             var tempStr = ""
-        //             var start = p * provideNumber
-        //             var end = start + provideNumber
-        //             if (p == rowNumber - 1) {
-        //                 tempStr = params.substring(start, paramsNameNumber);
-        //             } else {
-        //                 tempStr = params.substring(start, end) + "\n"
-        //             }
-        //             newParamsName += tempStr
-        //         }
-
-        //     } else {
-        //         newParamsName = params
-        //     }
-        //     return newParamsName
-        // }
+        }
         // axisLabel: {
         //     inside: true,
         //     color: "#000",
@@ -319,43 +319,42 @@ export const sampleOption = {
     },
     xAxis: {
         type: 'category',
-        data: ['已委托未收样1', '已收样', '已收不合格', '留样'],
+        data: ['已委托未收样', '已收样', '已收不合格', '留样'],
         axisTick: {
             alignWithLabel: true
         },
         axisLabel: {
             style: {
                 fill: '#fff'
+            },
+            formatter: function (params) {
+                let result = ''
+                //一行显示几个字
+                let rowMax = 3
+                let rowNumber = Math.ceil(params.length / rowMax)
+                if (params.length > rowMax) {
+                    for (let p = 0; p < rowNumber; p++) {
+                        let tempStr = ''
+                        let start = p * rowMax
+                        let end = start + rowMax
+                        if (p == rowNumber - 1) {
+                            tempStr = params.substring(start, params.length);
+                        } else {
+                            tempStr = params.substring(start, end) + '\n'
+                        }
+                        result += tempStr
+                    }
+    
+                } else {
+                    result = params
+                }
+                return result
             }
         },
         axisLine: {
             lineStyle: {
                 color: '#fff'
             }
-        },
-        formatter: function (params) {
-            var newParamsName = ''
-            var paramsNameNumber = params.length
-            //一行显示几个字
-            var provideNumber = 2
-            var rowNumber = Math.ceil(paramsNameNumber / provideNumber)
-            if (paramsNameNumber > provideNumber) {
-                for (var p = 0; p < rowNumber; p++) {
-                    var tempStr = ''
-                    var start = p * provideNumber
-                    var end = start + provideNumber
-                    if (p == rowNumber - 1) {
-                        tempStr = params.substring(start, paramsNameNumber);
-                    } else {
-                        tempStr = params.substring(start, end) + "\n"
-                    }
-                    newParamsName += tempStr
-                }
-
-            } else {
-                newParamsName = params
-            }
-            return newParamsName
         }
     },
     yAxis: {
@@ -547,13 +546,13 @@ export const yearOption = {
             {
                 name: '未完成',
                 textStyle: {
-                    color: '#00baff'
+                    color: '#ff6347'
                 }
             },
             {
                 name: '已完成',
                 textStyle: {
-                    color: '#f5d94e'
+                    color: '#3f3'
                 }
             }
         ]
@@ -575,11 +574,9 @@ export const yearOption = {
                     label: {
                         show: true,
                         position: 'outer',
-                        // formatter: '{d}%'
                         formatter: `占比：{d}%\n\n\r{b}:{c}`,
                         // formatter: `{b}:{c}\n\n\r占比：{d}%`,
-                        fontSize: 12,
-                        // padding: [0, 5]
+                        fontSize: 12
                     },
                     labelLine: {
                         show: true
@@ -588,7 +585,7 @@ export const yearOption = {
             }
         }
     ],
-    color: ['#00baff', '#f5d94e'],
+    color: ['#ff6347', '#3f3'],
     tooltip: {
         show: true,
         trigger: 'item',

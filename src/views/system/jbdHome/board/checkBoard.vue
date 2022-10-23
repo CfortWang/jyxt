@@ -8,13 +8,14 @@
                 <dv-decoration-8 :class="$style.right" :reverse="true" />
                 <div :class="$style.title">{{ titleName }}</div>
                 <div :class="$style.time">
+                    <span>月份：</span>
                     <el-date-picker
                         v-model="month"
                         type="month"
                         value-format="yyyy-MM"
                         format="yyyy-MM"
                         placeholder="日期选择"
-                        style="width: 130px"
+                        style="width: 120px"
                         :readonly="false"
                         :editable="true"
                         :clearable="false"
@@ -377,8 +378,7 @@
             display: flex;
             justify-content: space-between;
             flex-shrink: 0;
-            .left,
-            .right {
+            .left, .right {
                 width: 25%;
                 height: 60px;
             }
@@ -395,21 +395,25 @@
                 top: 15px;
                 transform: translateX(-50%);
             }
-            .time,
-            .back {
+            .time, .back {
                 width: 8%;
                 cursor: pointer;
                 height: 2.825rem;
                 line-height: 2.825rem;
                 text-align: center;
-                margin-left: 63%;
                 margin-top: 2.5%;
                 flex: 1;
                 position: absolute;
                 color: #ffffff;
             }
+            .time {
+                display: flex;
+                justify-content: flex-end;
+                width: 12%;
+                right: 75%;
+            }
             .back {
-                margin-left: 75%;
+                left: 75%;
             }
         }
     }
