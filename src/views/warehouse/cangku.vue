@@ -2,7 +2,7 @@
   <div class="sample-content">
     <!-- 表格組件 -->
     <div class="top-content">
-      <div class="top-title">仓库可视化</div>
+      <div class="top-title">库存可视化</div>
       <div class="query-content">
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
           <el-form-item label="仓库名称：">
