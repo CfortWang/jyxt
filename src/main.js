@@ -20,6 +20,10 @@ import less from 'less'
 import Blob from './excel/Blob'
 import Export2Excel from './excel/Export2Excel.js'
 
+//引入echarts
+import * as echarts from 'echarts'
+Vue.prototype.$echarts = echarts
+
 //less的css编码
 Vue.use(less)
 //数据大屏插件

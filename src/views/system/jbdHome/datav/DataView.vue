@@ -149,12 +149,12 @@ export default {
     box-sizing: border-box;
     padding-left:  0.8%;
   }
-  .block-top-content {
-    height: 55%;
-    display: flex;
-    flex-grow: 0;
-    box-sizing: border-box;
-    padding-bottom:  0.8%;
-  }
+  // .block-top-content {
+  //   height: 55%;
+  //   display: flex;
+  //   flex-grow: 0;
+  //   box-sizing: border-box;
+  //   padding-bottom:  0.8%;
+  // }
 }
 </style>

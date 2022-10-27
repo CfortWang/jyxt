@@ -253,6 +253,9 @@ export default {
       }
     },
     yeare(value,dedal){
+      if(value ==undefined || value ==null || undefined ==""){
+        return ""
+      }
       if(dedal=="年"){
         return value.split("-")[0]
       }else if(dedal=="月"){
@@ -282,7 +285,6 @@ export default {
       this.listData = [];
       curdPost("sql", sql).then((res) => {
         this_.tableData = res.variables.data;
-        console.log(this_.tableData, "12121");
         if (this_.tableData.length > 0) {
           this.hetongidFn(this_.tableData);
         } else {
@@ -469,7 +471,7 @@ export default {
       }
     },
     isYubaogao(value, row) {
-      console.log(value, row.jian_ce_xiang_mu_, "1222222222");
+      
     },
     // pin凑sql
     selectSplit() {
@@ -507,7 +509,6 @@ export default {
         "select * from t_mjjcbg " +
         moreSql +
         " shi_fou_yu_bao_ga='否' and lei_bie_qu_fen_yu = 'cnas' ORDER BY create_time_ DESC limit 0,20";
-      console.log(sql, "moresql");
       this.loadData(sql);
     },
     handleSizeChange(value) {
@@ -517,7 +518,6 @@ export default {
       this.loadData(sql);
     },
     handleCurrentChange(value) {
-      console.log(value)
       let sql =
         "select * from t_mjjcbg WHERE shi_fou_yu_bao_ga='否' and lei_bie_qu_fen_yu ='cnas' ORDER BY create_time_ DESC limit " +
         value +", 20";

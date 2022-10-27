@@ -1,441 +1,249 @@
 <template>
-  <div id="data-view-yangp">
-    <!-- 扫码接收的输入框-->
-    <el-input
-      v-model="facilityId"
-      ref="redarInput"
-      @change="facilityData(facilityId)"
-      style="z-index: -999;"
-      ></el-input>
-
-    <dv-full-screen-container>
-      <div class="main-header">
-
-        <div class="mh-left">
-          <div @click.prevent="toHome()"
-                        style="width: 140px;
-                           height: 40px;
-                           cursor: pointer;
-                           text-align:center;
-                           color: #FFFFFF;
-                           line-height: 40px;
-                           font-size: 14px;
-                           margin-left:35px;
-                           ">
-                    <dv-border-box-8>
-                            返回首页
-                          </dv-border-box-8>
-          </div>
-        </div>
-
-        <div class="mh-middle">样品流转及数据监控统计</div>
-        <div class="mh-right">
-
-
-
-        </div>
+  <div  class="data-view">
+      <!-- 全屏显示容器 -->
+      <dv-full-screen-container>
+        <div class="headerContent">
+           <!-- 标题装饰组件 -->
+          <header-decoration :titleName="outputData.headerName"/> 
+          <div
+                   style="width: 18%;
+                     cursor: pointer;
+                      height:2.825rem;
+                      line-height: 2.825rem;
+                      text-align:center;
+                      margin-left:70%;
+                      margin-top:-60px;
+                      flex: 1;
+                      position: absolute;
+                      color: #FFFFFF;"
+                      >
+                <dv-border-box-8 >
+                 
+                  上一次更新时间:{{this.sendTime}}
+                      </dv-border-box-8>
       </div>
-
-      <dv-border-box-1 class="main-container">
-        <div class="mc-top">
-          <Top-Left-Cmp />
-          <Top-Middle-Cmp />
-         <!-- <Top-right-Cmp /> -->
-
-
-
-         <!-- 出入库管理-->
-         <div>
-            <div @click.prevent="openRedar('检验检测')"
-                          style="width: 180px;
-                            cursor: pointer;
-                             text-align:center;
-                             color: #FFFFFF;
-                             line-height: 50px;
-                             ">
-                      <dv-border-box-7>
-                          检验检测扫码登记
-                      </dv-border-box-7>
-            </div>
-            <dv-decoration-8 :reverse="true" style="width:300px;height:50px;" />
-            </br>
-            <div @click.prevent="openRedar('待处理')"
-                          style="width: 180px;
-                            cursor: pointer;
-                             text-align:center;
-                             color: #FFFFFF;
-                             line-height: 50px;
-                             ">
-                      <dv-border-box-7>
-                          检完待处理扫码登记
-                      </dv-border-box-7>
-            </div>
-            <dv-decoration-8 :reverse="true" style="width:300px;height:50px;" />
-            </br>
-            <div @click.prevent="openRedar('处理')"
-                          style="width: 180px;
-                            cursor: pointer;
-                             text-align:center;
-                             color: #FFFFFF;
-                             line-height: 50px;
-                             ">
-                      <dv-border-box-7>
-                          样品处理扫码登记
-                      </dv-border-box-7>
-            </div>
-            <dv-decoration-8 :reverse="true" style="width:300px;height:50px;" />
-         </div>
-
-         <!-- 扫码操作组件-->
-
-         <div class="popContainer" v-if="redar" @click="remRedar">
-              <dv-decoration-12 style="width:150px;height:150px;margin:0 auto;top: 35%;">
-                 开启扫描设备连接
-              </dv-decoration-12>
-         </div>
-
-         <el-dialog
-             width="75%"
-             :modal-append-to-body='false'
-             :visible.sync="visible">
-                 <div style="min-height: 600px;">
-                   <div style="float: left; font-weight: bold;">需要{{behavior}}操作的样品:</div>
-                    <el-button @click="submitData" type="primary" style="float: right;">确认提交</el-button>
-                    <el-table
-                       :data="listData"
-                       stripe
-                       style="width: 100%">
-                       <el-table-column
-                         prop="sheBeiMingCheng"
-                         label="设备名称"
-                         >
-                       </el-table-column>
-
-                       <el-table-column
-                         prop="guiGeXingHao"
-                         label="规格型号"
-                        >
-                       </el-table-column>
-
-                       <el-table-column
-                         prop="sheBeiShiBieH"
-                         label="设备识别号">
-                       </el-table-column>
-
-                       <el-table-column
-                         prop="sheBeiZhuangTa"
-                         label="设备状态">
-                       </el-table-column>
-                     </el-table>
-                 </div>
-           </el-dialog>
+          <!-- <div>当前时间</div> -->
+          <!-- 样品数据总览 -->
+          <div class="overView">
+            <!-- <header-content/> -->
+            <headerContent  @getUpdateTime="getTime"></headerContent>
+            <dv-decoration-10 style="width:100%;height:5px;" />
+          </div> 
 
         </div>
+       
 
-        <!-- 其他统计组件 -->
-        <div class="mc-bottom">
-          <dv-border-box-6 class="bottom-left-container">
-            <dv-decoration-4 class="mcb-decoration-1" style="width:5px;height:45%;" />
-            <dv-decoration-4 class="mcb-decoration-2" style="width:5px;height:45%;" />
-            <Bottom-Left-Chart-1 />
-            <Bottom-Left-Chart-2 />
-          </dv-border-box-6>
-
-          <div class="bottom-right-container">
-            <Bottom-Right-Table-1 />
-            <Bottom-Right-Table-2 />
-            <Bottom-Right-Table-3 />
-            <Bottom-Right-Table-4 />
+        <!-- 主体内容(图表部分) -->
+        <div class="mainContent">
+          <div class="entrust">
+            <div class="entrustNumber" ref="Number_refs">
+              <!-- 委托样品条目情况组件 -->
+              <entrust-number/>
+            </div>
+            <!-- 委托样品类型组件 -->
+            <div class="entrustType" >
+              <entrust-type/>
+            </div>
+          </div>
+          <div class="detection">
+            <div class="monthlyStatus" ref="MonthlyStatus_refs"><monthlyStatus/></div>
+            <div class="monthlyNumber" ref="MonthlyNumber_refs"><monthlyNumber/></div>
+            <div class="annualStatus" ref="AnnualStatus_refs"><annualStatus/></div>
           </div>
         </div>
-      </dv-border-box-1>
-
-    </dv-full-screen-container>
-  </div>
+        
+      </dv-full-screen-container>
+   </div>
 </template>
 
 <script>
-import TopLeftCmp from './TopLeftCmp'
-import TopMiddleCmp from './TopMiddleCmp'
-import TopRightCmp from './TopRightCmp'
-
-import BottomLeftChart1 from './BottomLeftChart1'
-import BottomLeftChart2 from './BottomLeftChart2'
-
-import BottomRightTable1 from './BottomRightTable1'
-import BottomRightTable2 from './BottomRightTable2'
-import BottomRightTable3 from './BottomRightTable3'
-import BottomRightTable4 from './BottomRightTable4'
-import repostCurd from '../../../../business/platform/form/utils/custom/joinCURD.js'
-
+//全屏展示
+import screenfull from 'screenfull'
+//大屏标题组件
+import headerDecoration from './headerDecoration'
+//头部内容组件
+import headerContent from './headerContent'
+//委托样品条目情况组件
+import entrustNumber from './EntrustNumber'
+//委托样品类型组件
+import entrustType from './EntrustType'  
+// 月度检测完成情况(环形图)
+import monthlyStatus from './MonthlyStatus'
+//年度检测完成情况(环形图)
+import annualStatus from './AnnualStatus'
+//月度检测情况组件
+import monthlyNumber from './MonthlyNumber'
 export default {
-  name: 'DataView',
-  components: {
-    TopLeftCmp,
-    TopMiddleCmp,
-    TopRightCmp,
-    BottomLeftChart1,
-    BottomLeftChart2,
-    BottomRightTable1,
-    BottomRightTable2,
-    BottomRightTable3,
-    BottomRightTable4
+
+  components:{
+    headerDecoration,
+    headerContent,
+    entrustNumber,
+    entrustType,
+    monthlyStatus,
+    annualStatus,
+    monthlyNumber
   },
-  data () {
-    return {
-     visible:false,
-     redar:false,
-     facilityId:'',
-     listData:[],
-     behavior:''
+  data(){
+    return{
+      sendTime:'',
+      outputData:{
+        headerName:"月度样品管理看板"
+      }
+
+    }
+    
+  },
+  mounted(){
+    // this.getTime()
+  },
+  created() {
+    //时间
+    this.currentTime()
+    if(screenfull.isEnabled && !screenfull.isFullscreen){
+     
+      
     }
   },
-   methods: {
-	  toHome(){
-      this.$router.push({
-      			name:'dashboard'
-      })
-		 },
-     allView(){
-       screenfull.request() //默认显示全屏
-     },
-     openRedar(type){
-       this.behavior = type
-       this.redar = true
-       this.$refs.redarInput.focus();
-        this.listData = []
-     },
-     remRedar(){
-       this.redar = false
-     },
-     //扫码之后
-     facilityData(id){
-       if(id){
-         for(let item of this.listData){
-           if(item.id==id){
-             return
-             }
-                   }
-         this.loadData(id)
-         //开始查询设备
-         this.facilityId = ''
+  beforeDestroy() {
+      if(screenfull.isFullscreen){
+        screenfull.toggle()
         }
-     },
-     /* 查询参数格式化*/
-     getSearcFormData(id) {
-       const params = {}
-       params['Q^id_^S'] = id
-       return ActionUtils.formatParams(
-         params,
-        {},
-        {},
-         )
-     },
-     // 提交设备
-     submitData(){
-         this.visible = false
-         alert("提交设备 [ "+this.behavior+" ] 信息成功")
-       },
-
-     /* 获取数据*/
-     loadData(id) {
-       if(!id){
-         return
-       }
-     repostCurd('select',
-          '{"tableName": "t_ypgl","paramWhere":{"id_":"'+id+'"}}'
-              ).then(response => {
-                let cont = response.variables.data[0]
-
-                switch(cont.yang_pin_zhuang_t){
-                  case '入库':
-                    this.addSamRecord(id,cont.yang_pin_bian_hao,cont.yang_pin_ming_che,"检验检测" ) //增加流转记录
-                    this.updateSam(id,{yang_pin_zhuang_t:"检验检测"},"检验检测",cont.yang_pin_bian_hao)//修改样品信息
-                  break;
-
-                  case '检验检测':
-                    this.addSamRecord(id,cont.yang_pin_bian_hao,cont.yang_pin_ming_che,"检完、待处理" ) //增加流转记录
-                    this.updateSam(id,{yang_pin_zhuang_t:"检完、待处理",jian_ce_ri_qi_: this.sysTime() + ""},"检完、待处理",cont.yang_pin_bian_hao)//修改样品信息
-                  break;
-
-                  case '检完、待处理':
-                     this.$confirm('当前状态为 [ '+ cont.yang_pin_zhuang_t +' ] 可进行以下操作', '编号 [ '+cont.yang_pin_bian_hao+' ] 的样品', {
-                       cancelButtonText: '继续检验检测',
-                       confirmButtonText: '样品处理 / 送还',
-                       type: 'warning'
-                     }).then(() => {
-                       this.addSamRecord(id,cont.yang_pin_bian_hao,cont.yang_pin_ming_che,"检完、处理" ) //增加流转记录
-                       this.updateSam(id,{yang_pin_zhuang_t:"检完、处理"},"检完、处理",cont.yang_pin_bian_hao)//修改样品信息
-                     }).catch(() => {
-                       this.addSamRecord(id,cont.yang_pin_bian_hao,cont.yang_pin_ming_che,"检验检测" ) //增加流转记录
-                       this.updateSam(id,{yang_pin_zhuang_t:"检验检测"},"检验检测",cont.yang_pin_bian_hao)//修改样品信息
-                     })
-                  break;
-                  case '检完、处理':
-                    this.$message.warning("当前样品状态为: ["+cont.yang_pin_zhuang_t+" ] 无法进行操作！")
-                    this.redar = false
-                  break;
-
-                   default:
-                      this.$message.warning("数据库中没有找到当前样品！");
-                      break;
-
-                }
-                })
-
-     },
-     // 修改样品状态
-    updateSam(id,data,state,mun){
-       repostCurd('update',
-       '{"tableName": "t_ypgl","paramWhere":{"id_":"'+id+'"},"paramCond":'+JSON.stringify(data)+'}'
-              ).then((res)=>{
-                     this.$alert('<span style="font-size:16px;font-weight: bold;">状态成功变更为 [ <span style="color: #00CC66;">'+ state +'</span> ] ！！!</span>', '编号 [ '+mun+' ] 的样品', {
-                              dangerouslyUseHTMLString: true,
-                               type: 'success',
-                        }).then(() => { this.redar = false }).catch(() => {})
-             }).catch((er) => {
-                this.$message.error("参数错误，或网络延迟。请联系管理员")
-                this.redar = false
-             })
     },
-    //添加流转记录
-    addSamRecord(id,num,name,state){
-      let addLiuZhuan = []
-      let queRen = {}
-      queRen["jing_shou_shi_jia"] = this.sysTime() + "";
-      queRen["yang_pin_ming_che"] = name
-      queRen["yang_pin_bian_hao"] = num
-      queRen["jing_shou_ren_"] = this.$store.getters.userInfo.user.id
-      queRen["parent_id_"] = id
-      queRen["zhuang_tai_"] = state
-      addLiuZhuan.push(queRen)
-      repostCurd('add',
-      '{"tableName": "t_yplzjl","paramWhere":'+JSON.stringify(addLiuZhuan)+'}'
-             )
-
-    },
-     sysTime(){
-        var myDate = new Date();
-        var year = myDate.getFullYear();
-        var month = myDate.getMonth()+1;
-        var date = myDate.getDate();
-        var h = myDate.getHours();
-        var m = myDate.getMinutes();
-        var s = myDate.getSeconds();
-        var now = year + '-' +(month < 10 ? "0" :"")+ month + "-"+((date < 10 ? "0" :"")) +date + " "+((h < 10 ? "0" :"")) + h + ':'+((m < 10 ? "0" :"")) + m + ":"+((s < 10 ? "0" :"")) + s;
-        return now;
+  methods: {
+    getTime(val){
+      console.log('触发了父组件接收时间方法',val)
+      this.sendTime = val
+      
     },
 
+    allView(){
+      screenfull.request() //默认显示全屏
+    },
+    //时间
+    currentTime() {
+      setInterval(this.getNowTime, 500);
+    },
+    // getNowTime(){  
+    //   const nowDate = new Date();
+    //   const date = {
+    //       year: nowDate.getFullYear(),
+    //       month: nowDate.getMonth() + 1,
+    //       day: nowDate.getDate(),
+    //       hour: nowDate.getHours(),
+    //       // minute: nowDate.getMinutes(),
+    //       // second: nowDate.getSeconds()
+    //   }
+    //   this.sendTime = date.year + '年' + date.month + '月' + date.day + '日' +date.hour + '时' 
+    //   // this.sendTime = date.year + '年' + date.month + '月' + date.day + '日' +date.hour + '时' + date.minute + '分' + date.second + '秒'
+    // },
+ 
 
+       
+
+      
+     
+     
+     
+          
+    
   }
+
 }
 </script>
 
-<style lang="less">
-#data-view-yangp {
+<style lang="less" >
+*body{
+  padding: 0px;
+  margin: 0px;
+}
+.data-view {
   width: 100%;
   height: 100%;
-  background-color: #030409;
+  // position: absolute;
   color: #fff;
+  z-index: 9999;
   #dv-full-screen-container {
-    background-image: url('./img/bg.png');
+    background-image: url('./img/stars.png');
     background-size: 100% 100%;
-    box-shadow: 0 0 3px blue;
+    // box-shadow: 0 0 3px blue;bete
+    // display: flex;
+    // flex-direction: column;
     display: flex;
-    flex-direction: column;
-  }
+    flex-direction:column;
+    align-items: stretch;
+    
+   .headerContent{
+    flex: 1;
+    // background-color: rgb(99, 12, 41);
+    
 
-  .main-header {
-    height: 80px;
+   }
+   .mainContent{
+    width: 100%;
+    height: 100%;
+    flex: 4;
     display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-
-    .mh-left {
-      font-size: 20px;
-      color: rgb(1,134,187);
-
-      a:visited {
-        color: rgb(1,134,187);
-      }
-    }
-
-    .mh-middle {
-      font-size: 30px;
-    }
-
-    .mh-left, .mh-right {
-      width: 450px;
-    }
-  }
-
-  .main-container {
-    height: calc(~"100% - 80px");
-
-    .mc-top, .mc-bottom {
-      box-sizing: border-box;
-      padding: 30px;
+    flex-direction:column;
+    // align-items: stretch;
+    // align-items: flex-start;
+    align-content:space-between;
+    // margin-top: 20px;
+    
+    // background-color: rgb(12, 99, 58);
+      .entrust{
+      // width: 100%;
+      flex: 1;
+      // border: 1px solid rgb(25, 156, 91);
+      // background-color: rgb(6, 47, 161);
       display: flex;
-    }
-
-    .mc-top {
-      height: 40%;
-    }
-
-    .mc-bottom {
-      height: 60%;
-    }
-
-    .yp-top-left-cmp, .bottom-left-container {
-      width: 35%;
-    }
-
-    .yp-top-middle-cmp, .top-right-cmp {
-      width: 58%;
-    }
-
-    .bottom-left-container {
-      position: relative;
-
-      .border-box-content {
-        display: flex;
+      justify-content:space-between;
+      margin-bottom: 15px ;
+        .entrustNumber{
+          flex: 5;
+          margin-right: 10px;
+          // background-color: rgb(25, 97, 156);
+        }
+        .entrustType{
+          flex: 3;
+         
+        }
       }
 
-      .mcb-decoration-1, .mcb-decoration-2 {
-        position: absolute;
-        left: 50%;
-        margin-left: -2px;
-      }
-
-      .mcb-decoration-1 {
-        top: 5%;
-        transform: rotate(180deg);
-      }
-
-      .mcb-decoration-2 {
-        top: 50%;
-      }
-
-      .yp-bottom-left-chart-1, .yp-bottom-left-chart-2 {
-        width: 50%;
-        height: 100%;
-      }
-    }
-
-    .bottom-right-container {
-      width: 68%;
-      box-sizing: border-box;
+      .detection{
+      // width: 100%;
+      flex: 1;
       display: flex;
-    }
-    .popContainer{
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        z-index: 999;
-        background: rgba(0,0,0,0.7);
-    }
+      // border: 1px solid rgb(39, 3, 59);
+      // background-color: rgb(226, 77, 134);
+        .monthlyStatus{
+          flex: 1;
+        
+          // background-color: rgb(25, 156, 91);
+        }
+        .monthlyNumber{
+          flex: 3;
+          // margin: 0px 10px;
+          // background-color: rgb(39, 3, 59);
+        }
+        .annualStatus{
+          flex: 1;
+        // margin-right: 10px;
+        // background-color: rgb(25, 156, 91);
+        }
+      
+      }
+   
+
+  
   }
+ 
+    .overView{
+      width: 100%;
+      height: 80px;
+    }
+  
 }
+}
+
 </style>

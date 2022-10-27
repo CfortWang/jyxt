@@ -49,9 +49,9 @@
       }"
     >
       <!-- <el-table-column type="selection" width="55"> </el-table-column> -->
-      <el-table-column prop="chu_ju_bao_gao_sh" label="年份" width="80" >
+      <el-table-column prop="chu_ju_bao_gao_sh" label="年份" width="80">
         <template slot-scope="scope">
-              {{ scope.row.chu_ju_bao_gao_sh | yeare("月") }}
+          {{ scope.row.chu_ju_bao_gao_sh | yeare("年") }}
         </template>
       </el-table-column>
       <el-table-column prop="he_tong_bian_hao_" label="合同编号" width="100">
@@ -85,7 +85,7 @@
         </template>
       </el-table-column> -->
       <!-- <el-table-column width="180"> </el-table-column> -->
-      <el-table-column label="操作" align="left" >
+      <el-table-column label="操作" align="left">
         <template slot-scope="scope">
           <el-popover placement="left" width="200" trigger="click">
             <div slot="reference" class="more">
@@ -153,9 +153,9 @@
                     style="color: #85ce61; cursor: pointer"
                     v-for="it in yubaogaoitem"
                     :key="it.id_"
-                    @click="yuReports(reports.yubaogao,it.id)"
+                    @click="yuReports(reports.yubaogao, it.id)"
                   >
-                  {{ it.jian_ce_xiang_mu_ }}预报告记录
+                    {{ it.jian_ce_xiang_mu_ }}预报告记录
                   </div>
                 </div>
               </el-popover>
@@ -232,14 +232,14 @@ export default {
         jiancebaogao: "42明鉴/吴/明鉴细胞专业技术检测报告.rpx",
       },
       shenqingdanid: "",
-      nianfen:'',
+      nianfen: "",
       danwei: "",
       bianhao: "",
       tableData: [],
       itemInfo: [], // 列表内容
-      yubaogaoitem:[],
+      yubaogaoitem: [],
       hetong: [],
-      triggerType:'click'
+      triggerType: "click",
     };
   },
   filters: {
@@ -250,15 +250,18 @@ export default {
         }
       }
     },
-    yeare(value,dedal){
-      if(dedal=="年"){
-        return value.split("-")[0]
-      }else if(dedal=="月"){
-        return value.split("-")[0] + value.split("-")[1]
-      }else{
-        value
+    yeare(value, dedal) {
+      if (value == undefined || value == null || value == "") {
+        return ""
       }
-    }
+      if (dedal == "年") {
+        return value.split("-")[0];
+      } else if (dedal == "月") {
+        return value.split("-")[0] + value.split("-")[1];
+      } else {
+        value;
+      }
+    },
   },
   created() {
     let sql =
@@ -337,7 +340,7 @@ export default {
         curdPost("sql", itemSql).then((res) => {
           this_.itemInfo = res.variables.data;
           for (var i = 0; i++; i < this_itemInfo) {
-            if (this_itemInfo[i].shi_fou_yu_bao_ga =="是") {
+            if (this_itemInfo[i].shi_fou_yu_bao_ga == "是") {
               this_.yubaogaoitem.push(it);
             }
           }
@@ -349,11 +352,8 @@ export default {
         });
       });
     },
-    yuReports(url,id){
-      this.alertReport(
-         url,
-         id
-    );
+    yuReports(url, id) {
+      this.alertReport(url, id);
     },
     formEvent(itemName) {
       if (itemName.includes("pH检测")) {
@@ -469,7 +469,7 @@ export default {
     selectSplit() {
       var q1, q2, q3;
       if (this.nianfen) {
-        q1 = "chu_ju_bao_gao_sh like'" +"%" + this.nianfen +"%"  + "' ";
+        q1 = "chu_ju_bao_gao_sh like'" + "%" + this.nianfen + "%" + "' ";
       }
       if (this.danwei) {
         q2 = "wei_tuo_dan_wei_  = '" + this.danwei + "' ";
@@ -501,18 +501,20 @@ export default {
         "select * from t_mjjcbg " +
         moreSql +
         " shi_fou_yu_bao_ga='否' and lei_bie_qu_fen_yu = 'cnas/CMA' ORDER BY create_time_ DESC limit 0,20";
-      console.log(sql, "moresql");
       this.loadData(sql);
     },
     handleSizeChange(value) {
       this.currentPage4 = 1;
       let sql =
-        "select * from t_mjjcbg WHERE shi_fou_yu_bao_ga='否' and lei_bie_qu_fen_yu ='cnas/CMA' ORDER BY create_time_ DESC limit 0," +value;
+        "select * from t_mjjcbg WHERE shi_fou_yu_bao_ga='否' and lei_bie_qu_fen_yu ='cnas/CMA' ORDER BY create_time_ DESC limit 0," +
+        value;
       this.loadData(sql);
     },
     handleCurrentChange(value) {
       let sql =
-        "select * from t_mjjcbg WHERE shi_fou_yu_bao_ga='否' and lei_bie_qu_fen_yu ='cnas/CMA' ORDER BY create_time_ DESC limit " +value +", 20";
+        "select * from t_mjjcbg WHERE shi_fou_yu_bao_ga='否' and lei_bie_qu_fen_yu ='cnas/CMA' ORDER BY create_time_ DESC limit " +
+        value +
+        ", 20";
       this.loadData(sql);
     },
   },

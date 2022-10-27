@@ -86,7 +86,7 @@
                   >
                     <div class="top-dsc">
                       <div class="position">
-                        <p>名称：{{ it.cun_fang_wei_zhi_ }}</p>
+                        <p>名称：{{ it.wu_liao_ming_chen }}</p>
                         <p>编码：{{ it.wu_liao_bian_ma_ || "空" }}</p>
                         <p>位置：{{ it.cun_fang_wei_zhi_ || "空" }}</p>
                         <p>货号:{{ it.huo_hao_ || "空" }}</p>
