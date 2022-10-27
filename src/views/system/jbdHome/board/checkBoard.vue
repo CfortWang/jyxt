@@ -38,13 +38,6 @@
     </div>
 </template>
 <script>
-    // const sql1 = `select wt.total as wtTotal, wt.accepted as aaccepted, jc.total as jcTotal, jc.finished as jcFinish, rw.task as task, rw.finished as rwFinish, bg.report as report, bg.process as process,bg.approval as approval
-    // from
-    // (select count(id_) as total, count(zhuang_tai_ = '委托结束' or null) as accepted, count(create_time_ like '${today}' or null) as today from t_mjwtsqb where create_time_ LIKE '${month}%') wt,
-    // (select count(id_) as total, count(jian_ce_zhuang_ta = '已完成' or null) as finished from t_jchzb where create_time_ LIKE '${month}%') jc,
-    // (select count(id_) as task, count(zhuang_tai_ = '任务已完成' or null) as finished from t_rwfpb where create_time_ LIKE '${month}%') rw,
-    // (select count(id_) as report, count(zhuang_tai_ = '报告待审核' or null) as process, count(zhuang_tai_ = '报告待审批' or null) as approval from t_mjjcbg where create_time_ LIKE '${month}%') bg`
-
     import screenfull from 'screenfull'
     import curdPost from '@/business/platform/form/utils/custom/joinCURD.js'
     export default {
@@ -74,7 +67,7 @@
                         ],
                         data: [],
                         rowNum: 7,
-                        columnWidth: ['300','100','150','100','100']
+                        columnWidth: ['300','100','150','150','100']
                     },
                     acceptData:[],
                     taskData: [],
@@ -136,36 +129,47 @@
              *  报告——t_mjjcbg
              */
             getTopBarData() {
+                let quarter = this.getDateRange('quarter')
+                let week = this.getDateRange('week')
                 // 获取委托数及受理数
-                const sql = `select wt.total as wtTotal, wt.today as today, wt.accepted as accepted, jc.total as jcTotal, jc.finished as jcFinish, rw.task as task, rw.finished as rwFinish, bg.report as report, bg.process as process,bg.approval as approval
+                const sql = `select wt.month as month, wt.accepted as accepted, wt2.today as today, wt2.week as week, wt2.quarter as quarter, jc.total as jcTotal, jc.finished as jcFinish, rw.task as task, rw.finished as rwFinish, bg.report as report, bg.process as process,bg.approval as approval
                 from
-                (select count(id_) as total, count(zhuang_tai_ = '委托结束' or null) as accepted, count(create_time_ like '${this.today}' or null) as today from t_mjwtsqb where create_time_ LIKE '${this.month}%') wt,
+                (select count(id_) as month, count(zhuang_tai_ = '委托结束' or null) as accepted from t_mjwtsqb where create_time_ LIKE '${this.month}%') wt,
+                (select count(create_time_ like '${this.today}' or null) as today, count(create_time_ between '${week.start}' and '${week.end}' or null) as week, count(create_time_ between '${quarter.start}' and '${quarter.end}' or null) as quarter from t_mjwtsqb) wt2,
                 (select count(id_) as total, count(jian_ce_zhuang_ta = '已完成' or null) as finished from t_jchzb where create_time_ LIKE '${this.month}%') jc,
                 (select count(id_) as task, count(zhuang_tai_ = '任务已完成' or null) as finished from t_rwfpb where create_time_ LIKE '${this.month}%') rw,
                 (select count(id_) as report, count(zhuang_tai_ = '报告待审核' or null) as process, count(zhuang_tai_ = '报告待审批' or null) as approval from t_mjjcbg where create_time_ LIKE '${this.month}%') bg`
-                
+                console.log(sql)
                 curdPost('sql', sql).then(res => {
                     const data = res.variables.data
                     console.log(data)
                     
                     if ( data && data.length ) {
-                        const { accepted, approval, jcFinish, jcTotal, process, report, rwFinish, task, today, wtTotal } = data[0]
-                        this.middleCardData.taskData = [wtTotal, jcTotal, task, report]
+                        const { month, accepted, approval, jcFinish, jcTotal, process, report, rwFinish, task, today, week, quarter } = data[0]
+                        this.middleCardData.taskData = [month, jcTotal, task, report]
                         let result = [
                             {
                                 title: '委托',
                                 children: [
                                     {
-                                        label: '总数',
-                                        value: wtTotal
+                                        label: '本季度',
+                                        value: quarter
+                                    },
+                                    {
+                                        label: '月度',
+                                        value: month
+                                    },
+                                    {
+                                        label: '本周',
+                                        value: week
+                                    },
+                                    {
+                                        label: '本日',
+                                        value: today
                                     },
                                     {
                                         label: '受理',
                                         value: accepted
-                                    },
-                                    {
-                                        label: '今日',
-                                        value: today
                                     }
                                 ]
                             },
@@ -274,6 +278,7 @@
                     curdPost('sql', sql3),
                     curdPost('sql', sql4),
                 ]).then(([ res1, res2, res3, res4]) => {
+                    this.bottomCardData.flag = false
                     const data1 = res1.variables.data
                     const data2 = res2.variables.data
                     const data3 = res3.variables.data
@@ -323,6 +328,46 @@
                 }).catch(error => {
                     console.log(error)
                 })
+            },
+            // 获取本周和本季度的开始和结束日期，以对象形式返回
+            getDateRange(type) {
+                let current = new Date()
+                if (type !== 'week' && type !== 'quarter') {
+                    console.log('type is error')
+                    return
+                }
+                if (type === 'quarter') {
+                    let year = current.getFullYear()
+                    let month = current.getMonth() + 1
+                    const dateList = [
+                        {
+                            start: `${year}-01-01`,
+                            end: `${year}-03-31`
+                        },
+                        {
+                            start: `${year}-04-01`,
+                            end: `${year}-06-31`
+                        },
+                        {
+                            start: `${year}-07-01`,
+                            end: `${year}-09-31`
+                        },
+                        {
+                            start: `${year}-10-01`,
+                            end: `${year}-12-31`
+                        }
+                    ]
+                    let quarter = dateList[parseInt(month / 3)]
+                    return quarter
+                }
+                if (type === 'week') {
+                    let week = {}
+                    let currentWeek = current.getDay() === 0 ? 7 : current.getDay()
+                    let temp = new Date(current - (currentWeek - 1) * 86400000)
+                    week.start = new Date(current - (currentWeek - 1) * 86400000).toJSON().slice(0, 10)
+                    week.end = new Date((temp / 1000 + 6 * 86400) * 1000).toJSON().slice(0, 10)
+                    return week
+                }
             }
         }
     }
@@ -409,7 +454,7 @@
             .time {
                 display: flex;
                 justify-content: flex-end;
-                width: 12%;
+                width: 20%;
                 right: 75%;
             }
             .back {

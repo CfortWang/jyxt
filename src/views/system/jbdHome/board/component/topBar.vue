@@ -108,13 +108,19 @@
         align-items: center;
         background-color: rgba(6, 30, 93, 0.5);
         .item {
-            width: 23%;
+            width: 20%;
             // width: calc(100% / 13);
             height: 60%;
             padding: 12px 20px;
             border-left: 5px solid rgb(6, 30, 93);
+            &:first-child{
+                width: 33.3%;
+                .box{
+                    width: 20%;
+                }
+            }
             &:last-child{
-                width: 31%;
+                width: 26.6%;
                 .box{
                     width: 25%;
                 }
