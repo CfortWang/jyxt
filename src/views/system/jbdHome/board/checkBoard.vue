@@ -59,7 +59,7 @@
                 middleCardData: {
                     tableData: {
                         header: [
-                            '检测任务',
+                            '检测项目',
                             '检测类型',
                             '计划完成时间',
                             '当前状态',
