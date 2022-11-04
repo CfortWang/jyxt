@@ -1,5 +1,7 @@
 import request from '@/utils/request'
-
+import {
+    DATA_URL
+} from '@/api/baseUrl'
 
 /**
  * 查询-获取指定用户的所有页面及其权限信息
@@ -8,9 +10,8 @@ import request from '@/utils/request'
  */
 export function getAllIncludeUserStaticPage(params) {
     return request({
-        url: 'http://192.168.2.247:5100/ibps/business/v3/static/getAllIncludeUserStaticPage',
+        url: DATA_URL() + '/static/getAllIncludeUserStaticPage?userId=' + params,
         method: 'post',
-        data: params
     })
 }
 /**
@@ -20,7 +21,7 @@ export function getAllIncludeUserStaticPage(params) {
  */
 export function getAllUserInfor(params) {
     return request({
-        url: 'http://192.168.2.247:5100/ibps/business/v3/static/getAllUserInfor',
+        url: DATA_URL() + '/static/getAllUserInfor',
         method: 'post',
         data: params
     })
@@ -32,7 +33,7 @@ export function getAllUserInfor(params) {
  */
 export function saveStaticPage(params) {
     return request({
-        url: 'http://192.168.2.247:5100/ibps/business/v3/static/saveStaticPage',
+        url: DATA_URL() + '/static/saveStaticPage',
         method: 'post',
         data: params
     })

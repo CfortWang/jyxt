@@ -1,18 +1,15 @@
 import request from '@/utils/request'
+import {
+    DATA_URL
+} from '@/api/baseUrl'
 /**
  * 查询-根据用户id,获取文件信息
  * @param {*} params
- * {
-  "deptName": "string",
-  "fileCode": "string",
-  "fileName": "string",
-  "fileType": "string",
-  "userId": "string"
-}
+ * 
  */
 export function getFileByUserId(params) {
     return request({
-        url: 'http://192.168.2.247:5100/ibps/business/v3/consult/getFileByUserId',
+        url: DATA_URL() + '/consult/getFileByUserId',
         method: 'post',
         data: params
     })
@@ -24,9 +21,8 @@ export function getFileByUserId(params) {
  */
 export function getFileType(params) {
     return request({
-        url: 'http://192.168.2.247:5100/ibps/business/v3/consult/getFileType',
+        url: DATA_URL() + '/consult/getFileType?fileSign=' + params,
         method: 'post',
-        data: params
     })
 }
 /**
@@ -36,9 +32,8 @@ export function getFileType(params) {
  */
 export function getLmitedFile(params) {
     return request({
-        url: 'http://192.168.2.247:5100/ibps/business/v3/consult/getLmitedFile',
+        url: DATA_URL() + '/consult/getLmitedFile?userId=' + params,
         method: 'post',
-        data: params
     })
 }
 
@@ -49,9 +44,8 @@ export function getLmitedFile(params) {
  */
 export function getUserByFile(params) {
     return request({
-        url: 'http://192.168.2.247:5100/ibps/business/v3/consult/getUserByFile',
+        url: DATA_URL() + '/consult/getUserByFile?userId=' + params,
         method: 'post',
-        data: params
     })
 }
 
@@ -62,7 +56,7 @@ export function getUserByFile(params) {
  */
 export function saveUserByFile(params) {
     return request({
-        url: 'http://192.168.2.247:5100/ibps/business/v3/consult/saveUserByFile',
+        url: DATA_URL() + '/consult/saveUserByFile',
         method: 'post',
         data: params
     })

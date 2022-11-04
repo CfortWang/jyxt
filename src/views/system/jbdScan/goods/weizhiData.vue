@@ -5,7 +5,9 @@
       <el-input type="text" v-model="placeValue" clearable></el-input>
       <input type="text" v-model="value" style="opacity: 0; position: fixed" />
     </div>
-    <div class="viewArea">
+   <div class="viewArea" v-if="viewShow">
+      <h2 class="title">样品间样品存放位置可视图</h2>
+      <div class="close" @click="positionBtn"><i class="el-icon-circle-close"></i></div>
       <div class="select_quyu" v-if="viewShow">
         <div class="test-quyu" v-if="leixingcare">
           <div class="test-list">
@@ -66,7 +68,7 @@
           </div>
         </div>
       </div>
-      <div class="body-content" v-if="viewShow">
+      <div class="body-content" v-if="viewShow" v-loading="loading">
         <div class="right-view">
           <div class="goods-items">
             <div
@@ -84,43 +86,23 @@
                       :key="ind"
                       :style="{
                         background:
-                          it.wei_zhi_zhuang_ta == '空余' ? '#E6A23C' : '',
+                          it.wei_zhi_zhuang_ta == '空余' ? '#67c23a' : '',
                       }"
                     >
                       <div class="top-dsc">
                         <div class="position">
-                          <p>位置id：{{ it.shou_yang_wei_zhi }}</p>
-                          <p>货位id:{{ it.id_ }}</p>
+                          <!-- <p>位置id：{{ it.shou_yang_wei_zhi }}</p>
+                          <p>货位id:{{ it.id_ }}</p>                          -->
+                          <p>样品名称：{{ it.yang_pin_ming_che}}</p>
                           <p>位置编号：{{ it.wei_zhi_bian_hao_ }}</p>
                           <p>样品编号：{{ it.yang_pin_bian_hao }}</p>
-                          <p>
-                            存储条件：{{
-                              it.cun_chu_tiao_jian || it.cun_chu_yao_qiu_
-                            }}
-                          </p>
-                          <p>留样期限：{{ it.liu_yang_qi_xian_ }}</p>
-                          <p>样品名称：{{ it.yang_pin_ming_che }}</p>
                           <p>位置状态：{{ it.wei_zhi_zhuang_ta }}</p>
-                        </div>
-                        <div class="right-content" v-if="false">
-                          <p v-if="false">编号:{{ it.liu_yang_qi_xian_ }}</p>
                           <p>
-                            {{ it.wei_zhi_zhuang_ta || it.yang_pin_ming_che }}
-                          </p>
-                          <p v-if="false">
                             存储条件：{{
                               it.cun_chu_tiao_jian || it.cun_chu_yao_qiu_
                             }}
                           </p>
-                          <p v-if="false">
-                            留样期限：{{ it.liu_yang_qi_xian_ }}
-                          </p>
                         </div>
-                        <!-- <div class="right-content">
-                        <p>
-                          {{ it.wei_zhi_zhuang_ta || it.yang_pin_ming_che }}
-                        </p>
-                      </div> -->
                       </div>
                       <div class="bottom-dsc" v-if="false">
                         {{ it.yang_pin_ming_che || it.wei_zhi_zhuang_ta }}
@@ -129,17 +111,21 @@
                   </div>
                 </div>
               </div>
-              <div
-                class="goodshelf-name"
-                style="height: 500px"
-                v-if="index == 1"
-              >
-                {{ desString }}
-              </div>
+
             </div>
+
+
           </div>
+          <div
+            class="goodshelf-name"
+            style="height: 500px;font-size:20px;text-align:center"
+            >
+                {{ desString }}
+            </div>
         </div>
+        
       </div>
+
     </div>
   </div>
 </template>
@@ -177,6 +163,8 @@ export default {
       desString: "",
       viewShow: false,
       placeValue: "选择位置",
+      loading: true,
+      samplearr:[],
     };
   },
   props: {
@@ -194,7 +182,6 @@ export default {
       }
     },
   },
-  // created() {},
   methods: {
     firstLoadViewData() {
       var this_ = this;
@@ -250,39 +237,37 @@ export default {
       var this_ = this;
       this_.listData = [];
       curdPost("sql", sql).then((res) => {
-        console.log(sql, "111");
         datas = res.variables.data;
-        console.log(datas, "22ss");
-        let datasLength = datas.length;
         datas.forEach((item) => {
-          if (!labelsMap[item.ceng_hao_]) {
-            //没有就创建
-            labelsMap[item.ceng_hao_] = [];
-            labelsMap[item.ceng_hao_].push(item);
-          }else{
-            labelsMap[item.ceng_hao_].push(item);
+          let yangpingSql ="select * from t_mjypdjb WHERE yang_pin_bian_hao = '" +item.yang_pin_bian_hao +"'";  // 通过样品货位配置的id外键 查询样品登记表
+          if (!labelsMap[item.ceng_hao_]) {           
+            labelsMap[item.ceng_hao_] = [];//没有就创建
+            curdPost("sql", yangpingSql).then((res) => {
+              if (res.variables.data.length > 0) {
+                let data = res.variables.data;
+                item['yang_pin_ming_che'] = data[0].yang_pin_ming_che;
+                labelsMap[item.ceng_hao_].push(item);
+              }else{
+                labelsMap[item.ceng_hao_].push(item);
+              }
+            });
+          } else {
+            curdPost("sql", yangpingSql).then((res) => {
+              if (res.variables.data.length > 0) {
+                let data = res.variables.data;
+                item['yang_pin_ming_che'] = data[0].yang_pin_ming_che;
+                labelsMap[item.ceng_hao_].push(item);
+              }else{
+                labelsMap[item.ceng_hao_].push(item);
+              }
+            });
           }
-          // let yangpingSql =
-          //   "select * from t_mjypdjb WHERE shou_yang_wei_zhi = '" +
-          //   item.id_ +
-          //   "'"; // 通过样品货位配置的id外键 查询样品登记表
-          // curdPost("sql", yangpingSql).then((res) => {
-          //   var resData = res.variables.data;
-          //   if (resData.length > 0) {
-          //     console.log(resData);
-          //     resData.forEach((it) => {
-          //       it.wei_zhi_bian_hao_ = item.wei_zhi_bian_hao_;
-          //       labelsMap[item.ceng_hao_].push(it);
-          //     });
-          //   } else {
-          //     labelsMap[item.ceng_hao_].push(item);
-          //   }
-          //   if (datas.length == datasLength) {
-          //     this_.listData = labelsMap;
-          //   }
-          // });
         });
         this_.listData = labelsMap;
+        this.$nextTick(() => {
+          this.loading = false;
+        });
+
         // this.loading = true;
       });
     },
@@ -316,6 +301,7 @@ export default {
       if (selectText.includes("冰箱")) {
         //如果是冰箱 请求样品货位配置信息 ->查询登记表
         var sql = `select * from t_mjypcfwz where fang_jian_lei_xin = '${this.formInline.fang_jian_hao_value}' and qu_yu_ = '${this.formInline.qu_yu_value}' and  huo_jia_lei_xing_ = '${huojialeixing}' and huo_jia_hao_ = '${huojiaNum}'`;
+        this.desString = this.formInline.fang_jian_hao_value +this.formInline.qu_yu_value + huojiaNum+huojialeixing
         this.queryLoad(sql);
       } else if (selectText.includes("液氮罐")) {
         //液氮罐 查询该液氮罐下所有的挂件
@@ -375,9 +361,8 @@ export default {
       this.viewShow = !this.viewShow;
       this.placeValue = values[0].wei_zhi_bian_hao_;
       let this_ = this;
-       console.log(values[0].id_,"id");
-        this_.$emit("input", values[0].id_); //传导
-     
+      console.log(values[0].id_, "id");
+      this_.$emit("input", values[0].id_); //传导
     },
   },
   watch: {
@@ -427,6 +412,21 @@ p {
   top: 50;
   position: relative;
   background: white;
+    .close{
+    position: fixed;
+    right: 52px;
+    top:20px;
+    color: red;
+    z-index: 999;
+    font-size: 45px;
+  }
+  .title{
+      width: 100%;
+     height: 14px;
+     line-height: 24px;
+     font-size: 24px;
+     text-align: center;
+    }
   .selectPo {
     cursor: pointer;
     z-index: 9;
@@ -532,7 +532,7 @@ p {
               cursor: pointer;
               padding: 2px 6px;
               border-radius: 5px;
-              background: #67c23a;
+              background: #E6A23C;
               margin-left: 12px;
               margin-top: 6px;
               // box-sizing: border-box;
@@ -543,7 +543,7 @@ p {
                 // height: 18px;
                 line-height: 18px;
                 .position {
-                  width: 180px;
+                  width: 160px;
                   overflow: hidden;
                 }
                 .position > p {

@@ -157,33 +157,28 @@
                     :key="ind"
                     :style="{
                       background:
-                        it.wei_zhi_zhuang_ta == '空余' ? '#E6A23C' : '',
+                        it.wei_zhi_zhuang_ta == '空余' ? '#67c23a' : '',
                     }"
                   >
                     <div class="top-dsc">
                       <div class="position">
+                        <p>样品名称: {{ it.yang_pin_ming_che }}</p>
                         <p>位置编号：{{ it.wei_zhi_bian_hao_ }}</p>
                         <p>样品编号：{{ it.yang_pin_bian_hao }}</p>
-                        <p>
-                          存储条件：{{
-                            it.cun_chu_tiao_jian || it.cun_chu_yao_qiu_
-                          }}
-                        </p>
+                        <p>存储条件：{{ it.cun_chu_tiao_jian }}</p>
                         <p>留样期限：{{ it.liu_yang_qi_xian_ }}</p>
-                        <p>
-                          样品名称:
-                          {{ it.yang_pin_ming_che || it.wei_zhi_zhuang_ta }}
-                        </p>
+                        <p>位置状态:{{ it.wei_zhi_zhuang_ta }}</p>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="goodshelf-name" v-if="index == 1">
-              {{ desString }}
-            </div>
           </div>
+        </div>
+        <div class="goodshelf-name" style="text-align:center;height: 60px;
+    line-height: 60px;">
+          {{ desString }}
         </div>
       </div>
     </div>
@@ -221,6 +216,7 @@ export default {
       // pagination: {},
       // secondshow: false,
       desString: "",
+      samplearr: [],
     };
   },
   filters: {
@@ -261,7 +257,6 @@ export default {
         .then((response) => {
           this_.sampleOption = response.variables.data;
           this_.sampleOption.pop();
-          console.log(this.sampleOption,"房间类型")
         })
         .catch((err) => {
           console.log(err, "err------>");
@@ -299,33 +294,35 @@ export default {
         datas = res.variables.data;
         let datasLength = datas.length;
         datas.forEach((item) => {
+          let yangpingSql =
+            "select * from t_mjypdjb WHERE yang_pin_bian_hao = '" +
+            item.yang_pin_bian_hao +
+            "'"; // 通过样品货位配置的id外键 查询样品登记表
           if (!labelsMap[item.ceng_hao_]) {
             //没有就创建
             labelsMap[item.ceng_hao_] = [];
+            curdPost("sql", yangpingSql).then((res) => {
+              if (res.variables.data.length > 0) {
+                let data = res.variables.data;
+                item["yang_pin_ming_che"] = data[0].yang_pin_ming_che;
+                labelsMap[item.ceng_hao_].push(item);
+              } else {
+                labelsMap[item.ceng_hao_].push(item);
+              }
+            });
+          } else {
+            curdPost("sql", yangpingSql).then((res) => {
+              if (res.variables.data.length > 0) {
+                let data = res.variables.data;
+                item["yang_pin_ming_che"] = data[0].yang_pin_ming_che;
+                labelsMap[item.ceng_hao_].push(item);
+              } else {
+                labelsMap[item.ceng_hao_].push(item);
+              }
+            });
           }
-          // 通过样品货位配置的id外键 查询样品登记表
-          let yangpingSql =
-            "select * from t_mjypdjb WHERE shou_yang_wei_zhi = '" +
-            item.id_ +
-            "'";
-          curdPost("sql", yangpingSql).then((res) => {
-            
-            debugger
-            console.log(yangpingSql)
-            var resData = res.variables.data;
-            if (resData.length > 0) {
-              resData.forEach((it) => {
-                it.wei_zhi_bian_hao_ = item.wei_zhi_bian_hao_;
-                labelsMap[item.ceng_hao_].push(it);
-              });
-            } else {
-              labelsMap[item.ceng_hao_].push(item);
-            }
-            if ((datasLength = datas.length)) {
-              this_.listData = labelsMap;
-            }
-          });
         });
+        this_.listData = labelsMap;
       });
     },
     qu_yu_Event(e) {
@@ -358,11 +355,15 @@ export default {
       if (selectText.includes("冰箱")) {
         //如果是冰箱 请求样品货位配置信息 ->查询登记表
         var sql = `select * from t_mjypcfwz where fang_jian_lei_xin = '${this.formInline.fang_jian_hao_value}' and qu_yu_ = '${this.formInline.qu_yu_value}' and  huo_jia_lei_xing_ = '${huojialeixing}' and huo_jia_hao_ = '${huojiaNum}'`;
+        this.desString =
+          this.formInline.fang_jian_hao_value +
+          this.formInline.qu_yu_value +
+          huojiaNum +
+          "号" +
+          huojialeixing;
         this.queryLoad(sql);
-        //  alert("冰箱");
       } else if (selectText.includes("液氮罐")) {
         //液氮罐 查询该液氮罐下所有的挂件
-        console.log(huojiaNum);
         let sqlString = `select distinct gua_jia_hao_ from t_mjypcfwz where huo_jia_lei_xing_ = '液氮罐' and huo_jia_hao_ = '${huojiaNum}'  order by gua_jia_hao_ asc`;
         var this_ = this;
         curdPost("sql", sqlString).then((response) => {
@@ -383,6 +384,7 @@ export default {
         1
       )}' and gua_jia_hao_= '${hguajiaNum}'`;
       this.desString = fang_jian_hao_value + huo_jia_value + selectText;
+      this.formInline.gua_jia_value = hguajiaNum + "号挂件";
       this.queryLoad(sql);
     },
     huo_jia_arrEvent(quyu) {
@@ -411,19 +413,20 @@ export default {
     },
   },
   watch: {
-    "formInline.fang_jian_hao_value": function (newdata, olddata) {  //监控房间号 input 输入框数据变化 来改变区域和货架信息（input）
+    "formInline.fang_jian_hao_value": function (newdata, olddata) {
+      //监控房间号 input 输入框数据变化 来改变区域和货架信息（input）
       this.huo_jia_arr = [];
       let sqlString = `select distinct qu_yu_ ,huo_jia_hao_ from t_mjypcfwz where fang_jian_lei_xin = '${newdata}' `;
-      console.log(sqlString);
       var this_ = this;
+      this_.formInline.gua_jia_value = "";
+      this_.formInline.gua_jia_value = "";
+      this_.formInline.huo_jia_value = "";
       curdPost("sql", sqlString).then((response) => {
-        this_.quyu_arr = response.variables.data;
-        console.log(this_.quyu_arr,"房间");
+        this_.quyu_arr = response.variables.data.reverse();
         this_.quyu_arr.forEach((item) => {
           //待优化 事实上是一个用来判断
           if (item.qu_yu_ == "") {
             this_.leixingcare = false;
-            this_.formInline.qu_yu_value = "";
             let sql = `select distinct huo_jia_hao_,huo_jia_lei_xing_ from t_mjypcfwz where fang_jian_lei_xin = '${newdata}'  order by huo_jia_hao_ asc`;
             curdPost("sql", sql).then((res) => {
               this_.huo_jia_arr = res.variables.data;
@@ -457,6 +460,10 @@ p {
       width: 100%;
       font-size: 18px;
       line-height: 40px;
+    }
+    .goodshelf-name {
+      margin: 15px 0px;
+      text-align: center;
     }
     .query-content {
       display: flex;
@@ -540,7 +547,7 @@ p {
               cursor: pointer;
               padding: 2px 6px;
               border-radius: 5px;
-              background: #67c23a;
+              background: #e6a23c;
               margin-left: 12px;
               margin-top: 6px;
               box-sizing: border-box;
@@ -550,7 +557,7 @@ p {
                 font-size: 12px;
                 // height: 18px;
                 line-height: 18px;
-                width: 150px;
+                width: 164px;
                 .position > p {
                   text-align: left;
                   color: #fbe8ff;
@@ -592,9 +599,7 @@ p {
               }
             }
           }
-          .goodshelf-name {
-            margin: 15px 0px;
-          }
+
           .shelf {
             width: 100%;
             height: 40px;
@@ -602,26 +607,6 @@ p {
             text-align: center;
           }
         }
-        // .shelf-pointer {
-        //   position: fixed;
-        //   right: 75px;
-        //   bottom: 35%;
-        //   cursor: pointer;
-        //   .pointer {
-        //     .pointer-item {
-        //       width: 45px;
-        //       height: 45px;
-        //       line-height: 45px;
-        //       border: 1px solid #fcfefd;
-        //       background-color: #fcb400;
-        //       border-radius: 50%;
-        //       text-align: center;
-        //       color: #fff0f3;
-        //       font-size: 18px;
-        //       margin-top: 10px;
-        //     }
-        //   }
-        // }
       }
     }
   }
