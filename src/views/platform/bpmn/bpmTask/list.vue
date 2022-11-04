@@ -345,6 +345,9 @@
 				//   }
 				//  })
 
+                // 打开表单前给给flowName赋值，避免流程节点状态bug
+                this.flowName = this.listData.find(item => item.id === id).name
+
 				request({
 					url: BUSINESS_BASE_URL() + '/getFormData/flag',
 					method: 'post',
@@ -352,7 +355,6 @@
 						taskId: id
 					})
 				}).then(response => {
-
 					if (response.data != 'N') {
 						this_.editId = id
 						this_.bpmnFormrenderDialogVisible = true
