@@ -130,7 +130,8 @@ export default {
               show: true,
               formatter: " {b}\n {c} ({d}%)",
               // formatter: '{d}%\n{b}',// 显示百分比，
-              position: 'outside'
+              position: 'outside',
+              color:'#fff'
             },
             emphasis: {
               label: {
@@ -164,7 +165,7 @@ export default {
 }
   .monthlyStatus{
     width: 400px;
-    height: 400px;
+    height: 416px;
     display: flex;
     flex-direction:cloumn;
     flex-wrap :wrap;
@@ -174,12 +175,14 @@ export default {
       .monthlyStatus_title{
         width: 100%;
         height: 50px;
-        line-height: 30px;
-        padding-left: 20px;
+        line-height: 50px;
+        text-align: center;
+        // padding-left: 20px;
         // background-color: rgb(25, 97, 156);
-        font-weight: bold;
-        font-size: 16px;
-        overflow: hidden;
+        font-weight: 600;
+        font-size: 20px;
+        color:'#fff'
+        // overflow: hidden;
       }
       .monthlyStatus_content{
         width: 100%;

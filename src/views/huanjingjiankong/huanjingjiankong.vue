@@ -66,9 +66,17 @@
         </div>
       </div>
       <div class="controlStatus">
-        <div class="noControl"><span class="gray"></span><span style="margin-left: 30px;">未控</span> </div>
-        <div class="yesControl"><span class="green"></span> <span style="margin-left: 30px;">在控</span> </div>
-        <div class="runWild"><span class="red"></span> <span><span style="margin-left: 30px;">失控</span> </span></div>
+        <div class="noControl">
+          <span class="gray"></span><span style="margin-left: 30px">未控</span>
+        </div>
+        <div class="yesControl">
+          <span class="green"></span>
+          <span style="margin-left: 30px">在控</span>
+        </div>
+        <div class="runWild">
+          <span class="red"></span>
+          <span><span style="margin-left: 30px">失控</span> </span>
+        </div>
       </div>
     </div>
   </div>
@@ -185,6 +193,7 @@ export default {
       ],
       timelistData: [],
       ifshow: true,
+      setIntervalDis: false,
     };
   },
   filters: {
@@ -314,11 +323,15 @@ export default {
     },
     setIntervalData() {
       let this_ = this;
-      setInterval(() => {
+      var timer = setInterval(() => {
+        if (this_.setIntervalDis == true) {
+          clearInterval(timer);
+          return;
+        }
         this.screenChange();
         this_.mapChange();
         this_.timeData();
-      }, 300000);
+      }, 300000); 
     },
     returnifShow(t, h, p) {
       let temp = t.toFixed(2);
@@ -519,6 +532,9 @@ export default {
     this.mapChange();
     this.timeData();
     this.setIntervalData();
+  },
+  destroyed() {
+    this.setIntervalDis = true;
   },
   watch: {
     // 如果 `fullHeight ` 发生改变，这个函数就会运行

@@ -57,7 +57,7 @@ export default {
         value:item.shou_yang_shu_lia,
         name:item.yang_pin_lei_xing
       }));
-      // console.log('委托类型数据222',dataList)
+      console.log('委托类型数据222',dataList)
       this.entrustArray = dataList.reduce((total, cur, index) => {
         let hasValue = total.findIndex(current => {
           return current.name === cur.name;
@@ -136,7 +136,10 @@ export default {
           bottom:'10%',
           lineStyle:{
 
-          }
+          },
+          textStyle: {
+            color: '#fff',
+        },
         },
         series: [
        
@@ -153,7 +156,9 @@ export default {
               show: true,
               formatter: " {b}\n {c} ({d}%)",
               // formatter: '{d}%\n{b}',// 显示百分比，
-              position: 'outside'
+              position: 'outside',
+              color:'#fff'
+              
             },
             emphasis: {
               label: {
@@ -201,13 +206,15 @@ export default {
     overflow: hidden;
      
       .entrustType_title{
-        width: 100%;
-        height: 50px;
-        line-height: 50px;
-        margin-left: 20px;
-        // background-color: rgb(0, 99, 180);
-        // font-weight: bold;
-        font-size: 16px;
+          // background-color: rgb(0, 99, 180);
+          width: 100%;
+          height: 50px;
+          line-height: 50px;
+          text-align: center;
+          color: '#fff';
+          font-size:20px;
+          font-weight: 600;
+        // font-weight:bold;
       }
       .entrustType_content{
         width: 100%;

@@ -42,18 +42,15 @@ export default {
     methods: {
         handleChange(value, direction, movedKeys) {
             let paramsDatas = []
-
             for (let i of value) {
                 let paramsData = {}
                 let filterDatas = this.allFilesDatas.filter(item => item.wenJianId == i)
-
-                console.log("filter:", filterDatas[0].wenJianId)
                 paramsData["yongHuId"] = this.idT
                 paramsData["wenJianId"] = filterDatas[0].wenJianId
                 paramsData["wenJianMingChe"] = filterDatas[0].wenJianMingChe
                 paramsDatas.push(paramsData)
             }
-            saveUserByFile({ fileData: paramsDatas }).then(res => {
+            saveUserByFile(paramsDatas).then(res => {
             }).catch(res => {
             })
         },

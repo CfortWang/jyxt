@@ -5,22 +5,22 @@
         <div class="headerContent">
            <!-- 标题装饰组件 -->
           <header-decoration :titleName="outputData.headerName"/> 
+          <div class="goBackButton" @click.prevent="goBack()" >
+            <dv-border-box-8>返回</dv-border-box-8>
+          </div>
           <div
-                   style="width: 18%;
-                     cursor: pointer;
-                      height:2.825rem;
-                      line-height: 2.825rem;
-                      text-align:center;
-                      margin-left:70%;
-                      margin-top:-60px;
-                      flex: 1;
-                      position: absolute;
-                      color: #FFFFFF;"
-                      >
-                <dv-border-box-8 >
-                 
-                  上一次更新时间:{{this.sendTime}}
-                      </dv-border-box-8>
+             style="width: 18%;
+              cursor: pointer;
+              height:2.825rem;
+              line-height: 2.825rem;
+              text-align:center;
+              margin-left:70%;
+              margin-top:-60px;
+              flex: 1;
+              position: absolute;
+              color: #FFFFFF;"
+              >
+                <dv-border-box-8 >上一次更新时间:{{this.sendTime}}</dv-border-box-8>
       </div>
           <!-- <div>当前时间</div> -->
           <!-- 样品数据总览 -->
@@ -88,7 +88,7 @@ export default {
     return{
       sendTime:'',
       outputData:{
-        headerName:"月度样品管理看板"
+        headerName:"样品管理看板"
       }
 
     }
@@ -101,7 +101,7 @@ export default {
     //时间
     this.currentTime()
     if(screenfull.isEnabled && !screenfull.isFullscreen){
-     
+     this.allView()
       
     }
   },
@@ -112,41 +112,15 @@ export default {
     },
   methods: {
     getTime(val){
-      console.log('触发了父组件接收时间方法',val)
       this.sendTime = val
-      
     },
 
     allView(){
       screenfull.request() //默认显示全屏
     },
-    //时间
-    currentTime() {
-      setInterval(this.getNowTime, 500);
-    },
-    // getNowTime(){  
-    //   const nowDate = new Date();
-    //   const date = {
-    //       year: nowDate.getFullYear(),
-    //       month: nowDate.getMonth() + 1,
-    //       day: nowDate.getDate(),
-    //       hour: nowDate.getHours(),
-    //       // minute: nowDate.getMinutes(),
-    //       // second: nowDate.getSeconds()
-    //   }
-    //   this.sendTime = date.year + '年' + date.month + '月' + date.day + '日' +date.hour + '时' 
-    //   // this.sendTime = date.year + '年' + date.month + '月' + date.day + '日' +date.hour + '时' + date.minute + '分' + date.second + '秒'
-    // },
- 
-
-       
-
-      
-     
-     
-     
-          
-    
+    goBack(){
+      this.$router.back(-1)
+    }
   }
 
 }
@@ -175,9 +149,22 @@ export default {
     
    .headerContent{
     flex: 1;
+    
     // background-color: rgb(99, 12, 41);
     
 
+   }
+   .goBackButton{ 
+      width: 10%;
+      cursor: pointer;
+      height:2.825rem;
+      line-height: 2.825rem;
+      text-align:center;
+      margin-left:20%;
+      margin-top:-60px;
+      flex: 1;
+      position: absolute;
+      color: #FFFFFF;
    }
    .mainContent{
     width: 100%;
@@ -223,7 +210,7 @@ export default {
         }
         .monthlyNumber{
           flex: 3;
-          // margin: 0px 10px;
+          margin: 0px 10px;
           // background-color: rgb(39, 3, 59);
         }
         .annualStatus{

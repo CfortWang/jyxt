@@ -92,7 +92,8 @@ export default {
               show: true,
               formatter: " {b}\n {c} ({d}%)",
               // formatter: '{d}%\n{b}',// 显示百分比，
-              position: 'outside'
+              position: 'outside',
+              color:'#fff'
             },
             emphasis: {
               label: {
@@ -127,7 +128,7 @@ export default {
 }
   .annualStatus{
     width: 400px;
-    height: 400px;
+    height: 416px;
     display: flex;
     flex-direction:cloumn;
     flex-wrap :wrap;
@@ -137,11 +138,12 @@ export default {
       .annualStatus_title{
         width: 100%;
         height: 50px;
-        line-height: 30px;
-        margin-left: 20px;
+        line-height: 50px;
+        text-align: center;
         // background-color: rgb(25, 97, 156);
-        font-weight: bold;
-        font-size: 16px;
+        font-weight: 600;
+        font-size: 20px;
+        color: '#fff';
       }
       .annualStatus_content{
         width: 100%;

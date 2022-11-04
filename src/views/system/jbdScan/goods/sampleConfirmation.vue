@@ -44,7 +44,7 @@
                          <el-table-column
                            prop="shou_yang_shu_lia"
                            label="收样数量"
-                           width="100px">
+                           width="130px">
                          </el-table-column>
 
                          <el-table-column

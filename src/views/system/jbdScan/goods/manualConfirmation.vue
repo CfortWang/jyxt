@@ -45,7 +45,7 @@
                          <el-table-column
                            prop="shou_yang_shu_lia"
                            label="收样数量"
-                           width="100px">
+                           width="130px">
                          </el-table-column>
 
                          <el-table-column
@@ -72,10 +72,11 @@
                            width="230px"
                            >
                             <template slot-scope="scope">
-                              <ibps-link-data
+                              <!-- <ibps-link-data
                                 v-model="scope.row.shou_yang_wei_zhi"
                                 template-key = "mjyphjwzjztzly"
-                              />
+                              /> -->
+                              <weizhiData  v-model="scope.row.shou_yang_wei_zhi"/>
                              </template>
                          </el-table-column>
 
@@ -83,10 +84,11 @@
                            label="留样存放位置"
                            width="230px">
                             <template slot-scope="scope">
-                              <ibps-link-data
+                              <!-- <ibps-link-data
                                 v-model="scope.row.liu_yang_wei_zhi_"
                                 template-key = "mjyphjwzjztzly"
-                              />
+                              /> -->
+                              <liuyangData v-model="scope.row.liu_yang_wei_zhi_"/>
                              </template>
 
                          </el-table-column>
@@ -131,9 +133,13 @@
 <script>
 import manualConfirmationJS from '../js/manualConfirmationJS.js'
 import IbpsLinkData from '@/business/platform/data/templaterender/link-data'
+import weizhiData from "./weizhiData.vue"
+import liuyangData from "./liuyangData.vue"
  export default {
    components:{
-     IbpsLinkData
+     IbpsLinkData,
+     weizhiData,
+     liuyangData
    },
    mixins:[manualConfirmationJS],
    props:{scanVisible:Boolean},

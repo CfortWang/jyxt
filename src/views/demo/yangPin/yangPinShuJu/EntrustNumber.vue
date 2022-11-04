@@ -1,6 +1,6 @@
 <template>
  <div class="entrustNumber" >
-  
+  <!-- 委托样品情况 -->
       <dv-border-box-7  backgroundColor="rgba(6, 30, 93, 0.5)" >
         <div class="entrustNumber_title">
           <span class="demonstration">委托样品情况</span>
@@ -8,6 +8,7 @@
           class="chooseMonth"
             v-model="NowTime"
             type="month"
+          
             @change="changeTime"
             placeholder="请选择时间">
           </el-date-picker>
@@ -17,7 +18,7 @@
     </dv-border-box-7>       
    </div>
   
-  
+    
 </template>
 
 <script>
@@ -155,7 +156,12 @@ methods:{
               color: 'white',//坐标线的颜色
                 
             }
-          }
+          },
+          axisLabel: {
+            style: {
+                fill: '#fff'
+            }
+        },
         },
         yAxis: {
           type: "value",
@@ -166,7 +172,11 @@ methods:{
               color: 'white',//坐标线的颜色
                 
             }
-          }
+          },
+          //去除网格线
+          splitLine: {
+            show: false
+        },
         },
         // title: {
         //   text: '委托样品数量柱形图',
@@ -188,11 +198,14 @@ methods:{
         legend: {
           show:true, 
           orient: 'horizontal',  //horizontal 水平排列
-          top:'5%',
+          top:'0%',
           left:'center',
           lineStyle:{
 
-          }
+          },
+          textStyle: {
+            color: '#fff',
+        },
         },
         //隐藏刻度线
         axisTick:{
@@ -205,15 +218,17 @@ methods:{
             name:'未收到样品',
             label: {
               show: true,
-              position: 'top'
+              position: 'top',
+              color:'#fff'
+             
             },
+           
             data: [120, 200, 150, 80, 70, 110, 130,120, 200, 150, 80, 70, 110, 130,120, 200, 150, 80, 70, 110, 130,120, 200, 150, 80, 70, 110, 130,167,128],
             
            //柱子的颜色
             itemStyle:{
               show:true,
-              color:'rgba(0, 186, 255, 0.4)'
-              
+              color:'rgba(0, 186, 255, 0.4)',
             },
           
            
@@ -223,16 +238,16 @@ methods:{
             // },
           },
           {
-            name:'已收到',
+            name:'已收到样品',
             type: 'line',
             label: {
               show: true,
-              position: 'bottom'
+              position: 'bottom',
+              color:'#fff'  
             },
-            data: [2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2,
-            2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2,
-            2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2,
-            2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2,18.5,17,6],
+            data: [22 ,18, 33, 45, 63, 12, 20, 24, 23, 16, 12, 34,
+            22 ,18, 33, 45, 63, 12, 20, 24, 23, 16, 12, 34,
+            22 ,18, 12, 20, 24,  34],
             itemStyle:{
                 color:'rgba(55, 162, 218, 0.6)'
             },
@@ -268,22 +283,26 @@ methods:{
       flex-wrap :wrap;
       // justify-content:center;
       .entrustNumber_title{
+        // background-color: rgb(25, 97, 156);
         width: 100%;
         height: 50px;
-        // background-color: rgb(25, 97, 156);
-        font-weight: bold;
-        font-size: 16px;
-        display: flex;
-        justify-content: space-between;
+        position: relative;
         .demonstration{
-          // background-color: rgb(25, 97, 156);
           line-height: 50px;
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          margin-left: -50px;
+          margin-top: -25px;
+          color: '#fff';
+          font-size:20px;
+          font-weight:600;
 
         }
         .chooseMonth{
-          width: 20%;
+          width: 120px;
           line-height: 50px;
-          // background-color: red;
+          margin-left: 10px;
         }
       }
       .entrustNumber_content{

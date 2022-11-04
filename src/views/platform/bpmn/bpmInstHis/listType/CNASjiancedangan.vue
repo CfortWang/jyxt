@@ -267,13 +267,13 @@ export default {
   },
   created() {
     let sql =
-      "select * from t_mjjcbg WHERE shi_fou_yu_bao_ga='否' and lei_bie_qu_fen_yu ='cnas' ORDER BY create_time_ DESC limit 0,20";
+      "select * from t_mjjcbg WHERE shi_fou_yu_bao_ga='否' and lei_bie_qu_fen_yu ='cnas' and zhuang_tai_ ='报告待发放' ORDER BY create_time_ DESC limit 0,20";
     this.loadData(sql);
     // curdPost("sql", sql).then((response) => {
     //   this.tableData = response.variables.data;
     // });
     let sumsql =
-      "select COUNT(*) AS sum  FROM t_mjjcbg WHERE shi_fou_yu_bao_ga='否' and lei_bie_qu_fen_yu ='cnas'";
+      "select COUNT(*) AS sum  FROM t_mjjcbg WHERE shi_fou_yu_bao_ga='否' and lei_bie_qu_fen_yu ='cnas' and zhuang_tai_ ='报告待发放'";
     curdPost("sql", sumsql).then((response) => {
       this.total = response.variables.data[0].sum;
     });

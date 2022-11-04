@@ -102,7 +102,7 @@ export default {
         submitTable() {
             this.butLoading = true
             console.log("this.tableData:", this.tableData)
-            saveStaticPage({ saveUserData: this.tableData }).then(res => {
+            saveStaticPage(this.tableData).then(res => {
                 this.butLoading = false
                 console.log("保存成功")
                 this.firsthTableData = JSON.parse(JSON.stringify(this.tableData))
