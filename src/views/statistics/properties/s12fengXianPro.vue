@@ -18,7 +18,7 @@
       <el-aside style="border:0px;width: 13%;"></el-aside>
       <!-- 放统计内容-->
       <el-aside style="border:0px;width: 50%;">
-          <s5renYuanJianDuItem
+          <s12fengXianItem
             :data="data"
             width="95%"
             :height="height"
@@ -28,12 +28,12 @@
       </el-aside>
         <!-- 参数页面列 -->
         <el-aside style="border:0px;width: 37%;">
-          <el-divider content-position="left">{{data.t_zljdNum.date}} 年度</el-divider>
-            已完成监督数量 ：<el-tag>{{data.t_zljdNum.number[0]}} 次</el-tag>
+          <el-divider content-position="left">{{data.t_mjsyshdfxsbykzjhxbNum.date}} 年度</el-divider>
+            已完成数量 ：<el-tag>{{data.t_mjsyshdfxsbykzjhxbNum.number[0]}} 次</el-tag>
             <br>
-            所有监督数量 ：<el-tag>{{data.t_zljdNum.numberAll[0]}} 次</el-tag>
+            总数 ：<el-tag>{{data.t_mjsyshdfxsbykzjhxbNum.numberAll[0]}} 次</el-tag>
             <br>
-            监督完成率 ：<el-tag>{{data.t_zljdNum.res[0]}} %</el-tag>
+            计划完成率 ：<el-tag>{{data.t_mjsyshdfxsbykzjhxbNum.res[0]}} %</el-tag>
             <br>
           <!-- <div v-for="(item,i) in data.t_zljdNum.date" :key="i">
             <el-divider content-position="left">{{data.t_zljdNum.date[i]}} 年度</el-divider>
@@ -84,7 +84,7 @@
       },
       beforeCreate: function () {
           // 官方文档给出的是require
-           this.$options.components.s5renYuanJianDuItem = () => import('../item/s5renYuanJianDu.vue')
+           this.$options.components.s12fengXianItem = () => import('../item/s12fengXian.vue')
           },
 
     watch:{

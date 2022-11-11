@@ -13,39 +13,54 @@
       @close="handleClose">
 
       <div>
+        <el-container>
+          <!-- 放统计内容-->
+          <el-aside style="border:0px;width: 13%;"></el-aside>
+          <el-aside style="border:0px;width: 50%;">
+              <s5zhiLiangMuBiaoItem
+                :data="data"
+                width="95%"
+                :height="height"
+                id="s5zhiLiangMuBiaoPro"
+                click="false"
+              />
+          </el-aside>
+            <!-- 参数页面列 -->
+            <el-aside style="border:0px;width: 37%;">
+              <el-divider content-position="left">{{data.t_jchzbNum.date}} 年度</el-divider>
+              按时完成的检测项目数量 ：<el-tag>{{data.t_jchzbNum.number[0]}} 次</el-tag>
+              <br>
+              有效检测任务总数 ：<el-tag>{{data.t_jchzbNum.numberAll[0]}} 次</el-tag>
+              <br>
+              任务及时完成率 ：<el-tag>{{data.t_jchzbNum.res[0]}} %</el-tag>
+              <br>
+              <!-- <div class="dataCont" style="font-size: 14px;">
+              <el-divider content-position="left">2021 年度</el-divider>
+                投诉处理率 ：<el-tag>90%</el-tag>
+                <el-divider content-position="left">2022 年度</el-divider>
+                投诉处理率 ：<el-tag type="danger">91%</el-tag>
+                <el-divider content-position="left">2021 年度</el-divider>
+                满意度 ：<el-tag>95%</el-tag>
+                <el-divider content-position="left">2022 年度</el-divider>
+                  满意度 ：<el-tag type="danger">96%</el-tag>
+                <el-divider content-position="left">2021 年度</el-divider>
+                培训完成率 ：<el-tag>92%</el-tag>
+                <el-divider content-position="left">2022 年度</el-divider>
+                  培训完成率 ：<el-tag type="danger">94%</el-tag>
+              </div> -->
+              <!-- <div v-for="(item,i) in data.t_jchzbNum.date" :key="i">
+                <el-divider content-position="left">{{data.t_jchzbNum.date[i]}} 年度</el-divider>
+                按时完成的检测项目数量 ：<el-tag>{{data.t_jchzbNum.number[i]}} 次</el-tag>
+                <br>
+                有效检测任务总数 ：<el-tag>{{data.t_jchzbNum.numberAll[i]}} 次</el-tag>
+                <br>
+                任务及时完成率 ：<el-tag>{{data.t_jchzbNum.res[i]}} %</el-tag>
+                <br>
+              </div> -->
 
-    <el-container>
-      <!-- 放统计内容-->
-      <el-aside style="border:0px;width: 13%;"></el-aside>
-      <el-aside style="border:0px;width: 50%;">
-          <s5zhiLiangMuBiaoItem
-            :data="data"
-            width="95%"
-            :height="height"
-            id="s5zhiLiangMuBiaoPro"
-            click="false"
-          />
-      </el-aside>
-        <!-- 参数页面列 -->
-        <el-aside style="border:0px;width: 37%;">
-           <div class="dataCont" style="font-size: 14px;">
-          <el-divider content-position="left">2021 年度</el-divider>
-            投诉处理率 ：<el-tag>90%</el-tag>
-            <el-divider content-position="left">2022 年度</el-divider>
-            投诉处理率 ：<el-tag type="danger">91%</el-tag>
-             <el-divider content-position="left">2021 年度</el-divider>
-            满意度 ：<el-tag>95%</el-tag>
-            <el-divider content-position="left">2022 年度</el-divider>
-              满意度 ：<el-tag type="danger">96%</el-tag>
-            <el-divider content-position="left">2021 年度</el-divider>
-            培训完成率 ：<el-tag>92%</el-tag>
-            <el-divider content-position="left">2022 年度</el-divider>
-              培训完成率 ：<el-tag type="danger">94%</el-tag>
-           </div>
+            </el-aside>
 
-        </el-aside>
-
-      </el-container>
+          </el-container>
 
 
       </div>

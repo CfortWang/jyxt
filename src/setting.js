@@ -151,6 +151,7 @@ export default {
     '/tenantForget',
     '/authredirect',
     '/ziliao',
+    '/sealCompleted'
   ],
   // 白名单，匿名请求的URL
   whiteRequestList: [

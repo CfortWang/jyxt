@@ -18,23 +18,31 @@
       <el-aside style="border:0px;width: 13%;"></el-aside>
       <!-- 放统计内容-->
       <el-aside style="border:0px;width: 50%;">
-          <s3tousuItem
+          <s9neiBuZhiLiangItem
             :data="data"
             width="95%"
             :height="height"
-            id="s3tousuPro"
+            id="s9neibuPro"
             click="false"
           />
       </el-aside>
         <!-- 参数页面列 -->
         <el-aside style="border:0px;width: 37%;">
            <div class="dataCont" style="font-size: 14px;">
-            <el-divider content-position="left">{{data.t_complaintNum.date}} 年度</el-divider>
-              投诉总数次数 ：<el-tag>{{data.t_complaintNum.number[0]}} 次</el-tag>
+            <el-divider content-position="left">{{data.t_mjzlkzxbNum.date}} 年度</el-divider>
+              年度质量控制计划完成数量 ：<el-tag>{{data.t_mjzlkzxbNum.number[1]}} 次</el-tag>
               <br>
-              委托总数次数 ：<el-tag>{{data.t_complaintNum.numberAll[0]}} 次</el-tag>
+              年度质量控制计划总数 ：<el-tag>{{data.t_mjzlkzxbNum.number[2]}} 次</el-tag>
               <br>
-              客户投诉率 ：<el-tag>{{data.t_complaintNum.res[0]}} %</el-tag>
+              年度质量控制计划完成率 ：<el-tag>{{data.t_mjzlkzxbNum.number[2]==null||data.t_mjzlkzxbNum.number[2]==0?"0.00":(data.t_mjzlkzxbNum.number[1]/data.t_mjzlkzxbNum.number[2]*100).toFixed(2)}} %</el-tag>
+              <br>
+              <br>
+              部门质量控制计划完成数量 ：<el-tag>{{data.t_mjzlkzxbNum.numberAll[1]}} 次</el-tag>
+              <br>
+              部门质量控制计划总数 ：<el-tag>{{data.t_mjzlkzxbNum.numberAll[2]}} 次</el-tag>
+              <br>
+              部门质量控制计划完成率 ：<el-tag>{{data.t_mjzlkzxbNum.numberAll[2]==null||data.t_mjzlkzxbNum.numberAll[2]==0?"0.00":(data.t_mjzlkzxbNum.numberAll[1]/data.t_mjzlkzxbNum.numberAll[2]*100).toFixed(2)}} %</el-tag>
+              <br>
             <br>
               <!-- <div v-for="(item,i) in data.t_complaintNum.number" :key="i">
                   <el-divider content-position="left">{{data.t_complaintNum.date[i]}} 年度</el-divider>
@@ -73,7 +81,7 @@
       },
       beforeCreate: function () {
           // 官方文档给出的是require
-           this.$options.components.s3tousuItem = () => import('../item/s3tousu.vue')
+           this.$options.components.s9neiBuZhiLiangItem = () => import('../item/s9neiBuZhiLiang.vue')
           },
 
     watch:{

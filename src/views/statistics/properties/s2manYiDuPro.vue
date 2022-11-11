@@ -29,49 +29,24 @@
       </el-aside>
         <!-- 参数页面列 -->
         <el-aside style="border:0px;width: 37%;">
-           <div class="dataCont" style="font-size: 14px;">
-          <el-divider content-position="left">{{data.t_myddcBegin.date}} 年度</el-divider>
-            <font color="#FE8463">调查表总数 ：<el-tag>{{data.t_myddcBegin.number}} 次</el-tag></font>
-            <br>
-             <el-divider content-position="left">{{data.t_myddc1Begin.date}} 年度</el-divider>
-            <font color="#9BCA63">技术水平 ：<el-tag>{{((data.t_myddc1Begin.number-0.01)*100).toFixed(2)}} %</el-tag>
-            </font><br>
-            <el-divider content-position="left">{{data.t_myddc2Begin.date}} 年度</el-divider>
-             <font color="#FCCE10">检测效率满意度：<el-tag type="danger">{{((data.t_myddc2Begin.number-0.01)*100).toFixed(2)}} %</el-tag>
-             </font><br>
-          <el-divider content-position="left">{{data.t_myddc3Begin.date}} 年度</el-divider>
-            <font color="#E87C25">工作态度：<el-tag type="danger">{{((data.t_myddc3Begin.number-0.01)*100).toFixed(2)}} %</el-tag>
-            </font><br>
-              <el-divider content-position="left">{{data.t_myddc4Begin.date}} 年度</el-divider>
-             <font color="#27727B">检测准确性 ：<el-tag type="danger">{{((data.t_myddc4Begin.number-0.01)*100).toFixed(2)}} %</el-tag>
-             </font><br>
-               <el-divider content-position="left">{{data.t_myddc5Begin.date}} 年度</el-divider>
-              <font color="#9BCA63">报告完成率 ：<el-tag type="danger">{{((data.t_myddc5Begin.number-0.01)*100).toFixed(2)}} %</el-tag>
-              </font><br>
-            <el-divider content-position="left">{{data.t_myddc6Begin.date}} 年度</el-divider>
-              <font color="#FAD860">检测效率 ：<el-tag type="danger">{{((data.t_myddc6Begin.number-0.01)*100).toFixed(2)}} %</el-tag>
-              </font><br>
-                <el-divider content-position="left">{{data.t_myddcEnd.date}} 年度</el-divider>
-                 <font color="#FE8463">调查表总数：<el-tag type="danger">{{data.t_myddcEnd.number}} 次</el-tag>
-                 </font><br>
-              <el-divider content-position="left">{{data.t_myddc1End.date}} 年度</el-divider>
-                <font color="#9BCA63">技术水平 ：<el-tag type="danger">{{((data.t_myddc1End.number-0.01)*100).toFixed(2)}} %</el-tag>
-                </font><br>
-                  <el-divider content-position="left">{{data.t_myddc2End.date}} 年度</el-divider>
-                  <font color="#FCCE10">检测效率满意度 ：<el-tag type="danger">{{((data.t_myddc2End.number-0.01)*100).toFixed(2)}} %</el-tag>
-                  </font><br>
-                <el-divider content-position="left">{{data.t_myddc3End.date}} 年度</el-divider>
-                  <font color="#E87C25">工作态度 ：<el-tag type="danger">{{((data.t_myddc3End.number-0.01)*100).toFixed(2)}} %</el-tag>
-                  </font><br>
-                    <el-divider content-position="left">{{data.t_myddc4End.date}} 年度</el-divider>
-                   <font color="#27727B">检测准确性 ：<el-tag type="danger">{{((data.t_myddc4End.number-0.01)*100).toFixed(2)}} %</el-tag>
-                  </font><br>
-                    <el-divider content-position="left">{{data.t_myddc5End.date}} 年度</el-divider>
-                     <font color="#9BCA63">报告完成率：<el-tag type="danger">{{((data.t_myddc5End.number-0.01)*100).toFixed(2)}} %</el-tag>
-                     </font><br>
-                  <el-divider content-position="left">{{data.t_myddc6End.date}} 年度</el-divider>
-                    <font color="#FAD860">检测效率 ：<el-tag type="danger">{{((data.t_myddc6End.number-0.01)*100).toFixed(2)}} %</el-tag></font>
+           <div  class="dataCont" style="font-size: 14px;">
+              <el-divider content-position="left">{{data.t_khmydtjbNum.date}} 年度</el-divider>
+              调查表满意份数 ：<el-tag>{{data.t_khmydtjbNum.number[0]}} 次</el-tag>
+              <br>
+              收回调查表有效总份数 ：<el-tag>{{data.t_khmydtjbNum.numberAll[0]}} 次</el-tag>
+              <br>
+              客户满意度 ：<el-tag>{{data.t_khmydtjbNum.res[0]}} %</el-tag>
+              <br>
            </div>
+           <!-- <div v-for="(item,i) in data.t_khmydtjbNum.date" :key="i">
+              <el-divider content-position="left">{{data.t_khmydtjbNum.date[i]}} 年度</el-divider>
+              调查表满意份数 ：<el-tag>{{data.t_khmydtjbNum.number[i]}} 次</el-tag>
+              <br>
+              收回调查表有效总份数 ：<el-tag>{{data.t_khmydtjbNum.numberAll[i]}} 次</el-tag>
+              <br>
+              客户满意度 ：<el-tag>{{data.t_khmydtjbNum.res[i]}} %</el-tag>
+              <br>
+            </div> -->
 
         </el-aside>
 
@@ -158,7 +133,7 @@
       title: [
         {
          text: this.title,
-         subtext: this.data.t_myddcBegin.date+"-"+this.data.t_myddcEnd.date+"年数据统计"
+         subtext: this.data.t_myddcEnd.date+"年数据统计"
         }
       ],
       polar: {

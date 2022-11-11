@@ -178,7 +178,30 @@ export default {
                                 cfNew["ru_ku_shi_jian_"] = this_.dateFormat()
                                 cfNew["shou_yang_ri_qi_"] = uuidList[num]
                                 cfNewList.push(cfNew)
-                              repostCurd('add','{"tableName":"t_mjypcfwz","paramWhere":'+JSON.stringify(cfNewList)+'}')
+                                let uuid = cfNew["shou_yang_ri_qi_"];
+                                repostCurd('add', '{"tableName":"t_mjypcfwz","paramWhere":' + JSON.stringify(cfNewList) + '}').then(res => {
+                                  // alert('样品货位占位时重新生成货位')
+                                  let selectsql = "select id_ from t_mjypcfwz where shou_yang_ri_qi_='" + uuid + "'";
+                                  // console.log('zzj selectsql',selectsql)
+                                  repostCurd('sql', selectsql).then(res => {
+                                    let dataid = res.variables.data[0].id_;
+                                    // console.log(res.variables.data)
+                                    let abc = '{"biao_zhi_uuid_":"' + uuid + '"}'
+                                    // console.log('zzj abc ',abc)
+                                    if (changeWeizhi && !changesyWeizhi) {
+                                      // alert(1)
+                                      repostCurd('update', '{"tableName":"t_mjypdjb","paramWhere":' + abc + ',"paramCond":' + '{"shou_yang_wei_zhi":"' + dataid + '"}}').then(res => {
+                                        // alert('yang状态更新成功')
+                                      })
+                                    } else {
+                                      // alert(2)
+                                      repostCurd('update', '{"tableName":"t_mjypdjb","paramWhere":' + abc + ',"paramCond":' + '{"liu_yang_wei_zhi_":"' + dataid + '"}}').then(res => {
+                                        // alert('yang状态更新成功')
+                                      })
+                                    }
+                                  })
+
+                                })
                         }
                     }
                 })
@@ -259,6 +282,7 @@ export default {
                     rwzb["qi_wang_wan_cheng"] = mjfbbList[i].wan_cheng_shi_jia 			// 期望完成时间
                     rwzb["shi_fou_fen_bao_"] = mjfbbList[0][temp].shi_fou_fen_bao_			// 是否分包
                     rwzb["qi_wang_wan_cheng"] = mjfbbList[0][temp].wan_cheng_shi_jia 			// 期望完成时间
+                    rwzb["gong_xian_zhi_"] = mjypbList[i].yang_pin_lei_xin			// 供限值
                     rwb.push(rwzb)
                   }
                     index += str.length

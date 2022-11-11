@@ -15,7 +15,7 @@
 
 <script>
   import echarts from 'echarts'
-  import dialogView from '../properties/s8sheBeiHeChaPro.vue'
+  import dialogView from '../properties/s11biaoZhunWuPro.vue'
   import {GetPercent,GetMax} from  '../js/config.js'
   export default {
     components:{
@@ -35,7 +35,7 @@
       },
       id:{
         type:String,
-        default:"s8sheBeiHeCha"
+        default:"s11biaoZhunWu"
       },
       click:{
         type:String,
@@ -44,7 +44,7 @@
     },
     data () {
       return {
-        title:'设备核查计划',
+        title:'标准物质核查计划',
         dialogOff:false,
       }
     },
@@ -62,7 +62,7 @@
        }
       },
       drawLine(){
-        let s8sheBeiHeCha = echarts.init(document.getElementById(this.id))
+        let s11biaoZhunWu = echarts.init(document.getElementById(this.id))
          
 
           
@@ -82,13 +82,11 @@
         //  let max2=GetMax(data2)+1;
         //  let maxVal=max1>max2?max1:max2;
         //  console.log("max1:",max1,"max2:",max2);
-        console.log( this.data.t_sbhcjlbNum.name,'nameddd')
-
        let option = {
            //v3
           title: {
             text: this.title,
-            subtext: this.data.t_sbhcjlbNum.date+"年核查次数"
+            subtext: this.data.Num.date+"年"
           },
           tooltip: {
                         trigger: 'axis',
@@ -97,8 +95,7 @@
                         },
                         formatter: function (datas) {
                           console.log(datas)
-                            var res=datas[0].name+"<BR>"+'计划外核查:'+datas[0].data+"<BR>"
-                            res+='年度核查'+datas[1].data+"<BR>"
+                            var res=datas[0].name+"<BR>"+'核查次数:'+datas[0].data+"<BR>"
                             // res+='百分比:'+(datas[1].value==null||datas[1].value==0?"0.00":(datas[0].value/datas[1].value*100).toFixed(2))+"%"
                             return res
                         }
@@ -117,7 +114,7 @@
           },
           yAxis: {
             type: 'category',
-            data: this.data.t_sbhcjlbNum.name,
+            data: this.data.Num.name,
             axisLabel: {
                 show: true, // 是否显示X轴的内容，不包含两端的文字
                 interval: 0,
@@ -143,20 +140,17 @@
           series: [
             {
               type: 'bar',
-              data: this.data.t_sbhcjlbNum.number,
+              data: this.data.Num.number,
+              itemStyle: {color: '#006699'},
               label: {
                 show: true,
                 position: 'right'
               },
             },
-            {
-              type: 'bar',
-              data: this.data.t_sbhcjlbNum.numberAll,
-              label: {
-                show: true,
-                position: 'right'
-              },
-            },
+            // {
+            //   type: 'bar',
+            //   data: this.data.Num.numberAll
+            // },
           ],
                 dataZoom: [
         {
@@ -166,73 +160,16 @@
             filterMode: 'empty'
         }
       ],
-         //v1
-        //   grid: {
-        //         top: '20%',
-        //         left: '3%',
-        //         right: '4%',
-        //         bottom: '10%',
-        //         containLabel: true
-        //     },
-        //    tooltip: {
-        //           trigger: 'axis',
-        //           axisPointer: {
-        //             type: 'shadow'
-        //           },
-        //           formatter: function (datas) {
-        //               var res='计划:'+datas[0].value+"<BR>"
-        //               res+='记录:'+datas[1].value+"<BR>"
-        //               res+='百分比:'+(datas[0].value==null||datas[0].value==0?"0.00":(datas[1].value/datas[0].value*100).toFixed(2))+"%"
-        //               return res
-        //           }
-        //    },
-        // title: {
-        //      text: this.title,
-        //      subtext: this.data.t_sbhcjlbBegin.date+"-"+this.data.t_sbhcjlbEnd.date+"年核查次数"
-        //      //subtext: this.data.t_sbhcjhBegin.date+'完成率为:' + beginInof +'\n'+this.data.t_sbhcjhEnd.date+'完成率为:'+endInof,
-        // },
-        // color: ['#003366', '#006699', '#4cabce', '#e5323e'],
-        //    legend: {
-        //      show:false
-        //  },
-        //  xAxis: [
-        //      {
-        //          type: 'category',
-        //          axisTick: {show: false},
-        //          data: data3
-        //      }
-        //  ],
-        //  yAxis:  [
-        //      {
-        //        max:maxVal,
-        //        min:0,
-        //          type: 'value'
-        //      }
-        //  ] 
-        //  ,
-        //  series: [
-        //     {
-        //          name: '计划条数',
-        //          type: 'bar',
-        //          barGap: 0,
-        //          data: data1
-        //    },
-        //     {
-        //          name: '记录条数',
-        //          type: 'bar',
-        //          barGap: 0,
-        //          data: data2
-        //    },
-        //  ]
+       
        };
 
-       option && s8sheBeiHeCha.setOption(option);
+       option && s11biaoZhunWu.setOption(option);
       }
     }
   }
 </script>
 <style scoped>
-  #s8sheBeiHeCha:hover{
+  #s10waiBuNengLi:hover{
     transition: all 0.5s;
     transform:scale(1.03);
   }

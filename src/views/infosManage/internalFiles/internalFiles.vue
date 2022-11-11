@@ -46,7 +46,27 @@ export default {
             oldorgId: '',
             orgName: '',
             loading: false,
-            typeData: [],
+            typeData: [
+                { id: '0', label: '质量手册' },
+                { id: '1', label: '程序文件' },
+                { id: '2', label: '程序文件表单' },
+                { id: '3', label: '检测方法SOP' },
+                { id: '4', label: '设备操作维护SOP' },
+                { id: '5', label: '设备设施验证SOP' },
+                { id: '6', label: '检测方法验证SOP' },
+                { id: '7', label: '管理类SOP' },
+                { id: '8', label: '检测方法SOP表单' },
+                { id: '9', label: '设备操作维护SOP表单' },
+                { id: '10', label: '设备设施验证SOP表单' },
+                { id: '11', label: '检测方法验证SOP表单' },
+                { id: '12', label: '管理类SOP表单' },
+                { id: '13', label: '公司管理制度' },
+                { id: '14', label: '非检测方法SOP' },
+                { id: '15', label: '检测方法确认SOP' },
+                { id: '16', label: '非标确认规定' },
+                { id: '17', label: '非检测方法SOP表单' },
+                { id: '18', label: '非检测方法确认SOP表单' },
+            ],
             filterText: '',
             defaultProps: {
                 children: 'children',
@@ -96,7 +116,7 @@ export default {
         }
     },
     mounted() {
-        this.loadNode()
+        // this.loadNode()
     },
     methods: {
         filterNode(value, data) {
@@ -105,17 +125,17 @@ export default {
         },
         loadNode() {
             this.loading = true
-            getFileType("内部文件").then(res => {
-                this.loading = false
-                for (let i in res.variables.data) {
-                    let data = {}
-                    data["id"] = i
-                    data["label"] = res.variables.data[i]
-                    this.typeData.push(data)
-                }
-            }).catch(res => {
-                this.loading = false
-            })
+            // getFileType("内部文件").then(res => {
+            //     this.loading = false
+            //     for (let i in res.variables.data) {
+            //         let data = {}
+            //         data["id"] = i
+            //         data["label"] = res.variables.data[i]
+            //         this.typeData.push(data)
+            //     }
+            // }).catch(res => {
+            //     this.loading = false
+            // })
         },
         refreshData() {
             this.tableData = []
@@ -178,9 +198,9 @@ export default {
     },
 }
 </script>
-<style lang="scss" >
+<style lang="less" scoped>
 .box {
-    width: 210px;
+    width: 230px;
 }
 
 
@@ -193,6 +213,10 @@ export default {
 .treeDiv {
     height: 800px;
     overflow-y: auto;
+}
+
+/deep/ .el-tree-node__content {
+    display: block;
 }
 </style>
   

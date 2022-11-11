@@ -44,8 +44,9 @@
     },
     data () {
       return {
-        title:'投诉率',
+        title:'客户投诉率',
         dialogOff:false,
+        measured:[]
       }
     },
     mounted(){
@@ -63,79 +64,158 @@
       },
       drawLine(){
 
-        let beginInof = Number(this.data.t_complaintBegin.number)
-        let endInof = Number(this.data.t_complaintEnd.number)
+        // let beginInof = Number(this.data.t_complaintBegin.number)
+        // let endInof = Number(this.data.t_complaintEnd.number)
         let s3tousu = echarts.init(document.getElementById(this.id))
-        let beingDate=this.data.t_complaintBegin.date
-        let endDate=this.data.t_complaintEnd.date
+        // let beingDate=this.data.t_complaintBegin.date
+        // let endDate=this.data.t_complaintEnd.date
         var option;
-       option = {
-         rotate: {
-            min: -90,
-            max: 90
-          },
-          grid: {
-                top: '20%',
-                left: '3%',
-                right: '4%',
-                bottom: '10%',
-                containLabel: true
+        //v2
+        // let that = this
+        // for (let i = 0; i < that.data.t_complaintNum.date.length; i++) {
+        //   let result = 0
+        //   if(that.data.t_mjwtsqbNum.number[i] === 0){
+        //     result = Math.floor(that.data.t_complaintNum.number[i]/1 * 10000) / 100
+        //   }else{
+        //     result = Math.floor(that.data.t_complaintNum.number[i]/that.data.t_mjwtsqbNum.number[i] * 10000) / 100
+        //   }
+        //   that.measured.push(result)
+        //   // console.log(that.data.t_complaintNum.number[i], that.data.t_mjwtsqbNum.number[i], result, 'res')
+        // }
+        //v3
+         let e=[this.data.t_complaintNum.number[0],this.data.t_complaintNum.numberAll[0],this.data.t_complaintNum.res[0]]
+
+        option = {
+          //v3
+              legend: {},
+            tooltip: {
+              trigger: 'axis',
+              axisPointer: {
+                type: 'shadow'
+              },
+              // formatter: function (params) {
+              //   return params[0].data[0] + '<br/>满意份数：' + params[0].data[1] + '<br/>调查总份数: ' + params[0].data[2];
+              // }
             },
-          title: {
-             text: this.title,
-             subtext: '    '+this.data.t_complaintBegin.date+'-'+this.data.t_complaintEnd.date,
-           },
-         xAxis: {
-           type: 'category',
-           data: ['投诉总数','投诉总数']
-         },
-         yAxis: {
-           max:this.data.t_complaintBegin.number>this.data.t_complaintEnd.number?this.data.t_complaintBegin.number+1:this.data.t_complaintEnd.number+1,
-           min:0,
-           type: 'value',
-           minInterval: 1, //设置成1保证坐标轴分割刻度显示成整数。
-         },
-         tooltip: {
-                trigger: 'axis',
-                axisPointer: {
-                  type: 'shadow'
-                },
-                formatter: function (datas) {
-                    let year1 = datas[0].dataIndex==0||datas[0].dataIndex==2;
-                    var res=(year1?beingDate+':':endDate+':')+datas[0].name+':'+datas[0].value
-                    return res
+            // dataset: {
+            //   source: barData
+            // },
+            xAxis: { type: 'category',data:['投诉总数', '委托总数', '客户投诉率']},
+            yAxis: [
+              {
+                type: 'value',
+                scale: true,
+                name: '次数',
+                max: this.data.t_complaintNum.number[0]>this.data.t_complaintNum.numberAll[0]?this.data.t_complaintNum.number[0]+1:this.data.t_complaintNum.numberAll[0]+1,
+                min: 0,
+                // boundaryGap: [0.2, 0.2]
+              },
+              {
+                type: 'value',
+                scale: true,
+                name: '客户投诉率',
+                max: this.data.t_complaintNum.res[0],
+                min: 0,
+                axisLabel: {
+                  formatter: '{value} %'
                 }
-         },
-         series: [
-           {
-
-             itemStyle: {
-                    normal: {
-                        color: function(params) {
-                            var colorList = [
-                              '#F0805A','#B5C334','#FCCE10','#E87C25','#27727B',
-                               '#FE8463','#9BCA63','#FAD860','#F3A43B','#60C0DD',
-                               '#D7504B','#C6E579','#F4E001','#F0805A','#26C0C0'
-                            ];
-                            return colorList[params.dataIndex]
-                        },
-                    }
+              }
+            ],
+            // Declare several bar series, each will be mapped
+            // to a column of dataset.source by default.
+            // series: [{ type: 'bar' }],
+            series: [
+              {
+                data: e,
+                type: 'bar',
+                itemStyle: {
+                  color: '#cccc33'
                 },
+                label: {
+                  show: true,
+                  position: 'top'
+                },
+              }
+            ],
+            grid: {
+              top: '20%',
+              left: '3%',
+              right: '4%',
+              bottom: '10%',
+              containLabel: true
+            },
+            title: {
+              text: this.title,
+              // subtext: "        "+beingDate+"-"+endDate
+            },
+          //v2
+        //   rotate: {
+        //     min: -90,
+        //     max: 90
+        //   },
+        //   grid: {
+        //         top: '20%',
+        //         left: '3%',
+        //         right: '4%',
+        //         bottom: '10%',
+        //         containLabel: true
+        //     },
+        //   title: {
+        //      text: this.title,
+        //      subtext: '    '+this.data.t_complaintNum.date[0]+'-'+this.data.t_complaintNum.date[this.data.t_complaintNum.date.length-1],
+        //    },
+        //  xAxis: {
+        //    type: 'category',
+        //    data: this.data.t_complaintNum.date
+        //  },
+        //  yAxis: {
+        //   //  max:this.data.t_complaintBegin.number>this.data.t_complaintEnd.number?this.data.t_complaintBegin.number+1:this.data.t_complaintEnd.number+1,
+        //   // max: Math.max(...this.measured),
+        //   // min:0,
+        //   type: 'value',
+        //   axisLabel: {
+        //     show: true,
+        //     textStyle:{color:'#000'},
+        //     interval: 'auto',
+        //     formatter: '{value} %'
+        //   },
+        //  },
+        //  tooltip: {
+        //         trigger: 'axis',
+        //         axisPointer: {
+        //           type: 'shadow'
+        //         },
+        //         formatter: function (params) {
+        //           // console.log(params,'tousu ')
+        //           return params[0].axisValue + '<br/>客户投诉率：' + params[0].data;
+        //         }
+        //         // formatter: 
+        //         // function (datas) {
+        //         //     let year1 = datas[0].dataIndex==0||datas[0].dataIndex==2;
+        //         //     var res=(year1?beingDate+':':endDate+':')+datas[0].name+':'+datas[0].value
+        //         //     return res
+        //         // }
+        //  },
+        //  series: [
+        //    {
+        //      itemStyle: {
+        //             normal: {
+        //                 color: function(params) {
+        //                     var colorList = [
+        //                       '#F0805A','#B5C334','#FCCE10','#E87C25','#27727B',
+        //                        '#FE8463','#9BCA63','#FAD860','#F3A43B','#60C0DD',
+        //                        '#D7504B','#C6E579','#F4E001','#F0805A','#26C0C0'
+        //                     ];
+        //                     return colorList[params.dataIndex]
+        //                 },
+        //             }
+        //         },
 
-             data: [
-               {
-                 value:this.data.t_complaintBegin.number,
-                 itemStyle: {
-                   color: '#61a0a8'
-                 }
-
-               },
-               this.data.t_complaintEnd.number,
-             ],
-             type: 'bar',
-             barWidth:50
-           }
-         ]
+        //      data: this.measured,
+        //      type: 'bar',
+        //      barWidth:50
+        //    }
+        //  ]
        };
 
        option && s3tousu.setOption(option);

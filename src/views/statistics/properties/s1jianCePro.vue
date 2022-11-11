@@ -30,7 +30,14 @@
         <!-- 参数页面列 -->
         <el-aside style="border:0px;width: 37%;">
            <div class="dataCont" style="font-size: 14px;">
-          <el-divider content-position="left">{{data.t_gdyrqcwtBegin.date}} 年度</el-divider>
+            <el-divider content-position="left">{{data.t_mjjcbgNum.date}} 年度</el-divider>
+            统计期内检测报告的差错次数 ：<el-tag>{{data.t_mjjcbgNum.number[0]}} 次</el-tag>
+            <br>
+            有效检测任务总数 ：<el-tag>{{data.t_mjjcbgNum.numberAll[0]}} 次</el-tag>
+            <br>
+            检测报告差错率 ：<el-tag>{{data.t_mjjcbgNum.res[0]}} 次</el-tag>
+            <br>
+          <!-- <el-divider content-position="left">{{data.t_gdyrqcwtBegin.date}} 年度</el-divider>
             委托检测数 ：<el-tag>{{data.t_gdyrqcwtBegin.number}} 次</el-tag>
             <br>
              <el-divider content-position="left">{{data.t_gdyrqcwt2Begin.date}} 年度</el-divider>
@@ -65,7 +72,7 @@
                     检测结果准确率 ：<el-tag>{{((data.t_gdyrqcwt5End.number)*100).toFixed(2)}} %</el-tag>
                     <br>
                      <el-divider content-position="left">{{data.t_gdyrqcwt6End.date}} 年度</el-divider>
-                    按时完成率 ：<el-tag>{{((data.t_gdyrqcwt6End.number)*100).toFixed(2)}} %</el-tag>
+                    按时完成率 ：<el-tag>{{((data.t_gdyrqcwt6End.number)*100).toFixed(2)}} %</el-tag> -->
            </div>
 
         </el-aside>

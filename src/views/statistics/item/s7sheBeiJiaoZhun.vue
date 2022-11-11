@@ -15,8 +15,9 @@
 
 <script>
   import echarts from 'echarts'
-  import dialogView from '../properties/s7sheBeiJiaoZhunPro.vue'
   import {GetPercent,GetMax} from  '../js/config.js'
+  import dialogView from '../properties/s7sheBeiJiaoZhunPro.vue'
+
   export default {
     components:{
       dialogView
@@ -31,7 +32,7 @@
       },
       height:{
         type:String,
-        default: window.screen.height/4+"px"
+        default: window.screen.height/2+"px"
       },
       id:{
         type:String,
@@ -44,7 +45,7 @@
     },
     data () {
       return {
-        title:'设备校准完成率',
+        title:'设备鉴定/校验计划',
         dialogOff:false,
       }
     },
@@ -63,201 +64,222 @@
       },
       drawLine(){
         let s7sheBeiJiaoZhun = echarts.init(document.getElementById(this.id))
-         var posList = [
-         'left', 'right', 'top', 'bottom',
-         'inside',
-         'insideTop', 'insideLeft', 'insideRight', 'insideBottom',
-         'insideTopLeft', 'insideTopRight', 'insideBottomLeft', 'insideBottomRight'
-     ];
-     app.configParameters = {
-         rotate: {
-             min: -90,
-             max: 90
-         },
-         align: {
-             options: {
-                 left: 'left',
-                 center: 'center',
-                 right: 'right'
-             }
-         },
-         verticalAlign: {
-             options: {
-                 top: 'top',
-                 middle: 'middle',
-                 bottom: 'bottom'
-             }
-         },
-         position: {
-             options: echarts.util.reduce(posList, function (map, pos) {
-                 map[pos] = pos;
-                 return map;
-             }, {})
-         },
-         distance: {
-             min: 0,
-             max: 100
-         }
-     };
 
-     app.config = {
-         rotate: 90,
-         align: 'left',
-         verticalAlign: 'middle',
-         position: 'insideBottom',
-         distance: 15,
-         onChange: function () {
-             var labelOption = {
-                 normal: {
-                     rotate: app.config.rotate,
-                     align: app.config.align,
-                     verticalAlign: app.config.verticalAlign,
-                     position: app.config.position,
-                     distance: app.config.distance
-                 }
-             };
-             s5renYuanJianDu.setOption({
-                 series: [{
-                     label: labelOption
-                 }, {
-                     label: labelOption
-                 }, {
-                     label: labelOption
-                 }, {
-                     label: labelOption
-                 }]
-             });
-         }
-     };
+        // let beginInof = GetPercent(Number(this.data.t_rypxjlnkBegin.number),Number(this.data.t_ryndpxjhBegin.number))
+        // let endInof = GetPercent(Number(this.data.t_rypxjlnkEnd.number),Number(this.data.t_ryndpxjhEnd.number))
 
-         var labelOption = {
-         show: true,
-         position: app.config.position,
-         distance: app.config.distance,
-         align: app.config.align,
-         verticalAlign: app.config.verticalAlign,
-         rotate: app.config.rotate,
-         formatter: '{c}  {name|{a}}',
-         fontSize: 12,
-         rich: {
-             name: {
-                 textBorderColor: '#fff'
-             }
-         }
-        };
-        let beginInof = GetPercent(Number(this.data.t_yqsbxzjgBegin.number),Number(this.data.t_ndsbxzjdjhBegin.number))
-        let endInof = GetPercent(Number(this.data.t_yqsbxzjgEnd.number),Number(this.data.t_ndsbxzjdjhEnd.number))
-        let beingDate=this.data.t_ndsbxzjdjhBegin.date
-        let endDate=this.data.t_yqsbxzjgEnd.date
-         let data1 = [];
-         data1.push("计划");
-         data1.push("记录");
-         data1.push("计划");
-         data1.push("记录");
+        //  let data1 = [];
+        //  data1.push(this.data.t_ryndpxjhBegin.number);
+        //  data1.push(this.data.t_ryndpxjhEnd.number);
+        //  let data2 = [];
+        //  data2.push(this.data.t_rypxjlnkBegin.number);
+        //  data2.push(this.data.t_rypxjlnkEnd.number);
+        //  let data3 = [];
+        //  data3.push(this.data.t_rypxjlnkBegin.date);
+        //  data3.push(this.data.t_rypxjlnkEnd.date);
 
-         let data2 = [];
-         data2.push(this.data.t_ndsbxzjdjhBegin.number);
-         data2.push(this.data.t_yqsbxzjgBegin.number);
-         data2.push(this.data.t_ndsbxzjdjhEnd.number);
-         data2.push(this.data.t_yqsbxzjgEnd.number);
 
-       // prettier-ignore
-let dataAxis = data1;
-// prettier-ignore
-let data = data2;
-let yMax = 500;
-let dataShadow = [];
-for (let i = 0; i < data.length; i++) {
-  dataShadow.push(yMax);
-}
-let option = {
-   grid: {
-                top: '20%',
-                left: '3%',
-                right: '4%',
-                bottom: '10%',
-                containLabel: true
+        // let barData = []
+        // for (let i = 0; i < this.data.t_ryywpxjlNum.date.length; i++) {
+        //   let e=[this.data.t_ryywpxjlNum.date[i],this.data.t_ryywpxjlNum.number[i],this.data.t_ryywpxjlNum.numberAll[i]]
+        //   barData.push(e)
+        // }
+        //  let e=[this.data.t_ryywpxjlNum.number[0],this.data.t_ryywpxjlNum.numberAll[0],this.data.t_ryywpxjlNum.res[0]]
+
+
+        var option;
+        option = {
+          //v3
+          title: {
+            text: this.title,
+            subtext: this.data.t_mjsbjdxzjhzbNum.date+"年校准次数"
+          },
+          tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                          type: 'shadow'
+                        },
+                        formatter: function (datas) {
+                            var res=datas[0].name+"<BR>"+'完成:'+datas[0].value+"<BR>"
+                            res+='计划:'+datas[1].value+"<BR>"
+                            res+='百分比:'+(datas[1].value==null||datas[1].value==0?"0.00":(datas[0].value/datas[1].value*100).toFixed(2))+"%"
+                            return res
+                        }
+          },
+          legend: {},
+          grid: {
+                        top: '10%',
+                        left: '3%',
+                        right: '4%',
+                        bottom: '5%',
+                        containLabel: true
+                    },
+          xAxis: {
+            type: 'value',
+            boundaryGap: [0, 0.01]
+          },
+          yAxis: {
+            type: 'category',
+            data: this.data.t_mjsbjdxzjhzbNum.name,
+            axisLabel: {
+                show: true, // 是否显示X轴的内容，不包含两端的文字
+                interval: 0,
+                // rotate: '50', // 旋转50°
+                lineHeight: 18,
+                // formatter: function(params) {
+                //   //  console.log('formatter', params, params.length)
+                //   var newParamsName = ''// 最终拼接成的字符串
+                //   var paramsNameNumber = params.length// 实际标签的个数
+                //   var provideNumber = 3// 每行能显示的字的个数
+                //   // 判断标签的个数是否大于规定的个数， 如果大于，则进行换行处理 如果不大于，即等于或小于，就返回原标签
+                //   if (paramsNameNumber > provideNumber) {
+                //   // ********重点在这里********
+                //     newParamsName = params.substring(0, 3) + '..'// 最终拼成的字符串
+                //   } else { // 将旧标签的值赋给新标签
+                //     newParamsName = params
+                //   }
+                //   // 将最终的字符串返回
+                //   return newParamsName
+                // }
+              },
+          },
+          series: [
+            {
+              type: 'bar',
+              data: this.data.t_mjsbjdxzjhzbNum.number,
+              label: {
+                show: true,
+                position: 'right'
+              },
             },
-  title: {
-    text: this.title,
-    subtext: beingDate+"-"+endDate+"年校准次数"
-  },
-  xAxis: {
-    data: dataAxis,
-    axisLabel: {
-      inside: true,
-      color: '#000'
-    },
-    axisTick: {
-      show: true
-    },
-    axisLine: {
-      show: true
-    },
-    z: 10
-  },
-  yAxis: {
-    axisLine: {
-      show: false
-    },
-    axisTick: {
-      show: false
-    },
-    axisLabel: {
-      color: '#000'
-    }
-  },
-  dataZoom: [
-    {
-      type: 'inside'
-    }
-  ],
-  tooltip: {
-         trigger: 'axis',
-         axisPointer: {
-           type: 'shadow'
-         },
-         formatter: function (datas) {
-             let year1 = datas[0].dataIndex==0||datas[0].dataIndex==2;
-             var res=(year1?beingDate+':':endDate+':')+datas[0].name+':'+datas[0].value
-             return res
-         }
-  },
-  series: [
-    {
-      type: 'bar',
-      showBackground: true,
-      itemStyle: {
-        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-          { offset: 0, color: '#83bff6' },
-          { offset: 0.5, color: '#188df0' },
-          { offset: 1, color: '#188df0' }
-        ])
-      },
-      emphasis: {
-        itemStyle: {
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            { offset: 0, color: '#2378f7' },
-            { offset: 0.7, color: '#2378f7' },
-            { offset: 1, color: '#83bff6' }
-          ])
+            {
+              type: 'bar',
+              data: this.data.t_mjsbjdxzjhzbNum.numberAll,
+              label: {
+                show: true,
+                position: 'right'
+              },
+            },
+          ],dataZoom: [
+        {
+            id: 'dataZoomY',
+            type: 'inside',
+            yAxisIndex: [0],
+            filterMode: 'empty'
         }
-      },
-      data: data
-    }
-  ]
-};
-// Enable data zoom when user click bar.
-const zoomSize = 6;
-s7sheBeiJiaoZhun.on('click', function (params) {
-  console.log(dataAxis[Math.max(params.dataIndex - zoomSize / 2, 0)]);
-  s7sheBeiJiaoZhun.dispatchAction({
-    type: 'dataZoom',
-    startValue: dataAxis[Math.max(params.dataIndex - zoomSize / 2, 0)],
-    endValue:
-      dataAxis[Math.min(params.dataIndex + zoomSize / 2, data.length - 1)]
-  });
-});
+      ],
+          //v2
+        //     legend: {},
+        //     tooltip: {
+        //       trigger: 'axis',
+        //       axisPointer: {
+        //         type: 'shadow'
+        //       },
+        //       formatter: function (params) {
+        //         return params[0].data[0] + '<br/>已完成培训数量：' + params[0].data[1]+ '<br/>所有培训数量：' + params[0].data[2];
+        //       }
+        //     },
+        //     dataset: {
+        //       source: barData
+        //     },
+        //     xAxis: { type: 'category' },
+        //     yAxis: {
+        //       type: 'value',
+        //       axisLabel: {
+        //         show: true,
+        //         textStyle:{color:'#000'},
+        //         interval: 'auto',
+        //         // formatter: '{value} %'
+        //       },
+            
+        //     },
+        //     // Declare several bar series, each will be mapped
+        //     // to a column of dataset.source by default.
+        //     series: [{ type: 'bar'},{ type: 'bar'}],
+        //     grid: {
+        //       top: '20%',
+        //       left: '3%',
+        //       right: '4%',
+        //       bottom: '10%',
+        //       containLabel: true
+        //     },
+        //     title: {
+        //       text: this.title,
+        //       subtext: "        "+this.data.t_ryywpxjlNum.date[0]+"-"+this.data.t_ryywpxjlNum.date[this.data.t_ryywpxjlNum.date.length-1]
+        //     },
+        //v1
+          // title: {
+          //   text: this.title,
+          //   subtext: this.data.t_rypxjlnkBegin.date+"-"+this.data.t_rypxjlnkEnd.date+"年培训次数"
+          // },
+          // tooltip: {
+          //        trigger: 'axis',
+          //        axisPointer: {
+          //          type: 'shadow'
+          //        },
+          //        formatter: function (datas) {
+          //            var res='计划:'+datas[0].value+"<BR>"
+          //            res+='记录:'+datas[1].value+"<BR>"
+          //            res+='百分比:'+(datas[0].value==null||datas[0].value==0?"0.00":(datas[1].value/datas[0].value*100).toFixed(2))+"%"
+          //            return res
+          //        }
+          // },
+          // legend: {show:false},
+          //  grid: {
+          //       top: '20%',
+          //       left: '3%',
+          //       right: '4%',
+          //       bottom: '10%',
+          //       containLabel: true
+          //   },
+          // xAxis: {
+          //   type: 'category',
+          //   data: data3
+            
+          // },
+          // yAxis: {
+          //   type: 'value',
+          //   boundaryGap: [0, 0.01]
+          // },
+          // series: [
+
+          //   {
+          //     name: ['计划'],
+          //     type: 'bar',
+          //     data: data1,
+          //     itemStyle: {
+          //           normal: {
+          //               color: function(params) {
+          //                   var colorList = [
+          //                     '#FE8463','#9BCA63','#FCCE10','#E87C25','#27727B',
+          //                      '#FE8463','#9BCA63','#FAD860','#F3A43B','#60C0DD',
+          //                      '#D7504B','#C6E579','#F4E001','#F0805A','#26C0C0'
+          //                   ];
+          //                   return colorList[params.dataIndex]
+          //               },
+          //           }
+          //       },
+          //   },
+          //   {
+          //     name: ['记录'],
+          //     type: 'bar',
+          //     data: data2,
+          //     itemStyle: {
+          //           normal: {
+          //               color: function(params) {
+          //                   var colorList = [
+          //                     '#E87C25','#FAD860','#FCCE10','#E87C25','#27727B',
+          //                      '#FE8463','#9BCA63','#FAD860','#F3A43B','#60C0DD',
+          //                      '#D7504B','#C6E579','#F4E001','#F0805A','#26C0C0'
+          //                   ];
+          //                   return colorList[params.dataIndex]
+          //               },
+          //           }
+          //       },
+          //   }
+          // ]
+        };
+
 
        option && s7sheBeiJiaoZhun.setOption(option);
       }

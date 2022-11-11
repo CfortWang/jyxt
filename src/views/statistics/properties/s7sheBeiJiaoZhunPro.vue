@@ -27,8 +27,21 @@
           />
       </el-aside>
         <!-- 参数页面列 -->
-        <el-aside style="border:0px;width: 37%;">
-           <div class="dataCont" style="font-size: 14px;">
+        <el-aside style="border:0px;width: 37%; height: 700px;overflow: auto;">
+              <br>
+
+          <div>{{data.t_mjsbjdxzjhzbNum.date}} 年度</div>
+
+          <div v-for="(item,i) in data.t_mjsbjdxzjhzbNum.name" :key="i">
+              <el-divider content-position="left">{{data.t_mjsbjdxzjhzbNum.name[i]}}</el-divider>
+              仪器已完成校验次数 ：<el-tag>{{data.t_mjsbjdxzjhzbNum.number[i]}} 次</el-tag>
+              <br>
+              仪器计划校验次数 ：<el-tag>{{data.t_mjsbjdxzjhzbNum.numberAll[i]}} 次</el-tag>
+              <br>
+              校验完成率 ：<el-tag>{{data.t_mjsbjdxzjhzbNum.val[i]}} %</el-tag>
+              <br>
+            </div>
+           <!-- <div class="dataCont" style="font-size: 14px;">
           <el-divider content-position="left">{{data.t_ndsbxzjdjhBegin.date}} 年度</el-divider>
             设备校准计划次数 ：<el-tag>{{data.t_ndsbxzjdjhBegin.number}} 次</el-tag>
             <br>
@@ -39,7 +52,7 @@
             设备校准计划次数 ：<el-tag type="danger">{{data.t_ndsbxzjdjhEnd.number}} 次</el-tag>
           <el-divider content-position="left">{{data.t_yqsbxzjgEnd.date}} 年度</el-divider>
             设备校准完成次数 ：<el-tag type="danger">{{data.t_yqsbxzjgEnd.number}} 次</el-tag>
-           </div>
+           </div> -->
 
         </el-aside>
 

@@ -1,7 +1,14 @@
 <template>
   <div class="sample-content">
     <!-- 表格組件 -->
-    <div class="selectArea" >
+    <!-- <div @dblclick="clickBtn">{{ showValue }}</div> -->
+    <div @dblclick="clickBtn" style="cursor: pointer;" >
+      位置选择
+      <!-- <input placeholder="请输入内容" :value="showValue"  id="valueDom" @click="onChange"> -->
+    </div>
+    <!-- <el-input></el-input> -->
+    <div class="selectArea" v-if="ifshow">
+      <div @click="close" class="close-content">关闭</div>
       <div class="top-content">
         <div class="top-title">库存可视化</div>
         <div class="query-content">
@@ -79,11 +86,11 @@
             >
               <div>
                 <div class="goods-level">
-                  <div class="level-dsc" @click="closeView(listData[index])">
+                  <div class="level-dsc">
                     <!-- 第{{ index | indexfilter(listData) }}层 -->
                     第{{ index }}层
                   </div>
-                  <div @click="closeView(listData[index])" class="goods-list">
+                  <div class="goods-list">
                     <div
                       v-for="(it, index) in listData[index]"
                       :key="index"
@@ -92,6 +99,7 @@
                         background:
                           it.cun_fang_wei_zhi_ == '空' ? '' : '#67c23a',
                       }"
+                      @click="closeView(it)"
                     >
                       <div class="top-dsc">
                         <div class="position">
@@ -157,7 +165,26 @@ export default {
       loading: false,
       pagination: {},
       secondshow: false,
+      ifshow: false,
+      showValue: "",
+      value:"111"
     };
+  },
+  props: {
+    field: Object,
+    formData: {
+      type: Object,
+      default() {
+        return {};
+      },
+    },
+    component_12u7eoo:{
+      type:String,
+      default(){
+        return 111
+      }
+    }
+    
   },
   filters: {
     indexfilter: function (value, data) {
@@ -199,7 +226,67 @@ export default {
     this.firstLoadViewData();
     this.firstLoadQuyu("试剂库1");
   },
+  beforeDestroy() {
+    console.log(this.formData, "formData");
+    let id = this.formData.id;
+    let Status = this.formData.anNiugTai;
+    let ming_chen = this.formInline.cang_ku_ming_chen_value;
+    let weizhi = this.showValue;
+    console.log(weizhi, ming_chen);
+    return
+    if (weizhi !="" &&Status =="已入库") {
+      // 数据库更新
+      curdPost(
+        "update",
+        '{"tableName":"t_mjwlgl","paramWhere":{"wai_jian_":"' +
+          id +
+          '",},"paramCond":{"cang_ku_ming_chen":"' +
+          ming_chen +
+          '","cun_fang_wei_zhi_":"' +
+          weizhi +
+          '"}}'
+      )
+        .then((res) => {
+          this.$message({
+            message: "当前物料位置更新状态更新成功",
+            type: "success",
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  },
   methods: {
+
+    onChange(e){
+      console.log("onChange")
+
+    },
+    closeView(value1) {
+      // let values = value[0];
+      // console.log(this.formData, "formData");
+      // console.log(value1);
+      //  this.showValue = value[0].wei_zhi_?value[0].wei_zhi_:value[0].cun_fang_wei_zhi_;
+      if (value1.wei_zhi_) {
+        this.showValue = value1.wei_zhi_;
+      } else if (value1.cun_fang_wei_zhi_) {
+        this.showValue = value1.cun_fang_wei_zhi_;
+      }
+      //  values.cun_fang_wei_zhi_;
+      // console.log(this.showValue)
+      const name = "cunFangWeiZhi"; //其他字段属性
+      const value= this.showValue; //字段的值
+      this.$emit("change-data", name, value);
+
+      const name2 = "biaoZhunZhi"; //其他字段属性
+      const value2= this.formInline.cang_ku_ming_chen_value; //字段的值
+      this.$emit("change-data", name2, value2);
+      this.ifshow = !this.ifshow;
+    },
+    close() {
+      this.ifshow = !this.ifshow;
+    },
     firstLoadQuyu(cang_ku) {
       let sqlString = `select distinct qu_yu_,cun_chu_tiao_jian from t_ck where cang_ku_ming_chen = '${cang_ku}' order by qu_yu_ asc`;
       var this_ = this;
@@ -258,13 +345,16 @@ export default {
       let quyu = this.sqlSlice(py);
       let type = (quyu + num).replace(/^\s*/g, "");
       var sqlString =
-        "select * from t_mjwlgl where cang_ku_ming_chen = '"+this.formInline.cang_ku_ming_chen_value+"' and cun_fang_wei_zhi_ like " +
+        "select * from t_mjwlgl where cang_ku_ming_chen = '" +
+        this.formInline.cang_ku_ming_chen_value +
+        "' and cun_fang_wei_zhi_ like " +
         "'%" +
         type +
         "%'";
       this.queryLoad(sqlString, type);
     },
     queryLoad(sql, py) {
+      //数据加载
       let this_ = this;
       var datas = [];
       this.cenghao = [];
@@ -289,10 +379,10 @@ export default {
         "' ORDER BY wei_zhi_ ASC ";
       curdPost("sql", sqltype).then((res) => {
         typeData = res.variables.data; //查询具体仓库某个货架的所有位置
-        console.log(typeData, "位置");
+        // console.log(typeData, "位置");
         curdPost("sql", sql).then((res) => {
           datas = res.variables.data; //具体仓库某个货架的所有物料数据
-          console.log(datas, "数据");
+          // console.log(datas, "数据");
           typeData.forEach((item) => {
             typeArr[item.wei_zhi_] = [];
             if (datas.length == 0) {
@@ -310,7 +400,7 @@ export default {
               });
             }
           });
-          console.log(typeArr, "22222222222222");
+          // console.log(typeArr, "22222222222222");
           curdPost("sql", classSql).then((res2) => {
             let resData = res2.variables.data;
             resData.forEach((item) => {
@@ -327,14 +417,15 @@ export default {
                 }
               }
             });
-            console.log(labelsMap, "数据");
+            // console.log(labelsMap, "数据");
             this_.listData = labelsMap;
           });
         });
       });
     },
     qu_yu_Event(e) {
-      //点击区域事件，加载可视化视图
+      //点击区域事件，加载可视化视\
+      console.log(this.formData, "formData");
       let value = e.target.innerText;
       if (value.includes("(")) {
         let index = value.indexOf("(");
@@ -360,6 +451,9 @@ export default {
     blackEvent() {
       this.desShow = true;
     },
+    clickBtn() {
+      this.ifshow = !this.ifshow;
+    },
   },
   watch: {
     //监控仓库名称变化 触发第一次加载数据
@@ -371,6 +465,9 @@ export default {
       this.quyuShow = newdata;
       this.firstLoadActive = false;
     },
+    // formData(val) {
+    //   // console.log(val, "watching");
+    // },
   },
 };
 </script>
@@ -397,6 +494,9 @@ p {
     width: 100%;
     height: 100%;
     overflow: scroll;
+    position: fixed;
+    top: 50px;
+    left: 50px;
     background: white;
     z-index: 999;
   }

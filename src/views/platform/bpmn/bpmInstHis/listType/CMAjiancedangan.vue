@@ -37,6 +37,7 @@
     </div>
     <el-table
       :data="tableData"
+      border
       :stripe="true"
       style="width: 100%"
       height="75vh"
@@ -66,7 +67,7 @@
       <el-table-column
         prop="jian_ce_shen_qing"
         label="检测委托单号"
-        width="150"
+        width="180"
       >
       </el-table-column>
       <!-- <el-table-column prop="wei_tuo_dan_wei_" label="委托单位">
@@ -75,7 +76,7 @@
       </el-table-column>
       <el-table-column prop="yang_pin_bian_hao" label="样品编号" width="150">
       </el-table-column>
-      <el-table-column prop="yang_pin_ming_che" label="样品名称" width="150">
+      <el-table-column prop="yang_pin_ming_che" label="样品名称" width="">
       </el-table-column>
       <!-- <el-table-column prop="lian_xi_ren_" label="联系人"> </el-table-column>
       <el-table-column prop="lian_xi_dian_hua_" label="联系电话"></el-table-column> -->
@@ -85,7 +86,7 @@
         </template>
       </el-table-column> -->
       <!-- <el-table-column width="180"> </el-table-column> -->
-      <el-table-column label="操作" align="left">
+      <el-table-column label="操作" align="left" width="100">
         <template slot-scope="scope">
           <el-popover placement="left" width="200" trigger="click">
             <div slot="reference" class="more">
@@ -265,13 +266,14 @@ export default {
   },
   created() {
     let sql =
-      "select * from t_mjjcbg WHERE shi_fou_yu_bao_ga='否' and lei_bie_qu_fen_yu ='cnas/CMA' and zhuang_tai_ ='报告待发放' ORDER BY create_time_ DESC limit 0,20";
+      "select * from t_mjjcbg WHERE shi_fou_yu_bao_ga='否' and lei_bie_qu_fen_yu ='cnas/CMA' and zhuang_tai_ = '报告待发放' or  zhuang_tai_ = '已完成'  ORDER BY create_time_ DESC limit 0,20";
+      console.log(sql)
     this.loadData(sql);
     // curdPost("sql", sql).then((response) => {
     //   this.tableData = response.variables.data;
     // });
     let sumsql =
-      "select COUNT(*) AS sum  FROM t_mjjcbg WHERE shi_fou_yu_bao_ga='否' and lei_bie_qu_fen_yu ='cnas/CMA' and zhuang_tai_ ='报告待发放' ";
+      "select COUNT(*) AS sum  FROM t_mjjcbg WHERE shi_fou_yu_bao_ga='否' and lei_bie_qu_fen_yu ='cnas/CMA' and zhuang_tai_ ='报告待发放' or  zhuang_tai_ = '已完成'";
     curdPost("sql", sumsql).then((response) => {
       this.total = response.variables.data[0].sum;
     });
@@ -500,19 +502,19 @@ export default {
       var sql =
         "select * from t_mjjcbg " +
         moreSql +
-        " shi_fou_yu_bao_ga='否' and lei_bie_qu_fen_yu = 'cnas/CMA' ORDER BY create_time_ DESC limit 0,20";
+        " shi_fou_yu_bao_ga='否' and lei_bie_qu_fen_yu = 'cnas/CMA' and zhuang_tai_ = '报告待发放' or  zhuang_tai_ = '已完成' ORDER BY create_time_ DESC limit 0,20";
       this.loadData(sql);
     },
     handleSizeChange(value) {
       this.currentPage4 = 1;
       let sql =
-        "select * from t_mjjcbg WHERE shi_fou_yu_bao_ga='否' and lei_bie_qu_fen_yu ='cnas/CMA' ORDER BY create_time_ DESC limit 0," +
+        "select * from t_mjjcbg WHERE shi_fou_yu_bao_ga='否' and lei_bie_qu_fen_yu ='cnas/CMA' and zhuang_tai_ = '报告待发放' or  zhuang_tai_ = '已完成' ORDER BY create_time_ DESC limit 0," +
         value;
       this.loadData(sql);
     },
     handleCurrentChange(value) {
       let sql =
-        "select * from t_mjjcbg WHERE shi_fou_yu_bao_ga='否' and lei_bie_qu_fen_yu ='cnas/CMA' ORDER BY create_time_ DESC limit " +
+        "select * from t_mjjcbg WHERE shi_fou_yu_bao_ga='否' and lei_bie_qu_fen_yu ='cnas/CMA'  and zhuang_tai_ = '报告待发放' or  zhuang_tai_ = '已完成' ORDER BY create_time_ DESC limit " +
         value +
         ", 20";
       this.loadData(sql);

@@ -206,7 +206,7 @@ export function sealPre(url, fileKey) {
     "password": "MTIzNA==",
     "provideSigFile": Base64.encode(url),
     // "getSigFile":  Base64.encode(this.$form.$getSigFile),
-    "getSigFile":  Base64.encode('https://www.szjyxt.com'),
+    "getSigFile": Base64.encode('https://www.szjyxt.com/#/sealCompleted'),
 
     "fileKey": Base64.encode(fileKey),
   }
@@ -219,8 +219,8 @@ export function sealPre(url, fileKey) {
 
 /* 脚本对文件进行手动盖章-手动签章页面的url */
 export function getSigPageUrl(sigFile) {
-  let sigUrl = this.$form.$getSealPageFile+'?signKey=V1FTMjAyMTEyMjFkOTVjNWM=&signSecret=YWQwMmY3ZjQ4ZDJmMmYwNDA=&sigFile='+sigFile;
-  return  sigUrl
+  let sigUrl = this.$form.$getSealPageFile + '?signKey=V1FTMjAyMTEyMjFkOTVjNWM=&signSecret=YWQwMmY3ZjQ4ZDJmMmYwNDA=&sigFile=' + sigFile;
+  return sigUrl
 }
 
 export function generateUUID() {

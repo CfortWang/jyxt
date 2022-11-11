@@ -80,14 +80,6 @@ export default {
             this.orgId = data.id
             this.orgName = data.label
             this.show = 'detail'
-            getAllIncludeUserStaticPage({ userId: data.id }).then(res => {
-                this.tableData = res.variables.data
-                this.firsthTableData = res.variables.data
-            }).catch(res => {
-                this.loading = false
-                this.tableData = []
-                this.firsthTableData = []
-            })
         },
     },
     watch: {

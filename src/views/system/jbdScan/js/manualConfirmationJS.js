@@ -55,7 +55,7 @@ export default {
 
           // 获取样品列表
           let ypInfoList = this_.listData
-          console.log(ypInfoList, "样品信息")
+          // console.log(ypInfoList, "样品信息")
 
           let dWhere = []
           let ypbh = []
@@ -91,19 +91,17 @@ export default {
                 return;
               }
               let isLy = ypInfoList[yp].liu_yang_wei_zhi_
-              console.log(isLy, "留样");
+              // console.log(isLy, "留样");
               if (isLy.substr(-2, isLy.length - 1) == "占用" || isLy.substr(-2, isLy.length - 1) == "空余") { //？
                 let sql = "select 'id' from MJ_yp_position_status where positionAndStatus = '" + isLy + "' limit 1"
                 repostCurd('sql', sql).then(response => {
-                  console.log(response.variables)
                   cfwz = response.variables.data[0].id
                   ypInfoList[yp].liu_yang_wei_zhi_ = cfwz
-                  console.log(ypInfoList)
+                  // console.log(ypInfoList)
                   console.log('?question time留样')
                 })
               } else {
                 cfwz = ypInfoList[yp].liu_yang_wei_zhi_
-                console.log("留样id")
               }
 
             } else {
@@ -118,16 +116,15 @@ export default {
               let isZC = ypInfoList[yp].shou_yang_wei_zhi
               if (isZC.substr(-2, isZC.length - 1) == "占用" || isZC.substr(-2, isZC.length - 1) == "空余") { //?
                 let sql1 = "select `id` from MJ_yp_position_status where positionAndStatus = '" + isZC + "' limit 1"
-                console.log(sql1)
+                // console.log(sql1)
                 repostCurd('sql', sql1).then(response => {
-                  console.log(response.variables)
+                  // console.log(response.variables)
                   cfwz = response.variables.data[0].id
                   ypInfoList[yp].shou_yang_wei_zhi = cfwz //查询位置状态表 取值位置的id
                   console.log('?question time')
                 })
               } else {
                 cfwz = ypInfoList[yp].shou_yang_wei_zhi //取位置信息
-                console.log("收验id")
               }
             }
             dWhere.push('{"id_":"' + cfwz + '"}')
@@ -148,12 +145,10 @@ export default {
             let LYWZtem = ypLiuYangWeiZhi[index] == null ? '' : ypLiuYangWeiZhi[index]
             changeWeizhi = WZtem;
             changesyWeizhi = LYWZtem;
-            console.log(WZtem, LYWZtem, "双id")
-       
-            repostCurd('update', '{"tableName":"t_mjypdjb","paramWhere":' + ypIdList[index] + ',"paramCond":' + '{"shou_yang_wei_zhi":"' + WZtem + '","jie_yang_shu_lian":"' + saoMaNumList[index] + '","jie_yang_zhuang_t":"' + jieYangQueRenZTList[index] + '","liu_yang_wei_zhi_":"' + LYWZtem + '"}}').then(res => {
-              console.log(res, "更新成功")
-              alert('yang品表更新成功', index)
+            // console.log(WZtem, LYWZtem, "双id")
 
+            repostCurd('update', '{"tableName":"t_mjypdjb","paramWhere":' + ypIdList[index] + ',"paramCond":' + '{"shou_yang_wei_zhi":"' + WZtem + '","jie_yang_shu_lian":"' + saoMaNumList[index] + '","jie_yang_zhuang_t":"' + jieYangQueRenZTList[index] + '","liu_yang_wei_zhi_":"' + LYWZtem + '"}}').then(res => {
+              // console.log(res, "更新成功")
             })
           }
           for (let num in dWhere) {
@@ -164,8 +159,8 @@ export default {
                 if (resArr.length == 1) {
                   if (resArr[0].wei_zhi_zhuang_ta == "空余") {
                     repostCurd('update', '{"tableName":"t_mjypcfwz","paramWhere":' + dWhere[num] + ',"paramCond":' + '{"wei_zhi_zhuang_ta":"占用","yang_pin_bian_hao":"' + ypbh[num] + '","ru_ku_shi_jian_":"' + this_.dateFormat() + '","shou_yang_ri_qi_":"' + uuidList[num] + '"}}').then(res => {
-                      console.log(res, "原本位置为空余 ，新位置更新成功")
-                      alert('样品货位状态更新成功')
+                      // console.log(res, "原本位置为空余 ，新位置更新成功")
+                      // alert('样品货位状态更新成功')
                     })
                   } else if (resArr[0].wei_zhi_zhuang_ta == "占用") {
                     // 新增一条新的位置记录,使用旧的位置记录 修改它的样品编号，入库时间，标识UUID
@@ -186,25 +181,25 @@ export default {
                     cfNew["shou_yang_ri_qi_"] = uuidList[num]
                     cfNewList.push(cfNew)
                     let uuid = cfNew["shou_yang_ri_qi_"];
-                    console.log(cfNewList, 111111111111111)
+                    // console.log(cfNewList, 111111111111111)
                     repostCurd('add', '{"tableName":"t_mjypcfwz","paramWhere":' + JSON.stringify(cfNewList) + '}').then(res => {
-                      alert('样品货位占位时重新生成货位')
+                      // alert('样品货位占位时重新生成货位')
                       let selectsql = "select id_ from t_mjypcfwz where shou_yang_ri_qi_='" + uuid + "'";
-                      console.log('zzj selectsql',selectsql)
+                      // console.log('zzj selectsql',selectsql)
                       repostCurd('sql', selectsql).then(res => {
                         let dataid = res.variables.data[0].id_;
-                        console.log(res.variables.data)
+                        // console.log(res.variables.data)
                         let abc = '{"biao_zhi_uuid_":"' + uuid + '"}'
-                        console.log('zzj abc ',abc)
+                        // console.log('zzj abc ',abc)
                         if (changeWeizhi && !changesyWeizhi) {
-                          alert(1)
+                          // alert(1)
                           repostCurd('update', '{"tableName":"t_mjypdjb","paramWhere":' + abc + ',"paramCond":' + '{"shou_yang_wei_zhi":"' + dataid + '"}}').then(res => {
-                            alert('yang状态更新成功')
+                            // alert('yang状态更新成功')
                           })
                         } else {
-                          alert(2)
+                          // alert(2)
                           repostCurd('update', '{"tableName":"t_mjypdjb","paramWhere":' + abc + ',"paramCond":' + '{"liu_yang_wei_zhi_":"' + dataid + '"}}').then(res => {
-                            alert('yang状态更新成功')
+                            // alert('yang状态更新成功')
                           })
                         }
                       })
@@ -256,7 +251,7 @@ export default {
                 narr.push(a)
               }
               repostCurd('selects', '{"tableName":"t_mjfbb","paramWhere":[' + narr + ']}').then(response => {
-                console.log(response.variables)
+                // console.log(response.variables)
                 mjfbbList.push(response.variables.data)
               })
             }, 1000)
@@ -303,6 +298,7 @@ export default {
                   rwzb["zhuang_tai_"] = "任务待分配" //	状态
                   rwzb["shi_fou_fen_bao_"] = mjfbbList[0][temp].shi_fou_fen_bao_ // 是否分包
                   rwzb["qi_wang_wan_cheng"] = mjfbbList[0][temp].wan_cheng_shi_jia // 期望完成时间
+                  rwzb["gong_xian_zhi_"] = mjypbList[i].yang_pin_lei_xin			// 供限值
                   rwb.push(rwzb)
                 }
                 index += str.length

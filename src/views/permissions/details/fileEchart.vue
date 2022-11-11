@@ -5,11 +5,11 @@
             <div class="form-header">
                 <div class="title ibps-tc">用户查阅文件授权</div>
             </div>
-            <el-transfer style="text-align: left; display: inline-block" v-model="permissionFiles" filterable
+            <el-transfer style="text-align: left; display: inline-block" v-model="permissionFilesKey" filterable
                 :render-content="renderFunc" :titles="['受限文件', '可查阅文件']" :button-texts="['受限', '可查阅']" :format="{
                     noChecked: '${total}',
                     hasChecked: '${checked}/${total}'
-                }" @change="handleChange" :data="noPermissionFiles">
+                }" @change="handleChange" :data="allFiles">
             </el-transfer>
         </div>
     </div>
@@ -25,14 +25,16 @@ export default {
     props: {
         id: {
             type: [String, Number]
-        }
+        },
     },
     data() {
         return {
             idT: '',
             allFilesDatas: [],// 所有受控文件,与个人无关
+            allFiles: [],
             noPermissionFiles: [],
             permissionFiles: [],
+            permissionFilesKey: [],
             renderFunc(h, option) {
                 return <span>{option.label}</span>;
             }
@@ -55,7 +57,7 @@ export default {
             })
         },
         getFormData(id) {
-            getLmitedFile({ userId: id }).then(res => {
+            getLmitedFile(id).then(res => {
                 for (let i of res.variables.data) {
                     this.allFilesDatas.push(i)
                     let fileData = {}
@@ -63,10 +65,11 @@ export default {
                     fileData["label"] = i.wenJianMingChe
                     fileData["yongHuId"] = id
                     this.noPermissionFiles.push(fileData)
+                    this.allFiles.push(fileData)
                 }
             }).catch(res => {
             })
-            getUserByFile({ userId: id }).then(res => {
+            getUserByFile(id).then(res => {
                 for (let i of res.variables.data) {
                     this.allFilesDatas.push(i)
                     let filterFile = {}
@@ -74,6 +77,9 @@ export default {
                     filterFile["label"] = i.wenJianMingChe
                     filterFile["yongHuId"] = id
                     this.permissionFiles.push(filterFile)
+                    this.permissionFilesKey.push(i.wenJianId)
+                    this.allFiles.push(filterFile)
+
                 }
             }).catch(res => {
             })
@@ -86,6 +92,8 @@ export default {
                 this.allFilesDatas = []
                 this.permissionFiles = []
                 this.noPermissionFiles = []
+                this.allFiles = []
+                this.permissionFilesKey = []
                 this.idT = val
                 this.getFormData(val)
             },

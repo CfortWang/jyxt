@@ -28,7 +28,23 @@
       </el-aside>
         <!-- 参数页面列 -->
         <el-aside style="border:0px;width: 37%;">
-           <div class="dataCont" style="font-size: 14px;">
+          <el-divider content-position="left">{{data.t_ryywpxjlNum.date}} 年度</el-divider>
+            已完成培训数量 ：<el-tag>{{data.t_ryywpxjlNum.number[0]}} 次</el-tag>
+            <br>
+            所有培训数量 ：<el-tag>{{data.t_ryywpxjlNum.numberAll[0]}} 次</el-tag>
+            <br>
+            培训完成率 ：<el-tag>{{data.t_ryywpxjlNum.res[0]}} %</el-tag>
+            <br>
+          <!-- <div v-for="(item,i) in data.t_ryywpxjlNum.date" :key="i">
+            <el-divider content-position="left">{{data.t_ryywpxjlNum.date[i]}} 年度</el-divider>
+            已完成培训数量 ：<el-tag>{{data.t_ryywpxjlNum.number[i]}} 次</el-tag>
+            <br>
+            所有培训数量 ：<el-tag>{{data.t_ryywpxjlNum.numberAll[i]}} 次</el-tag>
+            <br>
+            培训完成率 ：<el-tag>{{data.t_ryywpxjlNum.res[i]}} %</el-tag>
+            <br>
+          </div> -->
+           <!-- <div class="dataCont" style="font-size: 14px;">
           <el-divider content-position="left">{{data.t_ryndpxjhBegin.date}} 年度</el-divider>
             人员培训计划次数 ：<el-tag>{{data.t_ryndpxjhBegin.number}} 次</el-tag>
             <br>
@@ -39,7 +55,7 @@
             人员培训计划次数 ：<el-tag type="danger">{{data.t_ryndpxjhEnd.number}} 次</el-tag>
           <el-divider content-position="left">{{data.t_rypxjlnkEnd.date}} 年度</el-divider>
             人员培训完成次数 ：<el-tag type="danger">{{data.t_rypxjlnkEnd.number}} 次</el-tag>
-           </div>
+           </div> -->
 
         </el-aside>
 

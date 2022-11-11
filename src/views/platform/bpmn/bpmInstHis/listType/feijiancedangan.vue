@@ -39,6 +39,7 @@
     </div>
     <el-table
       :data="tableData"
+      border
       :stripe="true"
       style="width: 100%"
       height="75vh"
@@ -63,21 +64,21 @@
       </el-table-column>
       <el-table-column prop="bao_gao_bian_hao_" label="报告编号" width="150">
       </el-table-column>
-      <el-table-column prop="jian_ce_kai_shi_s" label="检测时间" width="150">
+      <el-table-column prop="jian_ce_kai_shi_s" label="检测时间" width="120">
       </el-table-column>
       <el-table-column
         prop="jian_ce_shen_qing"
         label="检测委托单号"
-        width="150"
+        width="180"
       >
       </el-table-column>
       <!-- <el-table-column prop="wei_tuo_dan_wei_" label="委托单位">
       </el-table-column> -->
-      <el-table-column prop="wei_tuo_ri_qi_" label="委托日期" width="100">
+      <el-table-column prop="wei_tuo_ri_qi_" label="委托日期" width="120">
       </el-table-column>
       <el-table-column prop="yang_pin_bian_hao" label="样品编号" width="150">
       </el-table-column>
-      <el-table-column prop="yang_pin_ming_che" label="样品名称" width="150">
+      <el-table-column prop="yang_pin_ming_che" label="样品名称" width="">
       </el-table-column>
       <!-- <el-table-column prop="lian_xi_ren_" label="联系人">
       </el-table-column>
@@ -88,7 +89,7 @@
            {{scope.row.lei_bie_qu_fen_yu}}CNAS/CMA
          </template>
       </el-table-column> -->
-      <el-table-column label="操作">
+      <el-table-column label="操作" align="left" width="100">
         <template slot-scope="scope">
           <el-popover placement="left" width="200" trigger="click">
             <div slot="reference" class="more">
@@ -251,7 +252,6 @@ export default {
     },
     yeare(value, dedal) {
       if (value == undefined || value == null || value == "") {
-
         return "";
       }
       if (dedal == "年") {
@@ -266,13 +266,13 @@ export default {
   created() {
     let this_ = this;
     let sql =
-      "select * from t_mjjcbg WHERE shi_fou_yu_bao_ga='否' and lei_bie_qu_fen_yu ='非' and zhuang_tai_ ='报告待发放' ORDER BY create_time_ DESC limit 0,20";
+      "select * from t_mjjcbg WHERE shi_fou_yu_bao_ga='否' and lei_bie_qu_fen_yu ='非' and zhuang_tai_ ='报告待发放' or  zhuang_tai_ = '已完成' ORDER BY create_time_ DESC limit 0,20";
     // curdPost("sql", sql).then((response) => {
     //   this_.tableData = response.variables.data;
     // });
     this.loadData(sql);
     let sumsql =
-      "select COUNT(*) AS sum  FROM t_mjjcbg WHERE shi_fou_yu_bao_ga='否' and lei_bie_qu_fen_yu ='非' and zhuang_tai_ ='报告待发放'";
+      "select COUNT(*) AS sum  FROM t_mjjcbg WHERE shi_fou_yu_bao_ga='否' and lei_bie_qu_fen_yu ='非' and zhuang_tai_ ='报告待发放' or  zhuang_tai_ = '已完成'";
     curdPost("sql", sumsql).then((response) => {
       this.total = response.variables.data[0].sum;
     });
@@ -501,19 +501,19 @@ export default {
       var sql =
         "select * from t_mjjcbg " +
         moreSql +
-        " shi_fou_yu_bao_ga ='否' and lei_bie_qu_fen_yu = '非' ORDER BY create_time_ DESC limit 0,20";
+        " shi_fou_yu_bao_ga ='否' and lei_bie_qu_fen_yu = '非' and zhuang_tai_ ='报告待发放' or  zhuang_tai_ = '已完成' ORDER BY create_time_ DESC limit 0,20";
       this.loadData(sql);
     },
     handleSizeChange(value) {
       this.currentPage4 = 1;
       let sql =
-        "select * from t_mjjcbg WHERE shi_fou_yu_bao_ga='否' and lei_bie_qu_fen_yu ='非' ORDER BY create_time_ DESC limit 0," +
+        "select * from t_mjjcbg WHERE shi_fou_yu_bao_ga='否' and lei_bie_qu_fen_yu ='非' and zhuang_tai_ ='报告待发放' or zhuang_tai_ = '已完成' ORDER BY create_time_ DESC limit 0," +
         value;
       this.loadData(sql);
     },
     handleCurrentChange(value) {
       let sql =
-        "select * from t_mjjcbg WHERE shi_fou_yu_bao_ga='否' and lei_bie_qu_fen_yu ='非' ORDER BY create_time_ DESC limit " +
+        "select * from t_mjjcbg WHERE shi_fou_yu_bao_ga='否' and lei_bie_qu_fen_yu ='非' and zhuang_tai_ ='报告待发放' or zhuang_tai_ = '已完成' ORDER BY create_time_ DESC limit " +
         value +
         ", 20";
       this.loadData(sql);

@@ -8,7 +8,7 @@ const WX_URL = '/business/v3/wx'
  */
 export function get(params) {
   return request({
-    url: WX_URL + '/openids',
+    url: WX_URL + '/openid',
     method: 'get',
     params: params
   })

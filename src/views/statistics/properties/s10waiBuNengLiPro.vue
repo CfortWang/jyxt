@@ -18,11 +18,11 @@
       <el-aside style="border:0px;width: 13%;"></el-aside>
       <!-- 放统计内容-->
       <el-aside style="border:0px;width: 50%;">
-          <s8sheBeiHeChaItem
+          <s10s10waiBuNengLiItem
             :data="data"
             width="95%"
             :height="height"
-            id="s8sheBeiHeChaPro"
+            id="s10waiBuNengLiPro"
             click="false"
           />
       </el-aside>
@@ -30,14 +30,13 @@
         <el-aside style="border:0px;width: 37%; height: 700px;overflow: auto;">
               <br>
 
-          <div>{{data.t_sbhcjlbNum.date}} 年度</div>
-
-          <div v-for="(item,i) in data.t_sbhcjlbNum.name" :key="i">
-              <el-divider content-position="left">{{data.t_sbhcjlbNum.name[i]}}</el-divider>
-              计划外核查 ：<el-tag>{{data.t_sbhcjlbNum.number[i]}} 次</el-tag>
+          <div>{{data.Num.date}} 年度</div>
+          <div v-for="(item,i) in data.Num.name" :key="i">
+              <el-divider content-position="left">{{data.Num.name[i]}}</el-divider>
+              外部质量计划 ：<el-tag>{{data.Num.number[i]}} 次</el-tag>
               <br>
-              年度核查 ：<el-tag>{{data.t_sbhcjlbNum.numberAll[i]}} 次</el-tag>
-              <br>
+              <!-- 年度核查 ：<el-tag>{{data.Num.numberAll[i]}} 次</el-tag>
+              <br> -->
             </div>
            <!-- <div class="dataCont" style="font-size: 14px;">
           <el-divider content-position="left">{{data.t_sbhcjhBegin.date}} 年度</el-divider>
@@ -79,7 +78,7 @@
       },
       beforeCreate: function () {
           // 官方文档给出的是require
-           this.$options.components.s8sheBeiHeChaItem = () => import('../item/s10waiBuNengLi.vue')
+           this.$options.components.s10s10waiBuNengLiItem = () => import('../item/s10waiBuNengLi.vue')
           },
 
     watch:{

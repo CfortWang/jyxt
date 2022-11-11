@@ -9,40 +9,40 @@ const _import = require('@/utils/util.import.' + process.env.NODE_ENV)
  * 在主框架内显示
  */
 const frameIn = [
- {
+  {
     path: '/',
     redirect: { name: 'dashboard' },
     component: layoutHeaderAside,
     children: [
 
       // 首页
-	  {
-	    path: 'dashboard',
-	    name: 'dashboard',
-	    meta: {
-	      title: '首页',
-	      auth: true
-	    },
-	    component: _import('/system/dashboard')
-	  },
-	  {
-	    path: 'blank',
-	    name: 'blank',
-	    meta: {
-	      title: '首页',
-	      auth: true
-	    },
-	    component: _import('/system/blank')
-	  },
-   {
-       path: 'jbdHome',
-       name: 'jbdHome',
-       meta: {
-         title: '数据统计',
-         auth: true
-       },
-       component: _import('/system/jbdHome')
-     },
+      {
+        path: 'dashboard',
+        name: 'dashboard',
+        meta: {
+          title: '首页',
+          auth: true
+        },
+        component: _import('/system/dashboard')
+      },
+      {
+        path: 'blank',
+        name: 'blank',
+        meta: {
+          title: '首页',
+          auth: true
+        },
+        component: _import('/system/blank')
+      },
+      {
+        path: 'jbdHome',
+        name: 'jbdHome',
+        meta: {
+          title: '数据统计',
+          auth: true
+        },
+        component: _import('/system/jbdHome')
+      },
       // 系统 前端日志
       {
         path: 'log',
@@ -53,15 +53,15 @@ const frameIn = [
         },
         component: _import('/system/log')
       },
-		/* 	{
-			  path: 'dashboard',
-			  name: 'dashboard',
-			  meta: {
-			    title: '工作中心',
-			    auth: true
-			  },
-			  component: _import('/system/dashboard')
-			}, */
+      /* 	{
+          path: 'dashboard',
+          name: 'dashboard',
+          meta: {
+            title: '工作中心',
+            auth: true
+          },
+          component: _import('/system/dashboard')
+        }, */
       // 刷新页面 必须保留
       {
         path: 'refresh',
@@ -84,16 +84,16 @@ const frameIn = [
  * 在主框架之外显示
  */
 const frameOut = [
-       // 首页
-    /*  {
-        path: 'jbdHome',
-        name: 'jbdHome',
-        meta: {
-          title: '数据统计',
-          auth: true
-        },
-        component: _import('/system/jbdHome')
-      }, */
+  // 首页
+  /*  {
+      path: 'jbdHome',
+      name: 'jbdHome',
+      meta: {
+        title: '数据统计',
+        auth: true
+      },
+      component: _import('/system/jbdHome')
+    }, */
   // 登录
   {
     path: '/login',
@@ -103,7 +103,7 @@ const frameOut = [
     },
     component: _import('/system/login')
   },
- {
+  {
     path: '/fileView',
     name: 'fileView',
     meta: {
@@ -174,6 +174,14 @@ const frameOut = [
       title: 'iframe'
     },
     component: _import('/system/iframe')
+  },
+  {
+    path: '/sealCompleted',
+    name: 'sealCompleted',
+    meta: {
+      title: 'sealCompleted'
+    },
+    component: _import('/remindPage/sealCompleted')
   }
 ]
 
@@ -182,20 +190,20 @@ const frameOut = [
 /**
  * 响应式
  */
- const ziliao = [
-{
-//path: '/ziliao/:id',
-path: '/ziliao',
-name: 'ziliao',
-meta: {
- //title: ' '
-},
-//component: _import('/system/ziliao'),
-component: _import('/component/ziliao'),
-//requireAuth: false
+const ziliao = [
+  {
+    //path: '/ziliao/:id',
+    path: '/ziliao',
+    name: 'ziliao',
+    meta: {
+      //title: ' '
+    },
+    //component: _import('/system/ziliao'),
+    component: _import('/component/ziliao'),
+    //requireAuth: false
 
-},
- ]
+  },
+]
 
 /**
  * 错误页面

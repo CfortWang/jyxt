@@ -8,10 +8,10 @@
                 <div class="title ibps-tc">用户页面权限信息表</div>
             </div>
             <el-table class="tb-edit" :data="tableData" v-model="tableData" style="width: 100%" highlight-current-row
-                border @row-click="handleCurrentChange">
-                <el-table-column prop="id" label="页面路径">
-                    <template slot-scope="id">
-                        <span>{{ id.row.id }}</span>
+                border>
+                <el-table-column prop="yeMianBianMa" label="页面编码">
+                    <template slot-scope="yeMianBianMa">
+                        <span>{{ yeMianBianMa.row.yeMianBianMa }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="yeMianBiaoTi" label="页面标题">
@@ -52,11 +52,10 @@
                     </template>
                 </el-table-column>
             </el-table>
-            <!-- {{ tableData }} -->
             <div class="toolbar">
-
-                <el-button type="primary" @click="submitTable" :loading="butLoading">提交</el-button>
-                <el-button type="danger" @click="resetTable">重置</el-button>
+                <el-button type="primary" @click="submitTable" :loading="butLoading" :disabled="subStatus">提交
+                </el-button>
+                <el-button type="danger" @click="resetTable" :disabled="subStatus">重置</el-button>
             </div>
         </div>
     </div>
@@ -86,28 +85,62 @@ export default {
             ],
             firsthTableData: [],
             butLoading: false,
+            submitdatas: [],
+            subStatus: false
         }
     },
     methods: {
         getFormData(id) {
-            getAllIncludeUserStaticPage({ userId: id }).then(res => {
-                this.tableData = res.variables.data
-                this.firsthTableData = JSON.parse(JSON.stringify(res.variables.data))
+            getAllIncludeUserStaticPage(id).then(res => {
+                let datas = []
+                for (let i of res.variables.data) {
+                    let data = {}
+                    data["id"] = i.id
+                    data["yeMianBianMa"] = i.yeMianBianMa
+                    data["yeMianBiaoTi"] = i.yeMianBiaoTi
+                    data["yongHuZhangHao"] = this.$store.getters.userInfo.employee.account
+                    data["zengJia"] = Boolean(JSON.parse(i.zengJia))
+                    data["shanChu"] = Boolean(JSON.parse(i.shanChu))
+                    data["xiuGai"] = Boolean(JSON.parse(i.xiuGai))
+                    data["chaXun"] = Boolean(JSON.parse(i.chaXun))
+                    data["shenHe"] = Boolean(JSON.parse(i.shenHe))
+                    datas.push(data)
+                }
+                this.tableData = JSON.parse(JSON.stringify(datas))
+                this.firsthTableData = JSON.parse(JSON.stringify(datas))
             }).catch(res => {
-                this.loading = false
                 this.tableData = []
                 this.firsthTableData = []
             })
         },
         submitTable() {
             this.butLoading = true
-            console.log("this.tableData:", this.tableData)
-            saveStaticPage(this.tableData).then(res => {
+            for (let i of this.tableData) {
+                let submitdata = {}
+                submitdata["id"] = i.id
+                submitdata["yeMianBiaoTi"] = i.yeMianBiaoTi
+                submitdata["yongHuId"] = this.$store.getters.userInfo.employee.id
+                submitdata["yeMianBianMa"] = i.yeMianBianMa
+                submitdata["yongHuZhangHao"] = this.$store.getters.userInfo.employee.account
+                submitdata["zengJia"] = Boolean(JSON.parse(i.zengJia))
+                submitdata["shanChu"] = Boolean(JSON.parse(i.shanChu))
+                submitdata["xiuGai"] = Boolean(JSON.parse(i.xiuGai))
+                submitdata["chaXun"] = Boolean(JSON.parse(i.chaXun))
+                submitdata["shenHe"] = Boolean(JSON.parse(i.shenHe))
+                if (Boolean(i.zengJia) || Boolean(i.shanChu) || Boolean(i.xiuGai) || Boolean(i.chaXun) || Boolean(i.shenHe)) {
+                    this.submitdatas.push(submitdata)
+                }
+            }
+            saveStaticPage(this.submitdatas).then(res => {
                 this.butLoading = false
+                this.subStatus = true
                 console.log("保存成功")
+                alert("提交成功")
                 this.firsthTableData = JSON.parse(JSON.stringify(this.tableData))
+
             }).catch(res => {
                 this.butLoading = false
+                this.subStatus = true
                 console.log("保存失败")
             })
         },
@@ -121,7 +154,20 @@ export default {
             immediate: true,
             handler: function (val, oldVal) {
                 this.getFormData(val)
+                this.tableData = []
+                this.firsthTableData = []
             },
+        },
+        tableData: {
+            immediate: true,
+            handler: function (val, oldVal) {
+                if (JSON.stringify(val) === JSON.stringify(this.firsthTableData)) {
+                    this.subStatus = true
+                } else {
+                    this.subStatus = false
+                }
+            },
+            deep: true,
         }
     }
 }

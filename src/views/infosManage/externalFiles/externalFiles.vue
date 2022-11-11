@@ -46,7 +46,17 @@ export default {
             oldorgId: '',
             orgName: '',
             loading: false,
-            typeData: [],
+            typeData: [
+                { id: '0', label: 'CNAS相关文件' },
+                { id: '1', label: 'CMA相关文件' },
+                { id: '2', label: '法律法规' },
+                { id: '3', label: '检测标准' },
+                { id: '4', label: '设备说明书' },
+                { id: '5', label: '试剂耗材说明书' },
+                { id: '6', label: '标准物质证书' },
+                { id: '7', label: '参考技术文献（受限）' },
+                { id: '8', label: '客户技术资料（受限）' },
+            ],
             filterText: '',
             defaultProps: {
                 children: 'children',
@@ -96,7 +106,7 @@ export default {
         }
     },
     mounted() {
-        this.loadNode()
+        // this.loadNode()
     },
     methods: {
         filterNode(value, data) {
@@ -105,17 +115,17 @@ export default {
         },
         loadNode() {
             this.loading = true
-            getFileType("外部文件").then(res => {
-                this.loading = false
-                for (let i in res.variables.data) {
-                    let data = {}
-                    data["id"] = i
-                    data["label"] = res.variables.data[i]
-                    this.typeData.push(data)
-                }
-            }).catch(res => {
-                this.loading = false
-            })
+            // getFileType("外部文件").then(res => {
+            //     this.loading = false
+            //     for (let i in res.variables.data) {
+            //         let data = {}
+            //         data["id"] = i
+            //         data["label"] = res.variables.data[i]
+            //         this.typeData.push(data)
+            //     }
+            // }).catch(res => {
+            //     this.loading = false
+            // })
         },
         refreshData() {
             this.tableData = []
@@ -178,7 +188,7 @@ export default {
     },
 }
 </script>
-<style lang="scss" >
+<style lang="less" scoped>
 .box {
     width: 210px;
 }
@@ -193,6 +203,10 @@ export default {
 .treeDiv {
     height: 800px;
     overflow-y: auto;
+}
+
+/deep/ .el-tree-node__content {
+    display: block;
 }
 </style>
   
