@@ -23,7 +23,7 @@ const buttonTypes = {
   'consult': {
     label: '查阅',
     style: 'primary',
-    icon: 'edit',
+    icon: 'eye',
     position: 'consult',
     scope: ['manage']
   },

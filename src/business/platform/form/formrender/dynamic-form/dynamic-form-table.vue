@@ -611,8 +611,9 @@ export default {
       })
       return bs
     },
-    handleActionEvent(button, index) {
-      index = index+ this.currentPage * 10 - 10
+    handleActionEvent(button, buttonIndex) {
+        // 起始下标
+      let index = this.currentPage * 10 - 10 + buttonIndex
       this.actionCode = button.key === 'custom' ? (button.code || button.key + index) : button.key
       this.actionPosition = button.position || 'toolbar'
       // 前置事件
@@ -634,7 +635,7 @@ export default {
             this.handleDialogMode(index)
             break
           case 'consult':
-            // 查询按钮事件
+            // 查阅按钮事件
             this.handleDialogMode(index)
             break
           case 'remove':
@@ -694,8 +695,9 @@ export default {
       const selection = []
       if (position === 'toolbar' && this.mode !== 'block') {
         if (this.multipleSelection && this.multipleSelection.length > 0) {
+            let startIndex = this.currentPage * 10 - 10
           this.multipleSelection.forEach(row => {
-            selection.push(row.$index)
+            selection.push(row.$index + startIndex)
           })
         }
       } else {
@@ -704,8 +706,8 @@ export default {
       return selection
     },
     handleRemove(button, index) {
-      const position = button.position
-      const selection = this.getSelection(position, index)
+        const position = button.position
+        const selection = this.getSelection(position, index)
       ActionUtils.removeRecord(selection, '确定删除当前数据？？', true).then((ids) => {
         for (let i = this.dataModel.length - 1; i >= 0; i--) {
           if (ids.indexOf(i) > -1) {

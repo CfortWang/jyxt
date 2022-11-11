@@ -65,8 +65,8 @@ import Utils from '@/utils/util'
 import I18n from '@/utils/i18n'
 const loginForm = process.env.NODE_ENV === 'development'
   ? {
-    username: 'admin',
-    password: '1',
+    username: 'gaorz',
+    password: '12345678',
     captcha: '',
     remember: true,
     requestId: ''
