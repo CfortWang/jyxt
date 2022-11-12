@@ -43,10 +43,13 @@ export default {
         }
         this.$nextTick(() => {
           const defaultUrl = this.$route.meta.defaultUrl
+          const isDashboard = this.$route.name
           if (this.$utils.isNotEmpty(defaultUrl)) {
             // 判断地址是否正确
             const url = defaultUrl.split('/')
             this.dataTemplateId = url[url.length - 1]
+          } else if (isDashboard === 'dashboard') {
+            this.dataTemplateId = this.templateId
           } else {
             const params = this.$route.params
             this.dataTemplateId = params.id

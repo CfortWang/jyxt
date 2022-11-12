@@ -79,7 +79,7 @@
       },
       beforeCreate: function () {
           // 官方文档给出的是require
-           this.$options.components.s8sheBeiHeChaItem = () => import('../item/s10waiBuNengLi.vue')
+           this.$options.components.s8sheBeiHeChaItem = () => import('../item/s8sheBeiHeCha.vue')
           },
 
     watch:{
