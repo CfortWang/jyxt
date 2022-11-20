@@ -31,7 +31,7 @@
       },
       height:{
         type:String,
-        default: window.screen.height/2+"px"
+        default: window.screen.height/5+"px"
       },
       id:{
         type:String,
@@ -44,7 +44,7 @@
     },
     data () {
       return {
-        title:'标准物质核查计划',
+        title:'标准物质期间核查计划完成情况',
         dialogOff:false,
       }
     },
@@ -82,85 +82,39 @@
         //  let max2=GetMax(data2)+1;
         //  let maxVal=max1>max2?max1:max2;
         //  console.log("max1:",max1,"max2:",max2);
+        let e = 100 -this.data.Num.valna
        let option = {
            //v3
           title: {
             text: this.title,
-            subtext: this.data.Num.date+"年"
+            // subtext: 'Fake Data',
+            left: 'left',
+            textStyle:{ fontSize:14 }
           },
           tooltip: {
-                        trigger: 'axis',
-                        axisPointer: {
-                          type: 'shadow'
-                        },
-                        formatter: function (datas) {
-                          console.log(datas)
-                            var res=datas[0].name+"<BR>"+'核查次数:'+datas[0].data+"<BR>"
-                            // res+='百分比:'+(datas[1].value==null||datas[1].value==0?"0.00":(datas[0].value/datas[1].value*100).toFixed(2))+"%"
-                            return res
-                        }
+            trigger: 'item'
           },
-          legend: {},
-          grid: {
-                top: '10%',
-                left: '3%',
-                right: '4%',
-                bottom: '5%',
-                containLabel: true
-                    },
-          xAxis: {
-            type: 'value',
-            boundaryGap: [0, 0.01]
-          },
-          yAxis: {
-            type: 'category',
-            data: this.data.Num.name,
-            axisLabel: {
-                show: true, // 是否显示X轴的内容，不包含两端的文字
-                interval: 0,
-                // rotate: '50', // 旋转50°
-                lineHeight: 18,
-                // formatter: function(params) {
-                //   //  console.log('formatter', params, params.length)
-                //   var newParamsName = ''// 最终拼接成的字符串
-                //   var paramsNameNumber = params.length// 实际标签的个数
-                //   var provideNumber = 3// 每行能显示的字的个数
-                //   // 判断标签的个数是否大于规定的个数， 如果大于，则进行换行处理 如果不大于，即等于或小于，就返回原标签
-                //   if (paramsNameNumber > provideNumber) {
-                //   // ********重点在这里********
-                //     newParamsName = params.substring(0, 3) + '..'// 最终拼成的字符串
-                //   } else { // 将旧标签的值赋给新标签
-                //     newParamsName = params
-                //   }
-                //   // 将最终的字符串返回
-                //   return newParamsName
-                // }
-              },
-          },
+          color:['#6600ff','#cc33cc'],
           series: [
             {
-              type: 'bar',
-              data: this.data.Num.number,
-              itemStyle: {color: '#006699'},
+              type: 'pie',
+              radius: '50%',
               label: {
-                show: true,
-                position: 'right'
+                formatter: '{b}: {d}%'
               },
-            },
-            // {
-            //   type: 'bar',
-            //   data: this.data.Num.numberAll
-            // },
-          ],
-                dataZoom: [
-        {
-            id: 'dataZoomY',
-            type: 'inside',
-            yAxisIndex: [0],
-            filterMode: 'empty'
-        }
-      ],
-       
+              data: [
+                { value: this.data.Num.valna, name: '标准物质期间核查完成率' },
+                { value: e, name: '标准物质期间核查未完成率' }
+              ],
+              emphasis: {
+                itemStyle: {
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+              }
+            }
+          ]
        };
 
        option && s11biaoZhunWu.setOption(option);

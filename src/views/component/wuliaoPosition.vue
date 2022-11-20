@@ -2,12 +2,18 @@
   <div class="sample-content">
     <!-- 表格組件 -->
     <!-- <div @dblclick="clickBtn">{{ showValue }}</div> -->
-    <div @dblclick="clickBtn" style="cursor: pointer;" >
-      <el-input placeholder="请输入内容1" :value="showValue"  id="valueDom"></el-input>
+    <div @click="clickBtn" style="cursor: pointer">
+      <el-input
+        placeholder="请输入内容"
+        :value="showValue"
+        id="valueDom"
+      ></el-input>
     </div>
     <!-- <el-input></el-input> -->
     <div class="selectArea" v-if="ifshow">
-      <div @click="close" class="close-content">关闭</div>
+      <div @click="close" class="close-content">
+        <i class="el-icon-close"></i><el-button class="closeBtn">关闭视图</el-button>
+      </div>
       <div class="top-content">
         <div class="top-title">库存可视化</div>
         <div class="query-content">
@@ -103,7 +109,11 @@
                       <div class="top-dsc">
                         <div class="position">
                           <p>名称：{{ it.wu_liao_ming_chen || 空 }}</p>
-                          <p>编码：{{ it.wu_liao_bian_ma_ || it.wu_liao_bian_ma_ }}</p>
+                          <p>
+                            编码：{{
+                              it.wu_liao_bian_ma_ || it.wu_liao_bian_ma_
+                            }}
+                          </p>
                           <p>位置：{{ it.wei_zhi_ || it.cun_fang_wei_zhi_ }}</p>
                           <p>货号:{{ it.huo_hao_ || "空" }}</p>
                         </div>
@@ -166,7 +176,7 @@ export default {
       secondshow: false,
       ifshow: false,
       showValue: "",
-      value:"111"
+      value: "111",
     };
   },
   props: {
@@ -218,10 +228,9 @@ export default {
     this.firstLoadViewData();
     this.firstLoadQuyu("试剂库1");
     console.log(this.formData, "formData");
-
   },
-  updated(){
-       console.log(this.formData, "formData1");
+  updated() {
+    console.log(this.formData, "formData1");
   },
   // beforeDestroy() {
   //   console.log(this.formData, "formData");
@@ -265,10 +274,10 @@ export default {
       }
       //  values.cun_fang_wei_zhi_;
       const name2 = "cunFangWeiZhi"; //位置
-      const value2= this.showValue; //字段的值
+      const value2 = this.showValue; //字段的值
       this.$emit("change-data", name2, value2);
       const name1 = "cangKuMingCheng"; //仓库名
-      const value1= this.formInline.cang_ku_ming_chen_value; //字段的值
+      const value1 = this.formInline.cang_ku_ming_chen_value; //字段的值
       this.$emit("change-data", name1, value1);
       this.ifshow = !this.ifshow;
     },
@@ -456,19 +465,16 @@ export default {
     //。。。。。省略部分代码
     formData: {
       handler(val) {
-          //根据实际逻辑处理
-        
-        if(!this.showValue){
-          this.showValue = val.cunFangWeiZhi
-          console.log('自定义组件formData', val)
+        //根据实际逻辑处理
+
+        if (!this.showValue) {
+          this.showValue = val.cunFangWeiZhi;
+          console.log("自定义组件formData", val);
         }
-        
-        
       },
       deep: true,
-      immediate: true
-    }
-    
+      immediate: true,
+    },
   },
 };
 </script>
@@ -485,8 +491,18 @@ p {
   position: absolute;
   right: 100px;
   top: 50px;
-  color: red;
-  font-size: 18px;
+  //
+   background: #f56c6c;
+  font-size: 16px;
+  padding:0px 4px;
+  border-radius: 5px;
+ color: #ffffff;
+  .closeBtn {
+    background: #f56c6c;
+     border: none;
+     padding: 2px;
+      color: #ffffff;
+  }
 }
 .sample-content {
   cursor: pointer;
@@ -496,10 +512,10 @@ p {
     height: 100%;
     overflow: scroll;
     position: fixed;
-    top: 50px;
-    left: 50px;
+    top: 0px;
+    left: 0px;
     background: white;
-    z-index: 999;
+    z-index: 99999999!important;
   }
   .top-content {
     width: 100%;

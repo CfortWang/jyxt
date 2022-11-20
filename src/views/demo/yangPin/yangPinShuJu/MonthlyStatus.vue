@@ -37,18 +37,18 @@ export default {
       curdPost('sql',sql1).then(response => { 
         let  data = response.variables.data
        
-        console.log('检测样品任务总数',data.length)
+        // console.log('检测样品任务总数',data.length)
         let obj = {};
         let newArray = data.reduce((cur,next) => {
             obj[next.yang_pin_bian_hao] ? "" : obj[next.yang_pin_bian_hao] = true && cur.push(next);
             return cur;
         },[])
          this.testedData = newArray.length
-        console.log("检测样品任务总数3333", this.testedData)
+        // console.log("检测样品任务总数3333", this.testedData)
       })
       //定义一个对象：任务总量
       let newObj = {name:"任务总量",value:this.testedData}
-      console.log("检测样品任务总数444", newObj)
+      // console.log("检测样品任务总数444", newObj)
     },
 
     //已经完成检测的样品
@@ -57,7 +57,7 @@ export default {
       curdPost('sql',sql2).then(response => { 
       let  data = response.variables.data
       // this.testedData 
-      console.log('已经完成检测数据',data.length)
+      // console.log('已经完成检测数据',data.length)
 
       })
       
@@ -158,36 +158,34 @@ export default {
 }
 </script>
 
-<style lang="less" >
-* border,body{
+<style lang="less" scoped>
+*body{
   padding: 0px;
   margin: 0px;
 }
-  .monthlyStatus{
-    width: 400px;
-    height: 416px;
+.monthlyStatus{
+  width: 100%;
+  height: 100%;
+  #dv-border-box-7{
+    background-size: 100% 100%;
     display: flex;
-    flex-direction:cloumn;
-    flex-wrap :wrap;
-    //  background-color: rgb(25, 97, 156);
-    overflow: hidden;
-     
-      .monthlyStatus_title{
-        width: 100%;
-        height: 50px;
-        line-height: 50px;
-        text-align: center;
-        // padding-left: 20px;
-        // background-color: rgb(25, 97, 156);
-        font-weight: 600;
-        font-size: 20px;
-        color:'#fff'
-        // overflow: hidden;
-      }
-      .monthlyStatus_content{
-        width: 100%;
-        height: 350px;
-        // background-color: red;
-      }
-    }
+    flex-direction:column;
+    align-content:space-between;
+    
+  }
+  .monthlyStatus_title{
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 20px;
+    color:'#fff';
+  }
+  .monthlyStatus_content{
+    width: 100%;
+    height: calc(100% - 50px);
+  }
+  
+}
 </style>

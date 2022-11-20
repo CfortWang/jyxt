@@ -1,10 +1,10 @@
 <template>
-  <dv-full-screen-container>
+  <!-- <dv-full-screen-container> -->
     <el-scrollbar class="screen" ref="scrollDiv" >
     <!-- :style="{height:height}" -->
       <div class="statistics">
         <div class="editDate">
-          <div class="stitle">实验室管理看板</div>
+          <!-- <div class="stitle">实验室管理看板</div>
           <div class="block" style="display:none">
             <span class="demonstration">开始:</span>
             <el-date-picker v-model="BeginDate" type="year" size="mini" value-format="yyyy" format="yyyy年"  style="width: 96px;"
@@ -16,15 +16,15 @@
             <span class="demonstration">查询年度:</span>
             <!-- <el-date-picker v-model="endDate" type="year" size="mini" value-format="yyyy" format="yyyy年"  :clearable="false" style="width: 96px;"
               @change="checkYear(endDate,'end')" placeholder="选择日期"> -->
-                <el-date-picker
+                <!-- <el-date-picker
                   v-model="endDate"
                   type="year"
                   value-format="yyyy"
                   @change="checkYear(endDate,'end')"
                   placeholder="选择年">
-                </el-date-picker>
+                </el-date-picker> -->
             <!-- </el-date-picker> -->
-          </div>
+          <!-- </div>
 
           <div class="block">
             <el-button type="primary" size="mini" plain @click="selectAll">
@@ -33,11 +33,11 @@
           </div>
 
           <div class="goBackButton" @click.prevent="goBack()" >
-            返回
-          </div>
+            返回 -->
+          <!-- </div> -->
 
         </div>
-        <div class="ttitle">质量目标统计</div>
+        <!-- <div class="ttitle">质量目标统计</div> -->
         <div class="componentsData" v-if="relOf">
             <s1zhiLiangMuBiao :width="static=='row' ? '20%': '100%'"
             v-if="showAll || showComponents[1]" :data = "getS1renwu()"/>
@@ -78,39 +78,39 @@
             v-if="showAll || showComponents[13]" :data = "getS9neiBuZhiLiang()"/> -->
             <!-- <s12fengXian :width="static=='row' ? '20%': '100%'"
             v-if="showAll || showComponents[13]" :data = "getS12fengXian()"/> -->
-            <div class="clear"></div>
+            <!-- <div class="clear"></div>
         </div>
         <div class="ttitle">人员培训与管理</div>
-        <div class="componentsData" v-if="relOf">
+        <div class="componentsData" v-if="relOf"> -->
             <s4renYuanPeiXun :width="static=='row' ? '25%': '100%'"
             v-if="showAll || showComponents[8]" :data = "getS4renYuanPeiXun()"/>
             <s5renYuanJianDu :width="static=='row' ? '25%': '100%'"
             v-if="showAll || showComponents[9]" :data = "getS5renYuanJianDu()"/>
-            <div class="clear"></div>
+            <!-- <div class="clear"></div>
 
         </div>
         <div class="ttitle">设备维保</div>
-        <div class="componentsData" v-if="relOf">
+        <div class="componentsData" v-if="relOf"> -->
             <s7sheBeiJiaoZhun :width="static=='row' ? '33%': '100%'"
             v-if="showAll || showComponents[12]" :data = "getJiaoYanObjNum()"/>
             <s8sheBeiHeCha :width="static=='row' ? '33%': '100%'"
             v-if="showAll || showComponents[11]" :data = "gethechaObjNum()"/>
             <s11biaoZhunWu :width="static=='row' ? '33%': '100%'"
             v-if="showAll || showComponents[15]" :data = "getbiaozhunObjNum()"/>
-            <div class="clear"></div>
+            <!-- <div class="clear"></div>
 
         </div>
         <div class="ttitle">质量控制</div>
-        <div class="componentsData" v-if="relOf">
+        <div class="componentsData" v-if="relOf"> -->
             <s9neiBuZhiLiang :width="static=='row' ? '25%': '100%'"
             v-if="showAll || showComponents[13]" :data = "getS9neiBuZhiLiang()"/>
             <s10waiBuNengLi :width="static=='row' ? '25%': '100%'"
             v-if="showAll || showComponents[14]" :data = "getnengtliObjNum()"/>
-            <div class="clear"></div>
+            <!-- <div class="clear"></div>
 
         </div>
         <div class="ttitle">风险控制</div>
-        <div class="componentsData" v-if="relOf">
+        <div class="componentsData" v-if="relOf"> -->
             <s12fengXian :width="static=='row' ? '25%': '100%'"
             v-if="showAll || showComponents[16]" :data = "getS12fengXian()"/>
             <div class="clear"></div>
@@ -122,7 +122,7 @@
 
       </div>
     </el-scrollbar>
-  </dv-full-screen-container>
+  <!-- </dv-full-screen-container> -->
 </template>
 
 <script>

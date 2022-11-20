@@ -2,12 +2,15 @@
   <div  class="data-view">
       <!-- 全屏显示容器 -->
       <dv-full-screen-container>
+        <!-- 头部内容部分 -->
         <div class="headerContent">
            <!-- 标题装饰组件 -->
           <header-decoration :titleName="outputData.headerName"/> 
+          <!-- 返回按钮 -->
           <div class="goBackButton" @click.prevent="goBack()" >
             <dv-border-box-8>返回</dv-border-box-8>
           </div>
+          <!-- 显示数据上一次更新的时间 -->
           <div
              style="width: 18%;
               cursor: pointer;
@@ -21,11 +24,9 @@
               color: #FFFFFF;"
               >
                 <dv-border-box-8 >上一次更新时间:{{this.sendTime}}</dv-border-box-8>
-      </div>
-          <!-- <div>当前时间</div> -->
-          <!-- 样品数据总览 -->
+          </div>
+          <!-- 样品头部数据总览 -->
           <div class="overView">
-            <!-- <header-content/> -->
             <headerContent  @getUpdateTime="getTime"></headerContent>
             <dv-decoration-10 style="width:100%;height:5px;" />
           </div> 
@@ -36,19 +37,13 @@
         <!-- 主体内容(图表部分) -->
         <div class="mainContent">
           <div class="entrust">
-            <div class="entrustNumber" ref="Number_refs">
-              <!-- 委托样品条目情况组件 -->
-              <entrust-number/>
-            </div>
-            <!-- 委托样品类型组件 -->
-            <div class="entrustType" >
-              <entrust-type/>
-            </div>
+            <div class="Number" ref="Number_refs"><entrustNumber/> </div>
+            <div class="Type" ><entrustType/></div>
           </div>
           <div class="detection">
-            <div class="monthlyStatus" ref="MonthlyStatus_refs"><monthlyStatus/></div>
-            <div class="monthlyNumber" ref="MonthlyNumber_refs"><monthlyNumber/></div>
-            <div class="annualStatus" ref="AnnualStatus_refs"><annualStatus/></div>
+            <div class="monthlyS" ref="MonthlyStatus_refs"><monthlyStatus/></div>
+            <div class="monthlyN" ref="MonthlyNumber_refs"><monthlyNumber/></div>
+            <div class="annualS" ref="AnnualStatus_refs"><annualStatus/></div>
           </div>
         </div>
         
@@ -126,7 +121,7 @@ export default {
 }
 </script>
 
-<style lang="less" >
+<style lang="less" scoped>
 *body{
   padding: 0px;
   margin: 0px;
@@ -134,103 +129,93 @@ export default {
 .data-view {
   width: 100%;
   height: 100%;
-  // position: absolute;
   color: #fff;
   z-index: 9999;
   #dv-full-screen-container {
     background-image: url('./img/stars.png');
     background-size: 100% 100%;
-    // box-shadow: 0 0 3px blue;bete
-    // display: flex;
-    // flex-direction: column;
     display: flex;
     flex-direction:column;
-    align-items: stretch;
-    
-   .headerContent{
-    flex: 1;
-    
-    // background-color: rgb(99, 12, 41);
-    
-
-   }
-   .goBackButton{ 
-      width: 10%;
-      cursor: pointer;
-      height:2.825rem;
-      line-height: 2.825rem;
-      text-align:center;
-      margin-left:20%;
-      margin-top:-60px;
-      flex: 1;
-      position: absolute;
-      color: #FFFFFF;
-   }
-   .mainContent{
-    width: 100%;
-    height: 100%;
-    flex: 4;
-    display: flex;
-    flex-direction:column;
-    // align-items: stretch;
-    // align-items: flex-start;
-    align-content:space-between;
-    // margin-top: 20px;
-    
-    // background-color: rgb(12, 99, 58);
-      .entrust{
-      // width: 100%;
-      flex: 1;
-      // border: 1px solid rgb(25, 156, 91);
-      // background-color: rgb(6, 47, 161);
-      display: flex;
-      justify-content:space-between;
-      margin-bottom: 15px ;
-        .entrustNumber{
-          flex: 5;
-          margin-right: 10px;
-          // background-color: rgb(25, 97, 156);
-        }
-        .entrustType{
-          flex: 3;
-         
-        }
-      }
-
-      .detection{
-      // width: 100%;
-      flex: 1;
-      display: flex;
-      // border: 1px solid rgb(39, 3, 59);
-      // background-color: rgb(226, 77, 134);
-        .monthlyStatus{
-          flex: 1;
-        
-          // background-color: rgb(25, 156, 91);
-        }
-        .monthlyNumber{
-          flex: 3;
-          margin: 0px 10px;
-          // background-color: rgb(39, 3, 59);
-        }
-        .annualStatus{
-          flex: 1;
-        // margin-right: 10px;
-        // background-color: rgb(25, 156, 91);
-        }
-      
-      }
-   
-
-  
-  }
- 
-    .overView{
+    align-items: center;
+    .headerContent{
       width: 100%;
-      height: 80px;
+      height: 19%;
+      // border: 1px solid rgb(197, 17, 41);
+      .goBackButton{ 
+        width: 10%;
+        cursor: pointer;
+        height:2.825rem;
+        line-height: 2.825rem;
+        text-align:center;
+        margin-left:20%;
+        margin-top:-60px;
+        flex: 1;
+        position: absolute;
+        color: #FFFFFF;
+      }
+      .overView{
+        width: 100%;
+        height: 80px;
+      }
     }
-  
-}
+    
+    .mainContent{
+      width: 100%;
+      height:80%;
+      display: flex;
+      flex-direction:column;
+      align-content:space-between;
+      // border: 1px solid rgb(71, 17, 197);
+        .entrust{
+        width: 100%;
+        height: 48%;
+        display: flex;
+        justify-content:space-between;
+        // border: 1px solid rgb(17, 110, 197);
+          .Number{
+            width: 62%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            // background-color: rgb(171, 163, 204);
+          }
+          .Type{
+            width: 37.5%;
+            height: 100%;
+            margin-left: 10px;
+            // background-color: rgb(12, 103, 131);
+          
+          }
+        }
+
+        .detection{
+          width: 100%;
+          height: 48%;
+          margin-top: 15px;
+          display: flex;
+          justify-content:space-between;
+          // border: 1px solid rgb(142, 190, 30);
+          .monthlyS{
+            width: 23%;
+            height: 100%;
+            // background-color: rgb(12, 103, 131);
+          }
+          .monthlyN{
+            flex: 3;
+            width: 50%;
+            height: 100%;
+            margin: 0px 10px;
+            // background-color: rgb(171, 163, 204);
+          }
+          .annualS{
+            width: 23%;
+            height: 100%;
+            // background-color: rgb(12, 103, 131);
+          }
+        
+        }
+    } 
+  } 
 }
 
 </style>

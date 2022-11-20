@@ -2,13 +2,13 @@
   <div class="sample-content">
     <!-- 表格組件 -->
     <!-- <div @dblclick="clickBtn">{{ showValue }}</div> -->
-    <div @dblclick="clickBtn" style="cursor: pointer;" >
-      位置选择
+    <div @click="clickBtn" style="cursor: pointer;" >
+      <div >点击视图选择位置</div>
       <!-- <input placeholder="请输入内容" :value="showValue"  id="valueDom" @click="onChange"> -->
     </div>
     <!-- <el-input></el-input> -->
     <div class="selectArea" v-if="ifshow">
-      <div @click="close" class="close-content">关闭</div>
+      <div @click="close" class="close-content"> <i class="el-icon-close"></i><el-button class="closeBtn">关闭视图</el-button></div>
       <div class="top-content">
         <div class="top-title">库存可视化</div>
         <div class="query-content">
@@ -177,6 +177,10 @@ export default {
       default() {
         return {};
       },
+    },
+    readonly:{
+      type:Boolean,
+      default: false
     },
     component_12u7eoo:{
       type:String,
@@ -484,8 +488,18 @@ p {
   position: absolute;
   right: 100px;
   top: 50px;
-  color: red;
-  font-size: 18px;
+  //
+   background: #f56c6c;
+  font-size: 16px;
+  padding:0px 4px;
+  border-radius: 5px;
+ color: #ffffff;
+  .closeBtn {
+    background: #f56c6c;
+     border: none;
+     padding: 2px;
+      color: #ffffff;
+  }
 }
 .sample-content {
   cursor: pointer;
@@ -495,10 +509,10 @@ p {
     height: 100%;
     overflow: scroll;
     position: fixed;
-    top: 50px;
-    left: 50px;
+    top: 0px;
+    left: 0px;
     background: white;
-    z-index: 999;
+    z-index: 100025  !important;
   }
   .top-content {
     width: 100%;

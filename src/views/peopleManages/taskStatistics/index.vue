@@ -315,10 +315,9 @@ export default {
         },
         formLoading() {
             this.loading = true
-            let wheresql = this.chartData[this.setParams.dataIndex].jcId ? `jian_ce_yuan_='${this.chartData[this.setParams.dataIndex].jcId}'` : `fu_he_yuan_='${this.chartData[this.setParams.dataIndex].fhId}'`
             let formsql = `select jian_ce_zhuang_ta,fu_jian_,yang_pin_bian_hao,yang_pin_ming_che,shi_yan_shi_ming,
                         bao_gao_jian_ce_r,jie_guo_pan_ding_,jian_ce_yuan_,fu_he_yuan_,jian_ce_shi_jian_ FROM t_jchzb
-                        where update_time_ BETWEEN '${this.startDate}' AND '${this.endDate}' and ${wheresql} and `
+                        where update_time_ BETWEEN '${this.startDate}' AND '${this.endDate}' and `
             let sql = ''
 
             const params = this.$refs['crud'] ? this.$refs['crud'].getSearcFormData() : {}
@@ -326,16 +325,16 @@ export default {
 
             switch (this.setParams.seriesName) {
                 case "未完成检测项目情况":
-                    sql = formsql + `jian_ce_zhuang_ta != '已完成'`
+                    sql = formsql + `jian_ce_zhuang_ta != '已完成' and jian_ce_yuan_='${this.chartData[this.setParams.dataIndex].jcId}'`
                     break;
                 case "已完成检测项目情况":
-                    sql = formsql + `jian_ce_zhuang_ta = '已完成' `
+                    sql = formsql + `jian_ce_zhuang_ta = '已完成' and jian_ce_yuan_='${this.chartData[this.setParams.dataIndex].jcId}'`
                     break;
                 case "未完成复核项目情况":
-                    sql = formsql + `jian_ce_zhuang_ta != '已完成' `
+                    sql = formsql + `jian_ce_zhuang_ta != '已完成' and fu_he_yuan_='${this.chartData[this.setParams.dataIndex].fhId}'`
                     break;
                 case "已完成复核项目情况":
-                    sql = formsql + `jian_ce_zhuang_ta = '已完成' `
+                    sql = formsql + `jian_ce_zhuang_ta = '已完成' and fu_he_yuan_='${this.chartData[this.setParams.dataIndex].fhId}'`
                     break;
                 default:
                     break;

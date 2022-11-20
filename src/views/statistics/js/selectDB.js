@@ -15,11 +15,11 @@ export const gethechaObj = (end)=>{
 }
 export const getnengliObj = (end)=>{
   // return "select a.t_mjsbjdxzjhzbName,a.t_mjsbjdxzjhzb,b.t_mjsbjdxzjhzbS FROM (select she_bei_ming_chen as t_mjsbjdxzjhzbName, COUNT(she_bei_ming_chen) as t_mjsbjdxzjhzb from t_mjsbjdxzjhzb where YEAR(create_time_)='2022' GROUP BY she_bei_ming_chen HAVING COUNT(she_bei_ming_chen)>=1) as a left join  (select she_bei_ming_chen, COUNT(she_bei_ming_chen) as t_mjsbjdxzjhzbS from t_mjsbjdxzjhzb where YEAR(create_time_)= '2022' AND DATE(yi_jian_xiao_ri_q) >= DATE(ji_hua_ri_qi_) GROUP BY she_bei_ming_chen HAVING COUNT(she_bei_ming_chen)>=1 )as b on a.t_mjsbjdxzjhzbName=b.she_bei_ming_chen"
-  return "select she_bei_bian_hao_ as enname, suo_yong_she_bei_ as zhname, COUNT(she_bei_bian_hao_) as num from t_nlsysxb where YEAR(yu_ji_shi_jian_)="+end+" GROUP BY she_bei_bian_hao_ HAVING COUNT(she_bei_bian_hao_)>=1"
+  return "select a.enname,a.zhname,ifnull(a.num,0) as num,  ifnull(b.num,0) as numS from(select she_bei_bian_hao_ as enname, suo_yong_she_bei_ as zhname, COUNT(she_bei_bian_hao_) as num from t_nlsysxb where YEAR(yu_ji_shi_jian_)="+end+" GROUP BY she_bei_bian_hao_ HAVING COUNT(she_bei_bian_hao_)>=1) as a LEFT JOIN (select she_bei_bian_hao_ as enname, suo_yong_she_bei_ as zhname, COUNT(she_bei_bian_hao_) as num from t_nlsysxb as c LEFT JOIN t_sysbdhnlyzjh as d on c.parent_id_ = d.id_ where YEAR(c.create_time_)="+end+" and d.shi_fou_guo_shen_='1' GROUP BY she_bei_bian_hao_ HAVING COUNT(she_bei_bian_hao_)>=1) as b on a.enname = b.enname"
 }
 export const getbiaozhunObj = (end)=>{
   // return "select a.t_mjsbjdxzjhzbName,a.t_mjsbjdxzjhzb,b.t_mjsbjdxzjhzbS FROM (select she_bei_ming_chen as t_mjsbjdxzjhzbName, COUNT(she_bei_ming_chen) as t_mjsbjdxzjhzb from t_mjsbjdxzjhzb where YEAR(create_time_)='2022' GROUP BY she_bei_ming_chen HAVING COUNT(she_bei_ming_chen)>=1) as a left join  (select she_bei_ming_chen, COUNT(she_bei_ming_chen) as t_mjsbjdxzjhzbS from t_mjsbjdxzjhzb where YEAR(create_time_)= '2022' AND DATE(yi_jian_xiao_ri_q) >= DATE(ji_hua_ri_qi_) GROUP BY she_bei_ming_chen HAVING COUNT(she_bei_ming_chen)>=1 )as b on a.t_mjsbjdxzjhzbName=b.she_bei_ming_chen"
-  return "select biao_wu_ming_chen as name, COUNT(biao_wu_ming_chen) as num from t_bzwzhcjhxxb where YEAR(create_time_)="+end+" GROUP BY biao_wu_ming_chen HAVING COUNT(biao_wu_ming_chen)>=1"
+  return "select a.name as name, a.num ,IFNULL(b.numS,0) as numS from(select biao_wu_ming_chen as name, COUNT(biao_wu_ming_chen) as num from t_bzwzhcjhxxb where YEAR(create_time_)="+end+" GROUP BY biao_wu_ming_chen HAVING COUNT(biao_wu_ming_chen)>=1) as a LEFT JOIN (select biao_wu_ming_chen as name, COUNT(biao_wu_ming_chen) as numS from t_bzwzhcjhxxb as c LEFT JOIN t_bzwzhcjhb as d on c.parent_id_ = d.id_ where YEAR(c.create_time_)="+end+" and d.shi_fou_guo_shen_='1' GROUP BY biao_wu_ming_chen HAVING COUNT(biao_wu_ming_chen)>=1) as b on a.name = b.name"
 }
 export const DBData = (begin,end,scope)=>{
   // return "select tt.*,cast(1-(t_gdyrqcwt4"+begin+"/t_gdyrqcwt"+begin+")  AS decimal(32,2)) as t_gdyrqcwt6"+begin+
@@ -51,9 +51,9 @@ export const DBData = (begin,end,scope)=>{
   " join "+s5renYuanJianDu(begin,end,scope)+
   " join "+s9neiBu(begin,end,scope)+
   " join "+s12fengXian(begin,end,scope)+
-  " join "+s6sheBeiWeiHu(begin,end)+
+  // " join "+s6sheBeiWeiHu(begin,end)+
   " join "+s7sheBeiJiaoZhun(begin,end)+
-  " join "+s8sheBeiHeCha(begin,end)+
+  // " join "+s8sheBeiHeCha(begin,end)+
   ") tt"
 }
 /* 拼接通用条件，选用 */
@@ -123,26 +123,15 @@ function toolSame(val,tableName,where,join){
 function s1renwu(begin,end,scope){
   return "( SELECT COUNT( id_ ) AS t_jchzb"+end+" FROM t_jchzb "+ "WHERE shi_fou_guo_shen_ = '1' AND YEAR( create_time_ ) = "+end+" AND DATE(update_time_) BETWEEN DATE( create_time_ ) and DATE( qi_wang_wan_cheng ) ) s1renwu1  JOIN"+
   "( SELECT COUNT( id_ ) AS t_jchzbS"+end+" FROM t_jchzb WHERE shi_fou_guo_shen_ = '1' AND YEAR ( create_time_ ) = "+end+" ) s1renwu2  "
-  // let sql = "( SELECT COUNT( id_ ) AS t_jchzb"+begin+" FROM t_jchzb "+ "WHERE shi_fou_guo_shen_ = '1' AND YEAR( create_time_ ) = "+begin+" AND DATE(update_time_) BETWEEN DATE( create_time_ ) and DATE( qi_wang_wan_cheng ) ) s1renwu1  JOIN"
-  // for (let i = 1; i < scope.length; i++) {
-  //   if(i === scope.length - 1){
-  //     sql = sql + tool(scope[i],"t_jchzb",PAT_TASK(scope[i],true),1)
-  //   }else{
-  //     sql = sql + tool(scope[i],"t_jchzb",PAT_TASK(scope[i],true),0)
-  //   }
-  // }
-  // let sql1 = " JOIN ( SELECT COUNT( id_ ) AS t_jchzbS"+begin+" FROM t_jchzb WHERE shi_fou_guo_shen_ = '1' AND YEAR ( create_time_ ) = "+begin+" ) s1renwu2  JOIN "
-  // for (let i = 1; i < scope.length; i++) {
-  //   if(i === scope.length - 1){
-  //     sql1 = sql1 + toolSame(scope[i],"t_jchzb",PAT_TASK(scope[i],false),1)
-  //   }else{
-  //     sql1 = sql1 + toolSame(scope[i],"t_jchzb",PAT_TASK(scope[i],false),0)
-  //   }
-  // }
-  // let sqlAll = sql + sql1
-  // return sqlAll
-  //委托检测数
-  // return "SELECT *  FROM (select COUNT( id_ ) AS t_gdyrqcwt"+begin+" from t_gdyrgpjc WHERE YEAR( create_time_ ) = "+begin+" union all select id_ from t_gdyrqcjc WHERE YEAR( create_time_ ) = "+begin+") s1jianCe1  JOIN "+
+ 
+  }
+/* 检测 */
+function s1jianCe(begin,end){
+  // //v3
+  // return "( SELECT COUNT( id_ ) AS t_mjjcbg"+end+" FROM t_mjjcbg "+ "WHERE shi_fou_guo_shen_ = '已退回' AND YEAR( create_time_ ) = "+end+" ) s1jianCe1 JOIN"+
+  // "( SELECT COUNT( id_ ) AS t_mjjcbgS"+end+" FROM t_mjjcbg WHERE  YEAR ( create_time_ ) = "+end+" ) s1jianCe2 "
+  // 委托检测数
+  return "SELECT *  FROM (select COUNT( id_ ) AS t_gdyrqcwt"+end+" from t_gdyrgpjc WHERE YEAR( create_time_ ) = "+end+" union all select id_ from t_gdyrqcjc WHERE YEAR( create_time_ ) = "+end+") s1jianCe1  JOIN "+
   // "(SELECT COUNT( id_ ) AS t_gdyrqcwt"+end+" FROM (select id_ from t_gdyrgpjc WHERE YEAR( create_time_ ) = '"+end+"' union all select id_ from t_gdyrqcjc WHERE YEAR( create_time_ ) = '"+end+"') a0) s1jianCe2 on 1=1 join "+
   // //按期完成检测件数
   // "(select count(id_) as t_gdyrqcwt2"+begin+" from(select id_   from t_gdyrgpjc where qi_wang_wan_cheng>fa_fang_biao_zhi_ and wei_tuo_id_ in (select id_ from t_gdyrqcwt where YEAR( create_time_ ) = "+begin+") union all select id_ from t_gdyrqcjc where qi_wang_wan_cheng>fa_fang_biao_zhi_ and wei_tuo_id_ in (select id_ from t_gdyrqcwt where YEAR( create_time_ ) = "+begin+")) a) s1jianCe3 on 1=1 JOIN "+
@@ -156,32 +145,8 @@ function s1renwu(begin,end,scope){
   // //检测结果准确率
   // "(select count(wei_tuo_id_) as t_gdyrqcwt50"+begin+" from(select wei_tuo_id_   from t_gdyrgpjc where (qi_wang_wan_cheng<fa_fang_biao_zhi_ or fa_fang_biao_zhi_ is null) and wei_tuo_id_ in (select id_ from t_gdyrqcwt where YEAR( create_time_ ) = "+begin+" ) group by wei_tuo_id_ having count(1)=1 union all select wei_tuo_id_ from t_gdyrqcjc where (qi_wang_wan_cheng<fa_fang_biao_zhi_ or fa_fang_biao_zhi_ is null) and wei_tuo_id_ in (select id_ from t_gdyrqcwt where YEAR( create_time_ ) = "+begin+")  group by wei_tuo_id_ having count(1)=1 ) a) s1jianCe9 on 1=1 JOIN "+
   // "(select count(wei_tuo_id_) as t_gdyrqcwt50"+end+" from(select wei_tuo_id_  from t_gdyrgpjc where (qi_wang_wan_cheng<fa_fang_biao_zhi_ or fa_fang_biao_zhi_ is null) and wei_tuo_id_ in (select id_ from t_gdyrqcwt where YEAR( create_time_ ) = "+end+" ) group by wei_tuo_id_ having count(1)=1 union all select wei_tuo_id_ from t_gdyrqcjc where (qi_wang_wan_cheng<fa_fang_biao_zhi_ or fa_fang_biao_zhi_ is null) and wei_tuo_id_ in (select id_ from t_gdyrqcwt where YEAR( create_time_ ) = "+end+"  ) group by wei_tuo_id_ having count(1)=1 ) a) s1jianCe10 on 1=1 "
-  //按时完成率
-  //"( select select count(id_) AS t_gdyrqcwt6"+begin+" from t_gdyrgpjc where (qi_wang_wan_cheng<fa_fang_biao_zhi_ or fa_fang_biao_zhi_ is null) and wei_tuo_id_ in (select id_ from t_gdyrqcwt where YEAR( create_time_ ) = "+begin+"))) s1jianCe11 on 1=1 JOIN "+
-  //"( select count(id_) AS t_gdyrqcwt6"+end+" from t_gdyrgpjc where qi_wang_wan_cheng>fa_fang_biao_zhi_ and wei_tuo_id_ in (select id_ from t_gdyrqcwt where YEAR( create_time_ ) = '"+end+"')  ) s1jianCe12 on 1=1"
-  }
-/* 检测 */
-function s1jianCe(begin,end){
-  // //v3
-  // return "( SELECT COUNT( id_ ) AS t_mjjcbg"+end+" FROM t_mjjcbg "+ "WHERE shi_fou_guo_shen_ = '已退回' AND YEAR( create_time_ ) = "+end+" ) s1jianCe1 JOIN"+
-  // "( SELECT COUNT( id_ ) AS t_mjjcbgS"+end+" FROM t_mjjcbg WHERE  YEAR ( create_time_ ) = "+end+" ) s1jianCe2 "
-  // 委托检测数
-  return "SELECT *  FROM (select COUNT( id_ ) AS t_gdyrqcwt"+begin+" from t_gdyrgpjc WHERE YEAR( create_time_ ) = "+begin+" union all select id_ from t_gdyrqcjc WHERE YEAR( create_time_ ) = "+begin+") s1jianCe1  JOIN "+
-  "(SELECT COUNT( id_ ) AS t_gdyrqcwt"+end+" FROM (select id_ from t_gdyrgpjc WHERE YEAR( create_time_ ) = '"+end+"' union all select id_ from t_gdyrqcjc WHERE YEAR( create_time_ ) = '"+end+"') a0) s1jianCe2 on 1=1 join "+
-  //按期完成检测件数
-  "(select count(id_) as t_gdyrqcwt2"+begin+" from(select id_   from t_gdyrgpjc where qi_wang_wan_cheng>fa_fang_biao_zhi_ and wei_tuo_id_ in (select id_ from t_gdyrqcwt where YEAR( create_time_ ) = "+begin+") union all select id_ from t_gdyrqcjc where qi_wang_wan_cheng>fa_fang_biao_zhi_ and wei_tuo_id_ in (select id_ from t_gdyrqcwt where YEAR( create_time_ ) = "+begin+")) a) s1jianCe3 on 1=1 JOIN "+
-  "(select count(id_) as t_gdyrqcwt2"+end+" from(select id_  from t_gdyrgpjc where qi_wang_wan_cheng>fa_fang_biao_zhi_ and wei_tuo_id_ in (select id_ from t_gdyrqcwt where YEAR( create_time_ ) = "+end+") union all select id_ from t_gdyrqcjc where qi_wang_wan_cheng>fa_fang_biao_zhi_ and wei_tuo_id_ in (select id_ from t_gdyrqcwt where YEAR( create_time_ ) = "+end+")) a) s1jianCe4 on 1=1 join "+
-  //出具报告数
-  "(select count(id_) as t_gdyrqcwt3"+begin+" from(select id_   from t_gdyrgpjc where fa_fang_biao_zhi_ is not null and wei_tuo_id_ in (select id_ from t_gdyrqcwt where YEAR( create_time_ ) = "+begin+") union all select id_ from t_gdyrqcjc where fa_fang_biao_zhi_ is not null and wei_tuo_id_ in (select id_ from t_gdyrqcwt where YEAR( create_time_ ) = "+begin+")) a) s1jianCe5 on 1=1 JOIN "+
-  "(select count(id_) as t_gdyrqcwt3"+end+" from(select id_  from t_gdyrgpjc where fa_fang_biao_zhi_ is not null and wei_tuo_id_ in (select id_ from t_gdyrqcwt where YEAR( create_time_ ) = "+end+") union all select id_ from t_gdyrqcjc where fa_fang_biao_zhi_ is not null and wei_tuo_id_ in (select id_ from t_gdyrqcwt where YEAR( create_time_ ) = "+end+")) a) s1jianCe6 on 1=1 join "+
-  //逾期未完成数
-  "(select count(id_) as t_gdyrqcwt4"+begin+" from(select id_   from t_gdyrgpjc where (qi_wang_wan_cheng<fa_fang_biao_zhi_ or fa_fang_biao_zhi_ is null) and wei_tuo_id_ in (select id_ from t_gdyrqcwt where YEAR( create_time_ ) = "+begin+") union all select id_ from t_gdyrqcjc where (qi_wang_wan_cheng<fa_fang_biao_zhi_ or fa_fang_biao_zhi_ is null) and wei_tuo_id_ in (select id_ from t_gdyrqcwt where YEAR( create_time_ ) = "+begin+")) a) s1jianCe7 on 1=1 JOIN "+
-  "(select count(id_) as t_gdyrqcwt4"+end+" from(select id_  from t_gdyrgpjc where (qi_wang_wan_cheng<fa_fang_biao_zhi_ or fa_fang_biao_zhi_ is null) and wei_tuo_id_ in (select id_ from t_gdyrqcwt where YEAR( create_time_ ) = "+end+") union all select id_ from t_gdyrqcjc where (qi_wang_wan_cheng<fa_fang_biao_zhi_ or fa_fang_biao_zhi_ is null) and wei_tuo_id_ in (select id_ from t_gdyrqcwt where YEAR( create_time_ ) = "+end+")) a) s1jianCe8 on 1=1 JOIN " +
-  //检测结果准确率
-  "(select count(wei_tuo_id_) as t_gdyrqcwt50"+begin+" from(select wei_tuo_id_   from t_gdyrgpjc where (qi_wang_wan_cheng<fa_fang_biao_zhi_ or fa_fang_biao_zhi_ is null) and wei_tuo_id_ in (select id_ from t_gdyrqcwt where YEAR( create_time_ ) = "+begin+" ) group by wei_tuo_id_ having count(1)=1 union all select wei_tuo_id_ from t_gdyrqcjc where (qi_wang_wan_cheng<fa_fang_biao_zhi_ or fa_fang_biao_zhi_ is null) and wei_tuo_id_ in (select id_ from t_gdyrqcwt where YEAR( create_time_ ) = "+begin+")  group by wei_tuo_id_ having count(1)=1 ) a) s1jianCe9 on 1=1 JOIN "+
-  "(select count(wei_tuo_id_) as t_gdyrqcwt50"+end+" from(select wei_tuo_id_  from t_gdyrgpjc where (qi_wang_wan_cheng<fa_fang_biao_zhi_ or fa_fang_biao_zhi_ is null) and wei_tuo_id_ in (select id_ from t_gdyrqcwt where YEAR( create_time_ ) = "+end+" ) group by wei_tuo_id_ having count(1)=1 union all select wei_tuo_id_ from t_gdyrqcjc where (qi_wang_wan_cheng<fa_fang_biao_zhi_ or fa_fang_biao_zhi_ is null) and wei_tuo_id_ in (select id_ from t_gdyrqcwt where YEAR( create_time_ ) = "+end+"  ) group by wei_tuo_id_ having count(1)=1 ) a) s1jianCe10 on 1=1 "
-  // 按时完成率
-  "( select select count(id_) AS t_gdyrqcwt6"+begin+" from t_gdyrgpjc where (qi_wang_wan_cheng<fa_fang_biao_zhi_ or fa_fang_biao_zhi_ is null) and wei_tuo_id_ in (select id_ from t_gdyrqcwt where YEAR( create_time_ ) = "+begin+"))) s1jianCe11 on 1=1 JOIN "+
+  // // 按时完成率
+  // "( select select count(id_) AS t_gdyrqcwt6"+begin+" from t_gdyrgpjc where (qi_wang_wan_cheng<fa_fang_biao_zhi_ or fa_fang_biao_zhi_ is null) and wei_tuo_id_ in (select id_ from t_gdyrqcwt where YEAR( create_time_ ) = "+begin+"))) s1jianCe11 on 1=1 JOIN "+
   "( select count(id_) AS t_gdyrqcwt6"+end+" from t_gdyrgpjc where qi_wang_wan_cheng>fa_fang_biao_zhi_ and wei_tuo_id_ in (select id_ from t_gdyrqcwt where YEAR( create_time_ ) = '"+end+"')  ) s1jianCe12 on 1=1"
   }
   /* 检测 */

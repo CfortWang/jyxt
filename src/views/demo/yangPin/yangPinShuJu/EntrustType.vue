@@ -57,7 +57,7 @@ export default {
         value:item.shou_yang_shu_lia,
         name:item.yang_pin_lei_xing
       }));
-      console.log('委托类型数据222',dataList)
+      // console.log('委托类型数据222',dataList)
       this.entrustArray = dataList.reduce((total, cur, index) => {
         let hasValue = total.findIndex(current => {
           return current.name === cur.name;
@@ -105,7 +105,7 @@ export default {
           textAlign:'center',  //竖直居中对齐
           // textVerticalAlign:'auto',
           textStyle: {    //标题样式
-            fontSize: 18,
+            fontSize: 16,
             fontWeight: "bolder",  //bold??
             color: "#aaa",
             transform: "translate(-50%,-50%)",
@@ -192,35 +192,33 @@ export default {
 }
 </script>
 
-<style lang="less" >
-* border,body{
+<style lang="less" scoped>
+*body{
   padding: 0px;
   margin: 0px;
 }
-  .entrustType{
-    width: 600px;
-    height: 416px;
+.entrustType{
+  width: 100%;
+  height: 100%;
+  #dv-border-box-7{
+    background-size: 100% 100%;
     display: flex;
-    flex-direction:cloumn;
-    flex-wrap :wrap;
-    overflow: hidden;
-     
-      .entrustType_title{
-          // background-color: rgb(0, 99, 180);
-          width: 100%;
-          height: 50px;
-          line-height: 50px;
-          text-align: center;
-          color: '#fff';
-          font-size:20px;
-          font-weight: 600;
-        // font-weight:bold;
-      }
-      .entrustType_content{
-        width: 100%;
-        height: 350px;
-        // background-color: red($color: #000000);
-      }
-    }
+    flex-direction:column;
+    align-content:space-between;
+  }
+  .entrustType_title{
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    color: '#fff';
+    font-size:16px;
+    font-weight: 600;
+  }
+  .entrustType_content{
+    width: 100%;
+    height: calc(100% - 50px);
+  }
+}
 
 </style>

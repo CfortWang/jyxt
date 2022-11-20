@@ -15,25 +15,41 @@
       <div>
 
     <el-container>
-      <el-aside style="border:0px;width: 13%;"></el-aside>
+      <!-- <el-aside style="border:0px;width: 13%;"></el-aside> -->
       <!-- 放统计内容-->
-      <el-aside style="border:0px;width: 50%;">
+      <el-aside style="border:0px;width: 70%;">
           <s11biaoZhunWuItem
             :data="data"
-            width="95%"
+            width="50%"
             :height="height"
             id="s11biaoZhunWuPro"
             click="false"
           />
+          <s11biaoZhunWuCItem
+            :data="data"
+            width="50%"
+            :height="height"
+            id="s11biaoZhunWuCPro"
+            click="false"
+          />
+          <s11biaoZhunWuC2Item
+            :data="data"
+            width="100%"
+            :height="height"
+            id="s11biaoZhunWuC2Pro"
+            click="false"
+          />
       </el-aside>
         <!-- 参数页面列 -->
-        <el-aside style="border:0px;width: 37%; height: 700px;overflow: auto;">
+        <el-aside style="border:0px;width: 30%; height: 700px;overflow: auto;">
               <br>
 
           <div>{{data.Num.date}} 年度</div>
           <div v-for="(item,i) in data.Num.name" :key="i">
               <el-divider content-position="left">{{data.Num.name[i]}}</el-divider>
-              核查次数：<el-tag>{{data.Num.number[i]}} 次</el-tag>
+              标准物质期间核查已完成次数：<el-tag>{{data.Num.numberAll[i]}} 次</el-tag>
+              <br>
+              标准物质期间核查次数：<el-tag>{{data.Num.number[i]}} 次</el-tag>
               <br>
             </div>
            <!-- <div class="dataCont" style="font-size: 14px;">
@@ -71,12 +87,14 @@
         },
         height:{
           type:String,
-          default:window.screen.height * 0.75 +'px'
+          default:window.screen.height * 0.4 +'px'
         }
       },
       beforeCreate: function () {
           // 官方文档给出的是require
            this.$options.components.s11biaoZhunWuItem = () => import('../item/s11biaoZhunWu.vue')
+           this.$options.components.s11biaoZhunWuCItem = () => import('../item/s11biaoZhunWuCol.vue')
+           this.$options.components.s11biaoZhunWuC2Item = () => import('../item/s11biaoZhunWuCol2.vue')
           },
 
     watch:{

@@ -15,7 +15,7 @@
 
 <script>
   import echarts from 'echarts'
-  import dialogView from '../properties/s10waiBuNengLiPro.vue'
+  import dialogView from '../properties/s8sheBeiHeChaPro.vue'
   import {GetPercent,GetMax} from  '../js/config.js'
   export default {
     components:{
@@ -35,7 +35,7 @@
       },
       id:{
         type:String,
-        default:"s10waiBuNengLi"
+        default:"s8sheBeiHeCha"
       },
       click:{
         type:String,
@@ -44,7 +44,7 @@
     },
     data () {
       return {
-        title:'能力验证计划完成情况',
+        title:'设备期间核查计划完成情况总数量',
         dialogOff:false,
       }
     },
@@ -62,7 +62,7 @@
        }
       },
       drawLine(){
-        let s10waiBuNengLi = echarts.init(document.getElementById(this.id))
+        let s8sheBeiHeCha = echarts.init(document.getElementById(this.id))
          
 
           
@@ -82,49 +82,72 @@
         //  let max2=GetMax(data2)+1;
         //  let maxVal=max1>max2?max1:max2;
         //  console.log("max1:",max1,"max2:",max2);
-        let e = 100 -this.data.Num.valna
-
-       let option = {
-          //v3
-          title: {
-            text: this.title,
-            // subtext: 'Fake Data',
-            left: 'left',
-            textStyle:{ fontSize:14 }
-          },
-          tooltip: {
-            trigger: 'item'
-          },
-          color:['#6600ff','#cc33cc'],
-          series: [
-            {
-              type: 'pie',
-              radius: '50%',
-              label: {
-                formatter: '{b}: {d}%'
+        let e=[this.data.t_sbhcjlbNum.valAll,this.data.t_sbhcjlbNum.valnum]
+        let option = {
+           //v3
+          legend: {},
+            tooltip: {
+              trigger: 'axis',
+              axisPointer: {
+                type: 'shadow'
               },
-              data: [
-                { value: this.data.Num.valna, name: '能力验证计划完成率' },
-                { value: e, name: '能力验证计划未完成率' }
-              ],
-              emphasis: {
+              // formatter: function (params) {
+              //   return params[0].data[0] + '<br/>满意份数：' + params[0].data[1] + '<br/>调查总份数: ' + params[0].data[2];
+              // }
+            },
+            // dataset: {
+            //   source: barData
+            // },
+            xAxis: { 
+              type: 'category',
+              data:['设备期间核查总数', '设备期间核查已完成数量']
+
+            },
+            yAxis: [
+              {
+                type: 'value',
+                scale: true,
+                name: '数量',
+                max: this.data.t_sbhcjlbNum.valnum>this.data.t_sbhcjlbNum.valAll?this.data.t_sbhcjlbNum.valnum+1:this.data.t_sbhcjlbNum.valAll+1,
+                min: 0,
+              },
+            ],
+            series: [
+              {
+                data: e,
+                type: 'bar',
+                barWidth: '20%',
                 itemStyle: {
-                  shadowBlur: 10,
-                  shadowOffsetX: 0,
-                  shadowColor: 'rgba(0, 0, 0, 0.5)'
-                }
+                  color: '#0099ff'
+                },
+                label: {
+                  show: true,
+                  position: 'top'
+                },
               }
-            }
-          ]
+            ],
+            grid: {
+              top: '20%',
+              left: '3%',
+              right: '4%',
+              bottom: '10%',
+              containLabel: true
+            },
+            title: {
+              text: this.title,
+              textStyle:{ fontSize:14 }
+
+              // subtext: "        "+beingDate+"-"+endDate
+            },
        };
 
-       option && s10waiBuNengLi.setOption(option);
+       option && s8sheBeiHeCha.setOption(option);
       }
     }
   }
 </script>
 <style scoped>
-  #s10waiBuNengLi:hover{
+  #s8sheBeiHeCha:hover{
     transition: all 0.5s;
     transform:scale(1.03);
   }

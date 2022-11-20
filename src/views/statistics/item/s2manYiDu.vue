@@ -28,11 +28,11 @@
       },
       width:{
         type:String,
-        default:"20%"
+        default:"25%"
       },
       height:{
         type:String,
-        default: window.screen.height/4+"px"
+        default: window.screen.height/5+"px"
         // default: "100%"
       },
       id:{
@@ -87,72 +87,107 @@
         //   }
         //   barData.push(e)
         // }
-        let e=[this.data.t_khmydtjbNum.number[0],this.data.t_khmydtjbNum.numberAll[0],this.data.t_khmydtjbNum.res[0]]
+        // let e=[this.data.t_khmydtjbNum.number[0],this.data.t_khmydtjbNum.numberAll[0],this.data.t_khmydtjbNum.res[0]]
+        let e=100-this.data.t_khmydtjbNum.res[0]
 
         let beingDate=this.data.t_myddc2Begin.date
         let endDate=this.data.t_myddc2End.date
         let option = {
-            legend: {},
-            tooltip: {
-              trigger: 'axis',
-              axisPointer: {
-                type: 'shadow'
+            title: {
+            text: this.title,
+            // subtext: 'Fake Data',
+            left: 'left',
+            textStyle:{ fontSize:14 }
+          },
+          tooltip: {
+            trigger: 'item'
+          },
+          color:['#00ccff','#cc3333'],
+          series: [
+            {
+              type: 'pie',
+              radius: '50%',
+              label: {
+                formatter: '{b}: {d}%'
               },
-              // formatter: function (params) {
-              //   return params[0].data[0] + '<br/>满意份数：' + params[0].data[1] + '<br/>调查总份数: ' + params[0].data[2];
-              // }
-            },
-            // dataset: {
-            //   source: barData
-            // },
-            xAxis: { type: 'category',data:['满意份数', '调查份数', '满意度']},
-            yAxis: [
-              {
-                type: 'value',
-                scale: true,
-                name: '份数',
-                max: this.data.t_khmydtjbNum.number[0]>this.data.t_khmydtjbNum.numberAll[0]?this.data.t_khmydtjbNum.number[0]+1:this.data.t_khmydtjbNum.numberAll[0]+1,
-                min: 0,
-                // boundaryGap: [0.2, 0.2]
-              },
-              {
-                type: 'value',
-                scale: true,
-                name: '满意度',
-                max: this.data.t_khmydtjbNum.res[0],
-                min: 0,
-                axisLabel: {
-                  formatter: '{value} %'
+              data: [
+                { value: this.data.t_khmydtjbNum.res[0], name: '客户满意率' },
+                { value: e, name: '客户不满意率' }
+              ],
+              emphasis: {
+                itemStyle: {
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: 'rgba(0, 0, 0, 0.5)'
                 }
               }
-            ],
-            // Declare several bar series, each will be mapped
-            // to a column of dataset.source by default.
-            // series: [{ type: 'bar' }],
-            series: [
-              {
-                data: e,
-                type: 'bar',
-                itemStyle: {
-                  color: '#66CCCC'
-                },
-                label: {
-                  show: true,
-                  position: 'top'
-                },
-              }
-            ],
-            grid: {
-              top: '20%',
-              left: '3%',
-              right: '4%',
-              bottom: '10%',
-              containLabel: true
-            },
-            title: {
-              text: this.title,
-              // subtext: "        "+beingDate+"-"+endDate
-            },
+            }
+          ]
+
+
+            //v3
+            // legend: {},
+            // tooltip: {
+            //   trigger: 'axis',
+            //   axisPointer: {
+            //     type: 'shadow'
+            //   },
+            //   // formatter: function (params) {
+            //   //   return params[0].data[0] + '<br/>满意份数：' + params[0].data[1] + '<br/>调查总份数: ' + params[0].data[2];
+            //   // }
+            // },
+            // // dataset: {
+            // //   source: barData
+            // // },
+            // xAxis: { type: 'category',data:['满意份数', '调查份数', '满意度']},
+            // yAxis: [
+            //   {
+            //     type: 'value',
+            //     scale: true,
+            //     name: '份数',
+            //     max: this.data.t_khmydtjbNum.number[0]>this.data.t_khmydtjbNum.numberAll[0]?this.data.t_khmydtjbNum.number[0]+1:this.data.t_khmydtjbNum.numberAll[0]+1,
+            //     min: 0,
+            //     // boundaryGap: [0.2, 0.2]
+            //   },
+            //   {
+            //     type: 'value',
+            //     scale: true,
+            //     name: '满意度',
+            //     max: this.data.t_khmydtjbNum.res[0],
+            //     min: 0,
+            //     axisLabel: {
+            //       formatter: '{value} %'
+            //     }
+            //   }
+            // ],
+            // // Declare several bar series, each will be mapped
+            // // to a column of dataset.source by default.
+            // // series: [{ type: 'bar' }],
+            // series: [
+            //   {
+            //     data: e,
+            //     type: 'bar',
+            //     itemStyle: {
+            //       color: '#66CCCC'
+            //     },
+            //     label: {
+            //       show: true,
+            //       position: 'top'
+            //     },
+            //   }
+            // ],
+            // grid: {
+            //   top: '20%',
+            //   left: '3%',
+            //   right: '4%',
+            //   bottom: '10%',
+            //   containLabel: true
+            // },
+            // title: {
+            //   text: this.title,
+            //   // subtext: "        "+beingDate+"-"+endDate
+            // },
+        //v1
         // xAxis: {
         //   data: dataAxis,
         //   axisLabel: {

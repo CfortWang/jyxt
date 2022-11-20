@@ -121,34 +121,32 @@ export default {
 }
 </script>
 
-<style lang="less" >
-* border,body{
+<style lang="less" scoped>
+*body{
   padding: 0px;
   margin: 0px;
 }
-  .annualStatus{
-    width: 400px;
-    height: 416px;
+.annualStatus{
+  width: 100%;
+  height: 100%;
+  #dv-border-box-7{
+    background-size: 100% 100%;
     display: flex;
-    flex-direction:cloumn;
-    flex-wrap :wrap;
-    //  background-color: rgb(25, 97, 156);
-    overflow: hidden;
-     
-      .annualStatus_title{
-        width: 100%;
-        height: 50px;
-        line-height: 50px;
-        text-align: center;
-        // background-color: rgb(25, 97, 156);
-        font-weight: 600;
-        font-size: 20px;
-        color: '#fff';
-      }
-      .annualStatus_content{
-        width: 100%;
-        height: 350px;
-        // background-color: red;
-      }
-    }
+    flex-direction:column;
+    align-content:space-between;
+  }
+  .annualStatus_title{
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 20px;
+    color: '#fff';
+  }
+  .annualStatus_content{
+    width: 100%;
+    height: calc(100% - 50px);
+  } 
+}
 </style>

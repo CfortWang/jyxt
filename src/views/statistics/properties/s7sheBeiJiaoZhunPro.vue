@@ -15,19 +15,33 @@
       <div>
 
     <el-container>
-      <el-aside style="border:0px;width: 13%;"></el-aside>
+      <!-- <el-aside style="border:0px;width: 13%;"></el-aside> -->
       <!-- 放统计内容-->
-      <el-aside style="border:0px;width: 50%;">
+      <el-aside style="border:0px;width: 70%;margin-top:2%;">
           <s7sheBeiJiaoZhunItem
             :data="data"
-            width="95%"
+            width="50%"
             :height="height"
             id="s7sheBeiJiaoZhunPro"
             click="false"
           />
+          <s7sheBeiJiaoZhunCItem
+            :data="data"
+            width="50%"
+            :height="height"
+            id="s7sheBeiJiaoZhunCPro"
+            click="false"
+          />
+          <s7sheBeiJiaoZhunC2Item
+            :data="data"
+            width="100%"
+            :height="height"
+            id="s7sheBeiJiaoZhunC2Pro"
+            click="false"
+          />
       </el-aside>
         <!-- 参数页面列 -->
-        <el-aside style="border:0px;width: 37%; height: 700px;overflow: auto;">
+        <el-aside style="border:0px;width: 30%; height: 700px;overflow: auto;">
               <br>
 
           <div>{{data.t_mjsbjdxzjhzbNum.date}} 年度</div>
@@ -76,13 +90,16 @@
         },
         height:{
           type:String,
-          default:window.screen.height * 0.75 +'px'
+          default:window.screen.height * 0.4 +'px'
         }
       },
       beforeCreate: function () {
           // 官方文档给出的是require
            this.$options.components.s7sheBeiJiaoZhunItem = () => import('../item/s7sheBeiJiaoZhun.vue')
-          },
+           this.$options.components.s7sheBeiJiaoZhunCItem = () => import('../item/s7sheBeiJiaoZhunCol.vue')
+           this.$options.components.s7sheBeiJiaoZhunC2Item = () => import('../item/s7sheBeiJiaoZhunCol2.vue')
+
+      },
 
     watch:{
      dialogOff: {

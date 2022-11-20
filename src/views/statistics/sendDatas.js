@@ -12,7 +12,13 @@ export default {
                         //         matchArr.push(this.relData[matching+this.dataScope[i]])
                         // }
                         // for (let i = 0; i < this.dataScope.length; i++) {
-                                matchArr.push(this.relData[matching+this.endDate])
+                                if(typeof this.relData[matching+this.endDate] === "undefined"){
+                                        matchArr.push(0)
+                                        // console.log(matchArr,'1hiuhkj')
+                                }else{
+                                        matchArr.push(this.relData[matching+this.endDate])
+                                        // console.log('2nhkjhiuhkj')
+                                }
                         // }
                         return matchArr
                 },
@@ -22,7 +28,13 @@ export default {
                         //         matchArr.push(this.relData[matching+'S'+this.dataScope[i]])
                         // }
                         // for (let i = 0; i < this.dataScope.length; i++) {
-                                matchArr.push(this.relData[matching+'S'+this.endDate])
+                                if(typeof this.relData[matching+'S'+this.endDate] === "undefined"){
+                                        matchArr.push(0)
+                                        // console.log(matchArr,'1hiuhkj')
+                                }else{
+                                        matchArr.push(this.relData[matching+'S'+this.endDate])
+                                        // console.log('2nhkjhiuhkj')
+                                }
                         // }
                         return matchArr
                 },
@@ -32,33 +44,58 @@ export default {
                         let valAll = []
                         let e = []
                         let that = this
-                        for (let i = 0; i < that.jiaoyanObj.length; i++) {
-                                let num=0
-                                let nameMid =''
-                                if (that.jiaoyanObj[i].t_mjsbjdxzjhzb===0) {
-                                        num =0
-                                } else {
-                                        num =Math.floor(that.jiaoyanObj[i].t_mjsbjdxzjhzbS/that.jiaoyanObj[i].t_mjsbjdxzjhzb * 10000) / 100
-                                }
-                                if (!that.jiaoyanObj[i].t_mjsbjdxzjhzbName) {
-                                        name.push(that.jiaoyanObj[i].t_mjsbjdxzjhzbZhName)
-                                } else {
-                                        nameMid=that.jiaoyanObj[i].t_mjsbjdxzjhzbZhName.split("—")
-                                        if(nameMid.length===2){
-                                                name.push(nameMid[1]+that.jiaoyanObj[i].t_mjsbjdxzjhzbName)
-                                        }else{
-                                                name.push(nameMid[0]+that.jiaoyanObj[i].t_mjsbjdxzjhzbName)
+                        let a=0
+                        let b=0
+                        let c=0
+                        // console.log('3423sdfsd',that.jiaoyanObj)
+                        if(that.jiaoyanObj.length === 0){
+                                val = [0]
+                                valAll = [0]
+                                e = [0]
+                                name = [0]
+                        }else{
+                                for (let i = 0; i < that.jiaoyanObj.length; i++) {
+                                        let num=0
+                                        let nameMid =''
+                                        if (that.jiaoyanObj[i].t_mjsbjdxzjhzb===0) {
+                                                num =0
+                                        } else {
+                                                num =Math.floor(that.jiaoyanObj[i].t_mjsbjdxzjhzbS/that.jiaoyanObj[i].t_mjsbjdxzjhzb * 10000) / 100
                                         }
+                                        if (!that.jiaoyanObj[i].t_mjsbjdxzjhzbName) {
+                                                name.push(that.jiaoyanObj[i].t_mjsbjdxzjhzbZhName)
+                                        } else {
+                                                nameMid=that.jiaoyanObj[i].t_mjsbjdxzjhzbZhName.split("—")
+                                                if(nameMid.length===2){
+                                                        name.push(nameMid[1]+that.jiaoyanObj[i].t_mjsbjdxzjhzbName)
+                                                }else{
+                                                        name.push(nameMid[0]+that.jiaoyanObj[i].t_mjsbjdxzjhzbName)
+                                                }
+                                        }
+                                        valAll.push(that.jiaoyanObj[i].t_mjsbjdxzjhzb)
+                                        val.push(that.jiaoyanObj[i].t_mjsbjdxzjhzbS)
+                                        e.push(num)
+        
+                                        // name.push(that.jiaoyanObj[i].t_mjsbjdxzjhzbName)
+                                        
+        
                                 }
-                                valAll.push(that.jiaoyanObj[i].t_mjsbjdxzjhzb)
-                                val.push(that.jiaoyanObj[i].t_mjsbjdxzjhzbS)
-                                e.push(num)
-
-                                // name.push(that.jiaoyanObj[i].t_mjsbjdxzjhzbName)
-
                         }
+                        
+                        val.forEach( function(item){
+                                a += item ;
+                        });
+                        valAll.forEach( function(item){
+                                b += item ;
+                        });
+                        if(b===0){
+                                c=0
+                        }else{
+                                c= Math.floor(a/b * 10000) / 100
+                        }
+                        // console.log(val,valAll,e,name,a,b,c,"jsoi39")
                         return {
-                                "t_mjsbjdxzjhzbNum" :{"date": this.endDate,"number": val, "numberAll": valAll, "val": e, "name": name},
+                                "t_mjsbjdxzjhzbNum" :{"date": this.endDate,"number": val, "numberAll": valAll, "val": e, "name": name, "valnum":a,"valAll":b,"valna":c},
                                 "config":this.getMyConfig("检测") //返回需要的对应参数
                         }
                 },
@@ -68,29 +105,49 @@ export default {
                         let valAll = []
                         let e = []
                         let that = this
-                        for (let i = 0; i < that.hechaObj.length; i++) {
-                                let nameMid = ''
-                                // let num=0
-                                if (!that.hechaObj[i].t_sbhcjlbZhname) {
-                                        name.push(that.hechaObj[i].t_sbhcjlbName)
-                                } else {
-                                        nameMid=that.hechaObj[i].t_sbhcjlbName.split("—")
-                                        if(nameMid.length===2){
-                                                name.push(nameMid[1]+that.hechaObj[i].t_sbhcjlbZhname)
-                                        }else{
-                                                name.push(nameMid[0]+that.hechaObj[i].t_sbhcjlbZhname)
+                        let a=0
+                        let b=0
+                        let c=0
+                        if(that.hechaObj.length === 0){
+                                val = [0]
+                                valAll = [0]
+                                e = [0]
+                                name = [0]
+                        }else{
+                                for (let i = 0; i < that.hechaObj.length; i++) {
+                                        let nameMid = ''
+                                        // let num=0
+                                        if (!that.hechaObj[i].t_sbhcjlbZhname) {
+                                                name.push(that.hechaObj[i].t_sbhcjlbName)
+                                        } else {
+                                                nameMid=that.hechaObj[i].t_sbhcjlbName.split("—")
+                                                if(nameMid.length===2){
+                                                        name.push(nameMid[1]+that.hechaObj[i].t_sbhcjlbZhname)
+                                                }else{
+                                                        name.push(nameMid[0]+that.hechaObj[i].t_sbhcjlbZhname)
+                                                }
                                         }
+                                        valAll.push(that.hechaObj[i].t_sbhcjlb)
+                                        val.push(that.hechaObj[i].t_sbhcjlbS)
+                                        // e.push(num)
+
+                                        
+
                                 }
-                                valAll.push(that.hechaObj[i].t_sbhcjlb)
-                                val.push(that.hechaObj[i].t_sbhcjlbS)
-                                // e.push(num)
-
-                                
-
                         }
-                        console.log(val,valAll,name,that.hechaObj,'ssdddsdwew1231')
+                        val.forEach( function(item){
+                                a += item ;
+                        });
+                        valAll.forEach( function(item){
+                                b += item ;
+                        });
+                        if(b===0){
+                                c=0
+                        }else{
+                                c= Math.floor(a/b * 10000) / 100
+                        }
                         return {
-                                "t_sbhcjlbNum" :{"date": this.endDate,"number": val, "numberAll": valAll, "name": name},
+                                "t_sbhcjlbNum" :{"date": this.endDate,"number": val, "numberAll": valAll, "name": name,"valnum":a,"valAll":b,"valna":c},
                                 "config":this.getMyConfig("检测") //返回需要的对应参数
                         }
                 },
@@ -100,26 +157,49 @@ export default {
                         let valAll = []
                         let e = []
                         let that = this
-                        for (let i = 0; i < that.nengliObj.length; i++) {
-                                // let num=0
-                                // if (that.hechaObj[i].t_sbhcjlb===0) {
-                                //         num =0
-                                // } else {
-                                //         num =Math.floor(that.hechaObj[i].t_sbhcjlbS/that.hechaObj[i].t_sbhcjlb * 10000) / 100
-                                // }
-                                // valAll.push(that.hechaObj[i].t_sbhcjlb)
-                                val.push(that.nengliObj[i].num)
-                                // e.push(num)
-                                let nameMid = that.nengliObj[i].enname.split("—")
-                                if(nameMid.length===2){
-                                        name.push(nameMid[1]+that.nengliObj[i].zhname)
-                                }else{
-                                        name.push(nameMid[0]+that.nengliObj[i].zhname)
-                                }
+                        
+                        let a=0
+                        let b=0
+                        let c=0
+                        if(that.nengliObj.length === 0){
+                                val = [0]
+                                valAll = [0]
+                                e = [0]
+                                name = [0]
+                        }else{
+                                for (let i = 0; i < that.nengliObj.length; i++) {
+                                        // let num=0
+                                        // if (that.hechaObj[i].t_sbhcjlb===0) {
+                                        //         num =0
+                                        // } else {
+                                        //         num =Math.floor(that.hechaObj[i].t_sbhcjlbS/that.hechaObj[i].t_sbhcjlb * 10000) / 100
+                                        // }
+                                        // valAll.push(that.hechaObj[i].t_sbhcjlb)
+                                        val.push(that.nengliObj[i].num)
+                                        valAll.push(that.nengliObj[i].numS)
+                                        // e.push(num)
+                                        let nameMid = that.nengliObj[i].enname.split("—")
+                                        if(nameMid.length===2){
+                                                name.push(nameMid[1]+that.nengliObj[i].zhname)
+                                        }else{
+                                                name.push(nameMid[0]+that.nengliObj[i].zhname)
+                                        }
 
                         }
+                        }
+                        val.forEach( function(item){
+                                a += item ;
+                        });
+                        valAll.forEach( function(item){
+                                b += item ;
+                        });
+                        if(b===0){
+                                c=0
+                        }else{
+                                c= Math.floor(b/a * 10000) / 100
+                        }
                         return {
-                                "Num" :{"date": this.endDate,"number": val, "name": name},
+                                "Num" :{"date": this.endDate,"number": val, "name": name,"numberAll":valAll,"valnum":a,"valAll":b,"valna":c},
                                 "config":this.getMyConfig("检测") //返回需要的对应参数
                         }
                 },
@@ -128,22 +208,44 @@ export default {
                         let val =[]
                         let valAll = []
                         let e = []
+                        let a=0
+                        let b=0
+                        let c=0
                         let that = this
-                        for (let i = 0; i < that.biaozhunObj.length; i++) {
-                                // let num=0
-                                // if (that.hechaObj[i].t_sbhcjlb===0) {
-                                //         num =0
-                                // } else {
-                                //         num =Math.floor(that.hechaObj[i].t_sbhcjlbS/that.hechaObj[i].t_sbhcjlb * 10000) / 100
-                                // }
-                                // valAll.push(that.hechaObj[i].t_sbhcjlb)
-                                val.push(that.biaozhunObj[i].num)
-                                // e.push(num)
-                                name.push(that.biaozhunObj[i].name)
+                        if(that.biaozhunObj.length === 0){
+                                val = [0]
+                                valAll = [0]
+                                e = [0]
+                                name = [0]
+                        }else{
+                                for (let i = 0; i < that.biaozhunObj.length; i++) {
+                                        // let num=0
+                                        // if (that.hechaObj[i].t_sbhcjlb===0) {
+                                        //         num =0
+                                        // } else {
+                                        //         num =Math.floor(that.hechaObj[i].t_sbhcjlbS/that.hechaObj[i].t_sbhcjlb * 10000) / 100
+                                        // }
+                                        // valAll.push(that.hechaObj[i].t_sbhcjlb)
+                                        val.push(that.biaozhunObj[i].num)
+                                        valAll.push(that.biaozhunObj[i].numS)
+                                        // e.push(num)
+                                        name.push(that.biaozhunObj[i].name)
 
+                                }
+                        }
+                        val.forEach( function(item){
+                                a += item ;
+                        });
+                        valAll.forEach( function(item){
+                                b += item ;
+                        });
+                        if(b===0){
+                                c=0
+                        }else{
+                                c= Math.floor(b/a * 10000) / 100
                         }
                         return {
-                                "Num" :{"date": this.endDate,"number": val, "name": name},
+                                "Num" :{"date": this.endDate,"number": val, "name": name, "numberAll": valAll,"valnum":a,"valAll":b,"valna":c},
                                 "config":this.getMyConfig("检测") //返回需要的对应参数
                         }
                 },
@@ -358,6 +460,9 @@ export default {
                         let numData = []
                         let numAData = []
                         let barData = []
+                        let a=0
+                        let b=0
+                        let c=0
                         // for (let i = 0; i < this.dataScope.length; i++) {
                         // let e=0
                         // if (mjzlkzxbSNum[0]===0) {
@@ -373,9 +478,16 @@ export default {
                         numAData.push(mjzlkzjlbNum[0])
                         barData.push(numData)
                         barData.push(numAData)
+                        a=mjzlkzxbSNum[0]+mjzlkzjlbSNum[0]
+                        b=mjzlkzxbNum[0]+mjzlkzjlbNum[0]
+                        if(b===0){
+                                c=0
+                        }else{
+                                c= Math.floor(a/b * 10000) / 100
+                        }
                         // }
                         return {
-                                "t_mjzlkzxbNum" :{"date": this.endDate,"number": numData, "numberAll": numAData,'val':barData},
+                                "t_mjzlkzxbNum" :{"date": this.endDate,"number": numData, "numberAll": numAData,'val':barData,"valnum":a,"valAll":b,"valna":c},
                                 "config":this.getMyConfig("内部质量") //返回需要的对应参数
                         }
                 },
@@ -399,7 +511,6 @@ export default {
                         numData.push(mjsyshdfxsbykzjhxbNum[0])
                         barData.push(e)
                         // }
-                        // console.log(numData,'sddsddwqwww')
                         return {
                                 "t_mjsyshdfxsbykzjhxbNum" :{"date": this.endDate,"number": mjsyshdfxsbykzjhxbSNum, "numberAll":mjsyshdfxsbykzjhxbNum, "res":barData},
                                 "config":this.getMyConfig("内部质量") //返回需要的对应参数

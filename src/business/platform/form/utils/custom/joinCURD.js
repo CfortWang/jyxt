@@ -41,6 +41,12 @@ const post = (url, data) => {
   else if (url == "sendmessages") { //插入主管提醒数据
     pash = 'sendmessages'
   }
+  else if (url == "notice") { //插入公告短信
+    pash = 'sendNoticeMsg'
+  }
+  else if (url == "financial") { //插入财务短信
+    pash = 'sendFinancialMsg'
+  }
 
   if (typeof data == "object") {
     data = JSON.stringify(data)
@@ -63,11 +69,15 @@ const post = (url, data) => {
     requestData = data.slice(0, 1) + '"sig":"' + md5 + '",' + data.slice(1) //结果拼接
 
   }
+
+  let isMsg = ['sendNoticeMsg', 'sendFinancialMsg'].includes(pash)
+  let requestUrl = isMsg ? 'business/v3/hwsys/universal/' : 'business/v3/sys/universal/'
   return request({
-    url: 'business/v3/sys/universal/' + pash,
+    url: requestUrl + pash,
     method: 'post',
     data: requestData
   })
+
 }
 /* 直接传入sql的签名算法   MD5加密*/
 function sig(sql) {

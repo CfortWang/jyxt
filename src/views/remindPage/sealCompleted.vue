@@ -3,7 +3,7 @@
         <div class="center">
             <img class="ok-img" src="../../assets/images/success/completed.png" alt="">
             <div>
-                签章已经完成，请关闭当前页面，回到上个页面继续检测流程
+                签章已经完成，请关闭当前页面，回到上个页面继续相关操作。
             </div>
         </div>
     </div>

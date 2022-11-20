@@ -26,7 +26,7 @@
 <script>
   import $dialog from '@/utils/dialog'
   import store from '@/store'
-  import templateStatis from '@/views/statistics/index.vue'
+  import templateStatis from '@/views/statistics/indexold.vue'
   import { mapState, mapGetters, mapActions } from 'vuex'
   export default {
     components:{

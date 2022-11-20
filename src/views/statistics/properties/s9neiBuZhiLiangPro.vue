@@ -15,33 +15,40 @@
       <div>
 
     <el-container>
-      <el-aside style="border:0px;width: 13%;"></el-aside>
+      <!-- <el-aside style="border:0px;width: 13%;"></el-aside> -->
       <!-- 放统计内容-->
-      <el-aside style="border:0px;width: 50%;">
+      <el-aside style="border:0px;width: 70%;margin-top:2%;">
           <s9neiBuZhiLiangItem
             :data="data"
-            width="95%"
+            width="50%"
             :height="height"
             id="s9neibuPro"
             click="false"
           />
+          <s9neiBuZhiLiangCItem
+            :data="data"
+            width="50%"
+            :height="height"
+            id="s9neibuCPro"
+            click="false"
+          />
       </el-aside>
         <!-- 参数页面列 -->
-        <el-aside style="border:0px;width: 37%;">
+        <el-aside style="border:0px;width: 30%;">
            <div class="dataCont" style="font-size: 14px;">
             <el-divider content-position="left">{{data.t_mjzlkzxbNum.date}} 年度</el-divider>
-              年度质量控制计划完成数量 ：<el-tag>{{data.t_mjzlkzxbNum.number[1]}} 次</el-tag>
+              计划内质量控制计划完成数量 ：<el-tag>{{data.t_mjzlkzxbNum.number[1]}} 次</el-tag>
               <br>
-              年度质量控制计划总数 ：<el-tag>{{data.t_mjzlkzxbNum.number[2]}} 次</el-tag>
+              计划内质量控制计划总数 ：<el-tag>{{data.t_mjzlkzxbNum.number[2]}} 次</el-tag>
               <br>
-              年度质量控制计划完成率 ：<el-tag>{{data.t_mjzlkzxbNum.number[2]==null||data.t_mjzlkzxbNum.number[2]==0?"0.00":(data.t_mjzlkzxbNum.number[1]/data.t_mjzlkzxbNum.number[2]*100).toFixed(2)}} %</el-tag>
+              计划内质量控制计划完成率 ：<el-tag>{{data.t_mjzlkzxbNum.number[2]==null||data.t_mjzlkzxbNum.number[2]==0?"0.00":(data.t_mjzlkzxbNum.number[1]/data.t_mjzlkzxbNum.number[2]*100).toFixed(2)}} %</el-tag>
               <br>
               <br>
-              部门质量控制计划完成数量 ：<el-tag>{{data.t_mjzlkzxbNum.numberAll[1]}} 次</el-tag>
+              计划外质量控制计划完成数量 ：<el-tag>{{data.t_mjzlkzxbNum.numberAll[1]}} 次</el-tag>
               <br>
-              部门质量控制计划总数 ：<el-tag>{{data.t_mjzlkzxbNum.numberAll[2]}} 次</el-tag>
+              计划外质量控制计划总数 ：<el-tag>{{data.t_mjzlkzxbNum.numberAll[2]}} 次</el-tag>
               <br>
-              部门质量控制计划完成率 ：<el-tag>{{data.t_mjzlkzxbNum.numberAll[2]==null||data.t_mjzlkzxbNum.numberAll[2]==0?"0.00":(data.t_mjzlkzxbNum.numberAll[1]/data.t_mjzlkzxbNum.numberAll[2]*100).toFixed(2)}} %</el-tag>
+              计划外质量控制计划完成率 ：<el-tag>{{data.t_mjzlkzxbNum.numberAll[2]==null||data.t_mjzlkzxbNum.numberAll[2]==0?"0.00":(data.t_mjzlkzxbNum.numberAll[1]/data.t_mjzlkzxbNum.numberAll[2]*100).toFixed(2)}} %</el-tag>
               <br>
             <br>
               <!-- <div v-for="(item,i) in data.t_complaintNum.number" :key="i">
@@ -76,12 +83,13 @@
         },
         height:{
           type:String,
-          default:window.screen.height * 0.75 +'px'
+          default:window.screen.height * 0.5 +'px'
         }
       },
       beforeCreate: function () {
           // 官方文档给出的是require
            this.$options.components.s9neiBuZhiLiangItem = () => import('../item/s9neiBuZhiLiang.vue')
+           this.$options.components.s9neiBuZhiLiangCItem = () => import('../item/s9neiBuZhiLiangCol.vue')
           },
 
     watch:{

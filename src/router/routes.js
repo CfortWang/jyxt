@@ -111,6 +111,15 @@ const frameOut = [
     },
     component: _import('/viewFile')
   },
+  //内审不符合项统计的跳转
+  {
+    path: '/inconformity',
+    name: 'inconformity',
+    meta: {
+      title: '不符合项统计',
+    },
+    component: _import('/warehouse')
+  },
 /*  */  {
     path: '/register',
     name: 'register',

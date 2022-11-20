@@ -1,7 +1,7 @@
 <template>
   <div class="sample-content">
     <!-- 表格組件 -->
-    <div class="selectPo" @dblclick="positionBtn">
+    <div class="selectPo" @click="positionBtn">
       <el-input type="text" v-model="placeValue" clearable></el-input>
       <!-- <div>{{ placeValue }}</div> -->
       <input type="text" v-model="value" style="opacity: 0; position: fixed" />

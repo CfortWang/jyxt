@@ -85,44 +85,65 @@
         //   barData.push(e)
         // }
         //  let e=[this.data.t_ryywpxjlNum.number[0],this.data.t_ryywpxjlNum.numberAll[0],this.data.t_ryywpxjlNum.res[0]]
-        let e=100-this.data.t_mjsbjdxzjhzbNum.valna
 
-
-
+        let e=[this.data.t_mjsbjdxzjhzbNum.valAll,this.data.t_mjsbjdxzjhzbNum.valnum]
         var option;
         option = {
           //v3
-          title: {
-            text: this.title,
-            // subtext: 'Fake Data',
-            left: 'left',
-            textStyle:{ fontSize:14 }
-          },
-          tooltip: {
-            trigger: 'item'
-          },
-          color:['#9999ff','#cccc00'],
-          series: [
-            {
-              type: 'pie',
-              radius: '50%',
-              label: {
-                formatter: '{b}: {d}%'
+          legend: {},
+            tooltip: {
+              trigger: 'axis',
+              axisPointer: {
+                type: 'shadow'
               },
-              data: [
-                { value: this.data.t_mjsbjdxzjhzbNum.valna, name: '检定完成率' },
-                { value: e, name: '检定未完成率' }
-              ],
-              emphasis: {
+              // formatter: function (params) {
+              //   return params[0].data[0] + '<br/>满意份数：' + params[0].data[1] + '<br/>调查总份数: ' + params[0].data[2];
+              // }
+            },
+            // dataset: {
+            //   source: barData
+            // },
+            xAxis: { 
+              type: 'category',
+              data:['设备检定/校验计划总数', '设备检定/校验计划已完成数量']
+
+            },
+            yAxis: [
+              {
+                type: 'value',
+                scale: true,
+                name: '数量',
+                max: this.data.t_mjsbjdxzjhzbNum.valnum>this.data.t_mjsbjdxzjhzbNum.valAll?this.data.t_mjsbjdxzjhzbNum.valnum+1:this.data.t_mjsbjdxzjhzbNum.valAll+1,
+                min: 0,
+              },
+            ],
+            series: [
+              {
+                data: e,
+                type: 'bar',
+                barWidth: '20%',
                 itemStyle: {
-                  shadowBlur: 10,
-                  shadowOffsetX: 0,
-                  shadowColor: 'rgba(0, 0, 0, 0.5)'
-                }
+                  color: '#0099ff'
+                },
+                label: {
+                  show: true,
+                  position: 'top'
+                },
               }
-            }
-          ]
-       
+            ],
+            grid: {
+              top: '20%',
+              left: '3%',
+              right: '4%',
+              bottom: '10%',
+              containLabel: true
+            },
+            title: {
+              text: this.title,
+              textStyle:{ fontSize:14 }
+
+              // subtext: "        "+beingDate+"-"+endDate
+            },
         };
 
 

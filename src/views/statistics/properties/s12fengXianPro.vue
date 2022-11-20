@@ -15,25 +15,32 @@
       <div>
 
     <el-container>
-      <el-aside style="border:0px;width: 13%;"></el-aside>
+      <!-- <el-aside style="border:0px;width: 13%;"></el-aside> -->
       <!-- 放统计内容-->
-      <el-aside style="border:0px;width: 50%;">
+      <el-aside style="border:0px;width: 70%;margin-top:2%;">
           <s12fengXianItem
             :data="data"
-            width="95%"
+            width="50%"
             :height="height"
             id="s5renYuanJianDuPro"
             click="false"
           />
+          <s12fengXianCItem
+            :data="data"
+            width="50%"
+            :height="height"
+            id="s5renYuanJianDuCPro"
+            click="false"
+          />
       </el-aside>
         <!-- 参数页面列 -->
-        <el-aside style="border:0px;width: 37%;">
+        <el-aside style="border:0px;width: 30%;">
           <el-divider content-position="left">{{data.t_mjsyshdfxsbykzjhxbNum.date}} 年度</el-divider>
-            已完成数量 ：<el-tag>{{data.t_mjsyshdfxsbykzjhxbNum.number[0]}} 次</el-tag>
+            实验室活动风险识别与控制计划已完成数量 ：<el-tag>{{data.t_mjsyshdfxsbykzjhxbNum.number[0]}} 次</el-tag>
             <br>
-            总数 ：<el-tag>{{data.t_mjsyshdfxsbykzjhxbNum.numberAll[0]}} 次</el-tag>
+            实验室活动风险识别与控制计划总数 ：<el-tag>{{data.t_mjsyshdfxsbykzjhxbNum.numberAll[0]}} 次</el-tag>
             <br>
-            计划完成率 ：<el-tag>{{data.t_mjsyshdfxsbykzjhxbNum.res[0]}} %</el-tag>
+            实验室活动风险识别与控制计划完成率 ：<el-tag>{{data.t_mjsyshdfxsbykzjhxbNum.res[0]}} %</el-tag>
             <br>
           <!-- <div v-for="(item,i) in data.t_zljdNum.date" :key="i">
             <el-divider content-position="left">{{data.t_zljdNum.date[i]}} 年度</el-divider>
@@ -79,12 +86,13 @@
         },
         height:{
           type:String,
-          default:window.screen.height * 0.75 +'px'
+          default:window.screen.height * 0.5 +'px'
         }
       },
       beforeCreate: function () {
           // 官方文档给出的是require
            this.$options.components.s12fengXianItem = () => import('../item/s12fengXian.vue')
+           this.$options.components.s12fengXianCItem = () => import('../item/s12fengXianCol.vue')
           },
 
     watch:{

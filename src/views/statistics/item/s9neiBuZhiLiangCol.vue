@@ -44,7 +44,7 @@
     },
     data () {
       return {
-        title:'质量控制计划完成率',
+        title:'质量控制计划数量',
         dialogOff:false,
         measured:[]
       }
@@ -73,39 +73,61 @@
 
         //v3
         // let e=[this.data.t_complaintNum.number[0],this.data.t_complaintNum.numberAll[0],this.data.t_complaintNum.res[0]]
-        let e = 100 -this.data.t_mjzlkzxbNum.valna
 
         option = {
-          title: {
-            text: this.title,
-            // subtext: 'Fake Data',
-            left: 'left',
-            textStyle:{ fontSize:14 }
-          },
-          tooltip: {
-            trigger: 'item'
-          },
-          color:['#0099ff','#ffcccc'],
-          series: [
-            {
-              type: 'pie',
-              radius: '50%',
-              label: {
-                formatter: '{b}: {d}%'
-              },
-              data: [
-                { value: this.data.t_mjzlkzxbNum.valna, name: '质量控制计划完成率' },
-                { value: e, name: '质量控制计划未完成率' }
-              ],
-              emphasis: {
-                itemStyle: {
-                  shadowBlur: 10,
-                  shadowOffsetX: 0,
-                  shadowColor: 'rgba(0, 0, 0, 0.5)'
+            grid: {
+              top: '20%',
+              left: '3%',
+              right: '4%',
+              bottom: '10%',
+              containLabel: true
+            },
+            title: {
+              text: this.title,
+              textStyle:{ fontSize:14 }
+
+              // subtext: "        "+beingDate+"-"+endDate
+            },
+            legend: {},
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                  type: 'shadow'
+                },
+                formatter: function (datas) {
+                    console.log(datas,'sdsdds')
+                    var res=datas[0].data[0]+"<BR>"+'已完成：'+datas[0].data[1]+"<BR>"
+                    res+='总计划：'+datas[0].data[2]+"<BR>"
+                    res+='百分比:'+(datas[0].data[2]==null||datas[0].data[2]==0?"0.00":(datas[0].data[1]/datas[0].data[2]*100).toFixed(2))+"%"
+                    return res
                 }
-              }
-            }
-          ]
+            },
+            dataset: {
+                source: this.data.t_mjzlkzxbNum.val
+            },
+            xAxis: { type: 'category' },
+            yAxis: {},
+            // Declare several bar series, each will be mapped
+            // to a column of dataset.source by default.
+            series: [{ 
+              type: 'bar',
+              itemStyle: {color: '#cccc33'},
+              barWidth: '20%',
+              label: {
+                show: true,
+                position: 'top'
+              },
+            },
+            { 
+              type: 'bar',
+              itemStyle: {color: '#66CCCC'},
+              barWidth: '20%',
+
+              label: {
+                show: true,
+                position: 'top'
+              },
+            }]
         };
 
         option && s9neibu.setOption(option);

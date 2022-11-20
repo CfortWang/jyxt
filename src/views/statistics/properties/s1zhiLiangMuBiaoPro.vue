@@ -15,25 +15,34 @@
       <div>
         <el-container>
           <!-- 放统计内容-->
-          <el-aside style="border:0px;width: 13%;"></el-aside>
-          <el-aside style="border:0px;width: 50%;">
+          <!-- <el-aside style="border:0px;width: 13%;"></el-aside> -->
+          <el-aside style="border:0px;width: 70%;margin-top: 2%;">
               <s5zhiLiangMuBiaoItem
                 :data="data"
-                width="95%"
+                width="50%"
                 :height="height"
                 id="s5zhiLiangMuBiaoPro"
                 click="false"
               />
+              <s5zhiLiangMuBiaoItemC
+                :data="data"
+                width="50%"
+                :height="height"
+                id="s5zhiLiangMuBiaoCPro"
+                click="false"
+              />
           </el-aside>
             <!-- 参数页面列 -->
-            <el-aside style="border:0px;width: 37%;">
-              <el-divider content-position="left">{{data.t_jchzbNum.date}} 年度</el-divider>
-              按时完成的检测项目数量 ：<el-tag>{{data.t_jchzbNum.number[0]}} 次</el-tag>
-              <br>
-              有效检测任务总数 ：<el-tag>{{data.t_jchzbNum.numberAll[0]}} 次</el-tag>
-              <br>
-              任务及时完成率 ：<el-tag>{{data.t_jchzbNum.res[0]}} %</el-tag>
-              <br>
+            <el-aside style="border:0px;width: 30%;">
+              <div class="dataCont" style="font-size: 14px;">
+                <el-divider content-position="left">{{data.t_jchzbNum.date}} 年度</el-divider>
+                按时完成的检测项目数量 ：<el-tag>{{data.t_jchzbNum.number[0]}} 次</el-tag>
+                <br>
+                有效检测任务总数 ：<el-tag>{{data.t_jchzbNum.numberAll[0]}} 次</el-tag>
+                <br>
+                任务及时完成率 ：<el-tag>{{data.t_jchzbNum.res[0]}} %</el-tag>
+                <br>
+              </div>
               <!-- <div class="dataCont" style="font-size: 14px;">
               <el-divider content-position="left">2021 年度</el-divider>
                 投诉处理率 ：<el-tag>90%</el-tag>
@@ -80,12 +89,13 @@
         },
         height:{
           type:String,
-          default:window.screen.height * 0.75 +'px'
+          default:window.screen.height * 0.5 +'px'
         }
       },
       beforeCreate: function () {
           // 官方文档给出的是require
            this.$options.components.s5zhiLiangMuBiaoItem = () => import('../item/s1zhiLiangMuBiao.vue')
+           this.$options.components.s5zhiLiangMuBiaoItemC = () => import('../item/s1zhiLiangMuBiaoCol.vue')
           },
 
     watch:{

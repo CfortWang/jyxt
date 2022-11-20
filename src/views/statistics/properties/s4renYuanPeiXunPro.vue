@@ -15,26 +15,36 @@
       <div>
 
     <el-container>
-      <el-aside style="border:0px;width: 13%;"></el-aside>
+      <!-- <el-aside style="border:0px;width: 13%;"></el-aside> -->
       <!-- 放统计内容-->
-      <el-aside style="border:0px;width: 50%;">
+      <el-aside style="border:0px;width: 70%;margin-top: 2%;">
           <s4renYuanPeiXunItem
             :data="data"
-            width="95%"
+            width="50%"
             :height="height"
             id="s4renYuanPeiXunPro"
             click="false"
           />
+          <s4renYuanPeiXunCItem
+            :data="data"
+            width="50%"
+            :height="height"
+            id="s4renYuanPeiXunCPro"
+            click="false"
+          />
       </el-aside>
         <!-- 参数页面列 -->
-        <el-aside style="border:0px;width: 37%;">
-          <el-divider content-position="left">{{data.t_ryywpxjlNum.date}} 年度</el-divider>
-            已完成培训数量 ：<el-tag>{{data.t_ryywpxjlNum.number[0]}} 次</el-tag>
-            <br>
-            所有培训数量 ：<el-tag>{{data.t_ryywpxjlNum.numberAll[0]}} 次</el-tag>
-            <br>
-            培训完成率 ：<el-tag>{{data.t_ryywpxjlNum.res[0]}} %</el-tag>
-            <br>
+        <el-aside style="border:0px;width: 30%;">
+          <div class="dataCont" style="font-size: 14px;">
+
+            <el-divider content-position="left">{{data.t_ryywpxjlNum.date}} 年度</el-divider>
+              已完成培训数量 ：<el-tag>{{data.t_ryywpxjlNum.number[0]}} 次</el-tag>
+              <br>
+              所有培训数量 ：<el-tag>{{data.t_ryywpxjlNum.numberAll[0]}} 次</el-tag>
+              <br>
+              培训完成率 ：<el-tag>{{data.t_ryywpxjlNum.res[0]}} %</el-tag>
+              <br>
+          </div>
           <!-- <div v-for="(item,i) in data.t_ryywpxjlNum.date" :key="i">
             <el-divider content-position="left">{{data.t_ryywpxjlNum.date[i]}} 年度</el-divider>
             已完成培训数量 ：<el-tag>{{data.t_ryywpxjlNum.number[i]}} 次</el-tag>
@@ -79,12 +89,13 @@
         },
         height:{
           type:String,
-          default:window.screen.height * 0.75 +'px'
+          default:window.screen.height * 0.5 +'px'
         }
       },
       beforeCreate: function () {
           // 官方文档给出的是require
            this.$options.components.s4renYuanPeiXunItem = () => import('../item/s4renYuanPeiXun.vue')
+           this.$options.components.s4renYuanPeiXunCItem = () => import('../item/s4renYuanPeiXunCol.vue')
           },
 
     watch:{

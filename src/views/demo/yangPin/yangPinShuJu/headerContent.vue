@@ -66,7 +66,7 @@ export default {
       this.getReceivedData()
       this.getUnqualifiedData()
       this.getStayData()
-      console.log('执行了定时器',this.sendTime)
+      // console.log('执行了定时器',this.sendTime)
       //数据回来之后调用触发this.$emit,触发父组件自定义方法获取时间
       this.getNowTime()
       // this.$emit('getUpdateTime',this.sendTime)
@@ -89,7 +89,7 @@ export default {
           hour: nowDate.getHours(),
       }
       this.sendTime = date.year + '年' + date.month + '月' + date.day + '日' +date.hour + '时' 
-      console.log("获取时间函数执行了",this.sendTime)
+      // console.log("获取时间函数执行了",this.sendTime)
       //获取时间的时候直接传给父组件
       this.$emit('getUpdateTime',this.sendTime)
     },
