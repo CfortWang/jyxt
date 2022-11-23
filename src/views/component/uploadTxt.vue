@@ -22,6 +22,32 @@
                 fileName: ''
             }
         },
+        mounted() {
+            (function(){
+                //定义一个变量让setItem函数的值指向它
+                let originalSetItem = localStorage.setItem
+                //重写setItem函数
+                localStorage.setItem = function(key,newValue){
+                    //创建setItemEvent事件
+                    let event = new Event("setItemEvent")
+                    event.key = key
+                    event.newValue = newValue
+                    //提交setItemEvent事件
+                    window.dispatchEvent(event)
+                    //执行原setItem函数
+                    originalSetItem.apply(this, arguments)
+                }
+            })()
+
+            let ele = document.getElementById('uploadTxt')
+            // 监听localStorage, 清除已选文件
+            window.addEventListener('setItemEvent', e => {
+                if (e.key === 'tempFile') {
+                    ele.value = ''
+                    this.fileName = ''
+                }
+            })
+        },
         methods: {
             onChange(e) {
                 const { files } = e.dataTransfer || e.target
