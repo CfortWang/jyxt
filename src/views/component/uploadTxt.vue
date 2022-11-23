@@ -42,7 +42,7 @@
             let ele = document.getElementById('uploadTxt')
             // 监听localStorage, 清除已选文件
             window.addEventListener('setItemEvent', e => {
-                if (e.key === 'tempFile') {
+                if (e.key === 'areaData') {
                     ele.value = ''
                     this.fileName = ''
                 }
