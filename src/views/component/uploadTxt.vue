@@ -27,11 +27,11 @@
                 // 定义一个变量让setItem函数的值指向它
                 let originalSetItem = localStorage.setItem
                 // 重写setItem函数
-                localStorage.setItem = (key, value) => {
+                localStorage.setItem = function (key, newValue) {
                     // 创建setItemEvent事件
                     let event = new Event('setItemEvent')
                     event.key = key
-                    event.value = value
+                    event.newValue = newValue
                     // 提交setItemEvent事件
                     window.dispatchEvent(event)
                     // 执行原setItem函数
@@ -52,7 +52,9 @@
             onChange(e) {
                 const { files } = e.dataTransfer || e.target
                 // console.log(files)
-                this.fileName = files[0].name
+                if (files && files.length) {
+                    this.fileName = files[0].name
+                }
             }
         }
     }
