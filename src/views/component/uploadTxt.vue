@@ -24,17 +24,17 @@
         },
         mounted() {
             (function(){
-                //定义一个变量让setItem函数的值指向它
+                // 定义一个变量让setItem函数的值指向它
                 let originalSetItem = localStorage.setItem
-                //重写setItem函数
-                localStorage.setItem = function(key,newValue){
-                    //创建setItemEvent事件
-                    let event = new Event("setItemEvent")
+                // 重写setItem函数
+                localStorage.setItem = (key, value) => {
+                    // 创建setItemEvent事件
+                    let event = new Event('setItemEvent')
                     event.key = key
-                    event.newValue = newValue
-                    //提交setItemEvent事件
+                    event.value = value
+                    // 提交setItemEvent事件
                     window.dispatchEvent(event)
-                    //执行原setItem函数
+                    // 执行原setItem函数
                     originalSetItem.apply(this, arguments)
                 }
             })()
