@@ -25,5 +25,7 @@ export const requestPath = {
     // 财务短信
     financial: 'business/v3/hwsys/universal/sendFinancialMsg',
     // 创建流程
-    process: 'business/v3/bpm/modeler/save'
+    createProcess: 'business/v3/bpm/modeler/save',
+    // 设置流程
+    setProcess: 'business/v3/bpm/definition/saveSetting/vo'
 }

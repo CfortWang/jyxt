@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 import md5 from 'js-md5';
-import { processData } from './process'
+import { processCreate, processEdit } from './process'
 import { requestType, requestPath } from './requestType'
 
 // export function Update (name, where, cond) {
@@ -14,31 +14,59 @@ import { requestType, requestPath } from './requestType'
 const post = (method, data) => {
     let path = requestType[method]
     let requestData = ''
+    // 部分接口保留参数，用于后续接口传参
+    let retainData = null
 
-    if (typeof data == "object") {
+    const process = {
+        createProcess: processCreate,
+        setProcess: processEdit
+    }
+    let isProcess = Object.keys(process).includes(method)
+
+    if (typeof data == "object" && !isProcess) {
         data = JSON.stringify(data)
     }
 
-    if (data && data.slice(2, 1) == "l") {
+    // 原有逻辑,根据 data 值判断
+    // if (data && data.slice(2, 1) == "l") {
+    //     // 往主管表提交数据
+    //     data = '{"str":"' + data + '"}'
+    //     requestData = dealData(data)
+    // } else if (data && data.slice(0, 1) == "s") {
+    //     // 判断是{}的参数，还是纯sql字符串的参数 , 纯sql补全。
+    //     data = '{"sql":"' + data + '"}'
+    //     requestData = dealData(data)
+    // } else { //对象转字符串
+    //     requestData = dealData(data)
+    // }
+
+    // 改为根据 method 判断是否对数据做特殊处理
+    if (method === 'str' && data) {
         // 往主管表提交数据
         data = '{"str":"' + data + '"}'
         requestData = dealData(data)
-    } else if (data && data.slice(0, 1) == "s") {
-        // 判断是{}的参数，还是纯sql字符串的参数 , 纯sql补全。
+    } else if (method === 'sql' && data) {
+        // sql 类型参数补全
         data = '{"sql":"' + data + '"}'
         requestData = dealData(data)
-    } else if (method === 'process') { //对象转字符串
-        requestData = processData
+    } else if (isProcess) {
+        // 创建流程及编辑流程时数据特殊处理
+        requestData = process[method](data)
+        retainData = requestData.customParams
+        console.log(requestData)
     } else { //对象转字符串
         requestData = dealData(data)
     }
 
-    let isSpecial = ['notice', 'financial', 'process'].includes(method)
+    
+
+    let isSpecial = Object.keys(requestPath).includes(method)
     let requestUrl = isSpecial ? requestPath[method] : `business/v3/sys/universal/${ path }`
     return request({
         url: requestUrl,
         method: 'post',
-        data: requestData
+        data: requestData,
+        retainData
     })
 }
 

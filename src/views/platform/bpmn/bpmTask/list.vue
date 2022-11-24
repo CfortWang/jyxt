@@ -329,60 +329,58 @@
 			 * 审批
 			 */
 			handleApprove(id) {
-				let this_ = this
 				// this_.editId = id
-				//                             this_.bpmnFormrenderDialogVisible = true
-				//                             return
-				console.log("11111", request)
+				// this_.bpmnFormrenderDialogVisible = true
+				// return
+
 				// getFormDataFlag(JSON.stringify({taskId:id})).then(response => {
-				//   console.log("111")
-				//   if( response.data.data=='Y'){
-				//     this_.editId = id
-				//     this_.bpmnFormrenderDialogVisible = true
-				//   }else{
-				//                    ActionUtils.success('任务生成中、请稍后重试...!')
-				//                    this_.search()
-				//   }
-				//  })
+                //     console.log("111")
+                //     if( response.data.data=='Y'){
+                //         this_.editId = id
+                //         this_.bpmnFormrenderDialogVisible = true
+                //     }else{
+                //         ActionUtils.success('任务生成中、请稍后重试...!')
+                //         this_.search()
+                //     }
+                // })
 
                 // 打开表单前给给flowName赋值，避免流程节点状态bug
                 this.flowName = this.listData.find(item => item.id === id).name
 
-				request({
-					url: BUSINESS_BASE_URL() + '/getFormData/flag',
-					method: 'post',
-					data: JSON.stringify({
-						taskId: id
-					})
-				}).then(response => {
-					if (response.data != 'N') {
-						this_.editId = id
-						this_.bpmnFormrenderDialogVisible = true
-					} else {
-						ActionUtils.success('任务生成中、请稍后重试...!')
-						this_.search()
-					}
-				})
+                request({
+                    url: BUSINESS_BASE_URL() + '/getFormData/flag',
+                    method: 'post',
+                    data: JSON.stringify({
+                        taskId: id
+                    })
+                }).then(response => {
+                    if (response.data != 'N') {
+                        this.editId = id
+                        this.bpmnFormrenderDialogVisible = true
+                    } else {
+                        ActionUtils.success('任务生成中、请稍后重试...!')
+                        this.search()
+                    }
+                })
 
-				//       let sql = "select ID_,HOT_READ_ from ibps_bpm_tasks where TASK_ID_='"+id+"'"
-				//  curdPost('sql',sql).then(response => {
-				//      if( response.variables.data.length>0){
-				//        if( response.variables.data[0].HOT_READ_=='1'){
-				//         this_.editId = id
-				//         this_.bpmnFormrenderDialogVisible = true
-
-				//        }else{
-				//         ActionUtils.success('任务生成中、请稍后重试...!')
-				//         this_.search()
-				//        }
-				//      }else{
-				//         ActionUtils.success('任务状态已过期、请刷新页面...!')
-				//         this_.search()
-				//        }
-				// })
+                // let sql = "select ID_,HOT_READ_ from ibps_bpm_tasks where TASK_ID_='"+id+"'"
+                // curdPost('sql', sql).then(response => {
+                //     if( response.variables.data.length>0){
+                //         if ( response.variables.data[0].HOT_READ_=='1') {
+                //             this_.editId = id
+                //             this_.bpmnFormrenderDialogVisible = true
+                //         } else {
+                //             ActionUtils.success('任务生成中、请稍后重试...!')
+                //             this_.search()
+                //         }
+                //     } else {
+                //         ActionUtils.success('任务状态已过期、请刷新页面...!')
+                //         this_.search()
+                //     }
+                // })
 			},
 			handleLinkClick(data, columns) {
-				this.flowName = data.name
+                this.flowName = data.name
 				this.handleApprove(data[this.pkKey])
 			}
 		}
