@@ -60,6 +60,8 @@ export default {
     submitData(type) {
       // this指针
       let this_ = this;
+      let changeWeiZhi;
+      let changesyWeiZhi;
       // 回传关闭事件。隐藏当前组件。
       let judge = true;
         this.$confirm('请再次确认 [样品接收信息]').then(_ => {
@@ -150,6 +152,8 @@ export default {
               for(let index in ypIdList){
                 let WZtem = ypWeiZhi[index]==null?'':ypWeiZhi[index]
                 let LYWZtem = ypLiuYangWeiZhi[index]==null?'':ypLiuYangWeiZhi[index]
+                changeWeizhi = WZtem;
+                changesyWeizhi = LYWZtem;
                 repostCurd('update','{"tableName":"t_mjypdjb","paramWhere":'+ypIdList[index]+',"paramCond":'+'{"shou_yang_wei_zhi":"'+WZtem+'","jie_yang_shu_lian":"'+saoMaNumList[index]+'","jie_yang_zhuang_t":"'+jieYangQueRenZTList[index]+'","liu_yang_wei_zhi_":"'+ LYWZtem + '"}}')
             }
             for(let num in dWhere){

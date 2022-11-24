@@ -1,7 +1,14 @@
 <template>
   <div class="sample-content">
     <!-- 表格組件 -->
-    <div class="selectArea">
+    <!-- <div @dblclick="clickBtn">{{ showValue }}</div> -->
+    <div @click="clickBtn" style="cursor: pointer;" >
+      <div >点击选择位置</div>
+      <!-- <input placeholder="请输入内容" :value="showValue"  id="valueDom" @click="onChange"> -->
+    </div>
+    <!-- <el-input></el-input> -->
+    <div class="selectArea" v-if="ifshow">
+      <div @click="close" class="close-content"> <i class="el-icon-close"></i><el-button class="closeBtn">关闭视图</el-button></div>
       <div class="top-content">
         <div class="top-title">库存可视化</div>
         <div class="query-content">
@@ -79,11 +86,11 @@
             >
               <div>
                 <div class="goods-level">
-                  <div class="level-dsc" @click="closeView(listData[index])">
+                  <div class="level-dsc">
                     <!-- 第{{ index | indexfilter(listData) }}层 -->
                     第{{ index }}层
                   </div>
-                  <div @click="closeView(listData[index])" class="goods-list">
+                  <div class="goods-list">
                     <div
                       v-for="(it, index) in listData[index]"
                       :key="index"
@@ -92,15 +99,12 @@
                         background:
                           it.cun_fang_wei_zhi_ == '空' ? '' : '#67c23a',
                       }"
+                      @click="closeView(it)"
                     >
                       <div class="top-dsc">
                         <div class="position">
                           <p>名称：{{ it.wu_liao_ming_chen || 空 }}</p>
-                          <p>
-                            编码：{{
-                              it.wu_liao_bian_ma_ || it.wu_liao_bian_ma_
-                            }}
-                          </p>
+                          <p>编码：{{ it.wu_liao_bian_ma_ || it.wu_liao_bian_ma_ }}</p>
                           <p>位置：{{ it.wei_zhi_ || it.cun_fang_wei_zhi_ }}</p>
                           <p>货号:{{ it.huo_hao_ || "空" }}</p>
                         </div>
@@ -161,7 +165,30 @@ export default {
       loading: false,
       pagination: {},
       secondshow: false,
+      ifshow: false,
+      showValue: "",
+      value:"111"
     };
+  },
+  props: {
+    field: Object,
+    formData: {
+      type: Object,
+      default() {
+        return {};
+      },
+    },
+    readonly:{
+      type:Boolean,
+      default: false
+    },
+    component_12u7eoo:{
+      type:String,
+      default(){
+        return 111
+      }
+    }
+    
   },
   filters: {
     indexfilter: function (value, data) {
@@ -203,14 +230,72 @@ export default {
     this.firstLoadViewData();
     this.firstLoadQuyu("试剂库1");
   },
+  beforeDestroy() {
+    console.log(this.formData, "formData");
+    let id = this.formData.id;
+    let Status = this.formData.anNiugTai;
+    let ming_chen = this.formInline.cang_ku_ming_chen_value;
+    let weizhi = this.showValue;
+    console.log(weizhi, ming_chen);
+    return
+    if (weizhi !="" &&Status =="已入库") {
+      // 数据库更新
+      curdPost(
+        "update",
+        '{"tableName":"t_mjwlgl","paramWhere":{"wai_jian_":"' +
+          id +
+          '",},"paramCond":{"cang_ku_ming_chen":"' +
+          ming_chen +
+          '","cun_fang_wei_zhi_":"' +
+          weizhi +
+          '"}}'
+      )
+        .then((res) => {
+          this.$message({
+            message: "当前物料位置更新状态更新成功",
+            type: "success",
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  },
   methods: {
+
+    onChange(e){
+      console.log("onChange")
+
+    },
+    closeView(value1) {
+      // let values = value[0];
+      // console.log(this.formData, "formData");
+      // console.log(value1);
+      //  this.showValue = value[0].wei_zhi_?value[0].wei_zhi_:value[0].cun_fang_wei_zhi_;
+      if (value1.wei_zhi_) {
+        this.showValue = value1.wei_zhi_;
+      } else if (value1.cun_fang_wei_zhi_) {
+        this.showValue = value1.cun_fang_wei_zhi_;
+      }
+      //  values.cun_fang_wei_zhi_;
+      // console.log(this.showValue)
+      const name = "cunFangWeiZhiTiao"; //其他字段属性
+      const value= this.showValue; //字段的值
+      this.$emit("change-data", name, value);
+
+      const name2 = "cangKuMingCheng"; //其他字段属性
+      const value2= this.formInline.cang_ku_ming_chen_value; //字段的值
+      this.$emit("change-data", name2, value2);
+      this.ifshow = !this.ifshow;
+    },
+    close() {
+      this.ifshow = !this.ifshow;
+    },
     firstLoadQuyu(cang_ku) {
       let sqlString = `select distinct qu_yu_,cun_chu_tiao_jian from t_ck where cang_ku_ming_chen = '${cang_ku}' order by qu_yu_ asc`;
       var this_ = this;
       curdPost("sql", sqlString).then((response) => {
-
         this_.quyu_arr = response.variables.data;
-                console.log(this_.quyu_arr)
         if (!this.firstLoadActive) {
           this_.formInline.qu_yu_value = "";
         }
@@ -238,8 +323,8 @@ export default {
           return "SJG";
         case "冰箱":
           return "BX";
-        case "危化品柜":
-          return "WHPG";
+       case "危化品柜":
+      return "WHPG";
         default:
           "";
       }
@@ -259,12 +344,10 @@ export default {
     },
     onSubmits() {
       this.desShow = false;
-      // debugger;
       //头部按钮查询事
       // var sqlString = `select * from t_mjwlgl where cang_ku_ming_chen = '${this.formInline.cang_ku_ming_chen_value}' and qu_yu_ = '${this.formInline.qu_yu_value}'`;
       let py = this.formInline.qu_yu_value.split("号")[1].replace(/^\s*/g, "");
       let num = this.formInline.qu_yu_value.split("号")[0];
-      console.log(py, "111111111");
       let quyu = this.sqlSlice(py);
       let type = (quyu + num).replace(/^\s*/g, "");
       var sqlString =
@@ -274,10 +357,10 @@ export default {
         "'%" +
         type +
         "%'";
-      console.log(sqlString, type, "按钮");
       this.queryLoad(sqlString, type);
     },
     queryLoad(sql, py) {
+      //数据加载
       let this_ = this;
       var datas = [];
       this.cenghao = [];
@@ -292,7 +375,6 @@ export default {
         " and cang_ku_ming_chen ='" +
         this.formInline.cang_ku_ming_chen_value +
         "' ORDER BY wei_zhi_ ASC ";
-        console.log(py)
         let weiSlice ="SUBSTR(wei_zhi_, 1, 6)"
       if (py.includes("WHPG")) {
         weiSlice = 'SUBSTR(wei_zhi_, 1, 7)';
@@ -305,13 +387,12 @@ export default {
         " and cang_ku_ming_chen ='" +
         this.formInline.cang_ku_ming_chen_value +
         "' ORDER BY wei_zhi_ ASC ";
-      console.log(classSql, "classSql");
       curdPost("sql", sqltype).then((res) => {
         typeData = res.variables.data; //查询具体仓库某个货架的所有位置
-        console.log(typeData, "位置");
+        // console.log(typeData, "位置");
         curdPost("sql", sql).then((res) => {
           datas = res.variables.data; //具体仓库某个货架的所有物料数据
-          console.log(datas, "数据");
+          // console.log(datas, "数据");
           typeData.forEach((item) => {
             typeArr[item.wei_zhi_] = [];
             if (datas.length == 0) {
@@ -329,7 +410,7 @@ export default {
               });
             }
           });
-          console.log(typeArr, "22222222222222");
+          // console.log(typeArr, "22222222222222");
           curdPost("sql", classSql).then((res2) => {
             let resData = res2.variables.data;
             resData.forEach((item) => {
@@ -346,14 +427,15 @@ export default {
                 }
               }
             });
-            console.log(labelsMap, "数据");
+            // console.log(labelsMap, "数据");
             this_.listData = labelsMap;
           });
         });
       });
     },
     qu_yu_Event(e) {
-      //点击区域事件，加载可视化视图
+      //点击区域事件，加载可视化视\
+      console.log(this.formData, "formData");
       let value = e.target.innerText;
       if (value.includes("(")) {
         let index = value.indexOf("(");
@@ -379,6 +461,9 @@ export default {
     blackEvent() {
       this.desShow = true;
     },
+    clickBtn() {
+      this.ifshow = !this.ifshow;
+    },
   },
   watch: {
     //监控仓库名称变化 触发第一次加载数据
@@ -390,6 +475,9 @@ export default {
       this.quyuShow = newdata;
       this.firstLoadActive = false;
     },
+    // formData(val) {
+    //   // console.log(val, "watching");
+    // },
   },
 };
 </script>
@@ -406,8 +494,18 @@ p {
   position: absolute;
   right: 100px;
   top: 50px;
-  color: red;
-  font-size: 18px;
+  //
+   background: #f56c6c;
+  font-size: 16px;
+  padding:0px 4px;
+  border-radius: 5px;
+ color: #ffffff;
+  .closeBtn {
+    background: #f56c6c;
+     border: none;
+     padding: 2px;
+      color: #ffffff;
+  }
 }
 .sample-content {
   cursor: pointer;
@@ -416,8 +514,11 @@ p {
     width: 100%;
     height: 100%;
     overflow: scroll;
+    position: fixed;
+    top: 0px;
+    left: 0px;
     background: white;
-    z-index: 999;
+    z-index: 100025  !important;
   }
   .top-content {
     width: 100%;

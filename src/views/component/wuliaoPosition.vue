@@ -316,6 +316,8 @@ export default {
           return "SJG";
         case "冰箱":
           return "BX";
+     case "危化品柜":
+          return "WHPG";
         default:
           "";
       }
@@ -366,14 +368,20 @@ export default {
         " and cang_ku_ming_chen ='" +
         this.formInline.cang_ku_ming_chen_value +
         "' ORDER BY wei_zhi_ ASC ";
+
+        let weiSlice ="SUBSTR(wei_zhi_, 1, 6)"
+      if (py.includes("WHPG")) {
+        weiSlice = 'SUBSTR(wei_zhi_, 1, 7)';
+      }
       let classSql =
-        `select DISTINCT SUBSTR(wei_zhi_,1,6) AS wei_zhi_  from t_ck where wei_zhi_ like ` +
+        `select DISTINCT ${weiSlice} AS wei_zhi_  from t_ck where wei_zhi_ like ` +
         "'%" +
         py +
         "%'" +
         " and cang_ku_ming_chen ='" +
         this.formInline.cang_ku_ming_chen_value +
         "' ORDER BY wei_zhi_ ASC ";
+        
       curdPost("sql", sqltype).then((res) => {
         typeData = res.variables.data; //查询具体仓库某个货架的所有位置
         // console.log(typeData, "位置");

@@ -202,7 +202,7 @@ export default {
                     { prop: 'jian_ce_zhuang_ta', label: '检测状态' }
                 ]
             },
-            startDate: '1949-10-1',
+            startDate: '2022-1-1',
             endDate: '',
             chartData: [],
             pagination: { limit: 20, page: 1 },
@@ -384,6 +384,7 @@ export default {
     created() {
         const initendDate = new Date();
         this.endDate = initendDate.getFullYear() + '-' + (initendDate.getMonth() + 1) + '-' + initendDate.getDate()
+        this.monthValues = [new Date(this.startDate), new Date(initendDate.getFullYear() + '-' + (initendDate.getMonth() + 1) + '-' + initendDate.getDate())]
         this.chartLoading()
     },
     mounted() {
