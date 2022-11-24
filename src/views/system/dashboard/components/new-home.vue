@@ -459,6 +459,7 @@
                 orverPagination: { page: 1, limit: 10 },
                 sorts: {},
                 timer: null,
+                processName: '',
                 testingList
             }
         },
