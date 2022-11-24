@@ -226,6 +226,10 @@ export default {
     closeable: {
       type: Boolean,
       default: true
+    },
+    processName: { // 流程名称
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -389,6 +393,7 @@ export default {
         // 表单定义
         this.formDef = this.$utils.parseData(formModel.formData) || {}
         this.formDef.flowName = this.flowName
+        this.formDef.processName = this.processName
 
         this.formData = {
           // 表单数据

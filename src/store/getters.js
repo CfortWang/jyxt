@@ -32,5 +32,7 @@ export default {
   permissions: state => state.ibps.menu.permissions, //  拥有的权限
   jianCeDuiXiangId: state => state.ibps.jianCeDuiXiangId ? state.ibps.jianCeDuiXiangId : '',
   myform: state => state.ibps.myform ? state.ibps.myform : '',
-  jianCeCanShuId: state => state.ibps.jianCeCanShuId ? state.ibps.jianCeCanShuId : ''
+  jianCeCanShuId: state => state.ibps.jianCeCanShuId ? state.ibps.jianCeCanShuId : '',
+  // 罗湖项目新增，所有检测项目名称及流程key数组
+  testingList: state => state.ibps.param && state.ibps.param.testingList ? state.ibps.param.testingList : []
 }

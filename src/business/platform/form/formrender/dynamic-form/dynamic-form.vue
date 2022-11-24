@@ -4,8 +4,7 @@
         <div class="dynamic-form" :class="{ 'jbd-form-cont': !isDialog }">
             <!--表头-->
             <div v-if="hasHeader" class="form-header">
-                <div v-if="hasHeader" class="title" style="font-size: 22px; font-family: SimHei" :class="titlePosition">
-                    {{ formDef.name }}
+      <div v-if="hasHeader" class="title" style="font-size:22px; font-family:SimHei;"  :class="titlePosition">{{ formDef.processName ? formDef.processName : formDef.name}}
                     <span v-if="formDef && formDef.flowName">{{ formDef.flowName }}</span>
                     <relevance-table v-if="titleList.length > 0 && formParams.formAttrs.customClass.indexOf('true') != -1" :list="titleList" :form="form" />
                     <Statis-or-record-table v-if="StaOrRec.length > 0" :StaOrRec="StaOrRec" :form="form" />
