@@ -5,7 +5,7 @@ export default {
         jianCeDuiXiangId: '',
         jianCeCanShuId: '',
         myform: '',
-        // 罗湖项目新增，所有检测项目名称及流程key数组
+        // 所有检测项目名称及流程key数组
         testingList: []
     },
     mutations: {
