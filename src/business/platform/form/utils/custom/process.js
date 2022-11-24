@@ -39,37 +39,37 @@ const defaultData = {
 // 流程绑定的表单信息,渲染有变动时更改此处对应数据
 const formData = {
     // 数据表名
-    boName: '罗湖检测总表',
+    boName: '检测汇总表',
     // 数据表key
-    boKey: 'lhjczb',
+    boKey: 'jchzb',
     // 流程节点绑定的表单key
-    formKey: ['xjzjjcydzjjzpyf', 'xjzjjcydzjjzpyfsjsr', 'xjzjjcydzjjzpyfsjxy'],
+    formKey: ['tyjcmb', 'sjsrtyjc', 'sjxytyjc'],
     // 表单审批意见组件key
-    formOpinions: ['approval_opinion_0f353vc', 'approval_opinion_1frszdl', 'approval_opinion_1s3sgtf'],
+    formOpinions: ['approval_opinion_1ifs4mo', 'approval_opinion_1dm76ow', 'approval_opinion_0nphdzy'],
     // 开始节点按钮
     startBtn: ['start', 'startSave', 'flow'],
     // 中间节点流程按钮
     btnList: [
         ['agree', 'save', 'flow'],
         ['agree', 'save', 'reject', 'flow'],
-        ['end', 'save', 'reject', 'flow']
+        ['end', 'reject', 'flow']
     ],
     // 流程执行人数据
     executor: [
         {
-            desc1: '【用户】人员变量【lhjczb.jianCeYuan】（或） ;　',
-            desc2: '人员变量[lhjczb.jianCeYuan]',
-            name: 'lhjczb.jianCeYuan'
+            desc1: '【用户】人员变量【jchzb.jianCeYuan】（或） ;　',
+            desc2: '人员变量[jchzb.jianCeYuan]',
+            name: 'jchzb.jianCeYuan'
         },
         {
-            desc1: '【用户】人员变量【lhjczb.jianCeYuan】（或） ;　',
-            desc2: '人员变量[lhjczb.jianCeYuan]',
-            name: 'lhjczb.jianCeYuan'
+            desc1: '【用户】人员变量【jchzb.jianCeYuan】（或） ;　',
+            desc2: '人员变量[jchzb.jianCeYuan]',
+            name: 'jchzb.jianCeYuan'
         },
         {
-            desc1: '【用户】人员变量【lhjczb.fuHeYuan】（或） ;　',
-            desc2: '人员变量[lhjczb.fuHeYuan]',
-            name: 'lhjczb.fuHeYuan'
+            desc1: '【用户】人员变量【jchzb.fuHeYuan】（或） ;　',
+            desc2: '人员变量[jchzb.fuHeYuan]',
+            name: 'jchzb.fuHeYuan'
         }
     ]
 }
