@@ -76,7 +76,8 @@ const formData = {
 
 // 获取随机key
 const getRandomKey = (type) => {
-    let key = `${typeList[type]}_${(parseInt(Math.random().toFixed(6).split('.')[1]) + Date.now()).toString(36).split('.')[0]}`
+    let randomNum = parseInt(Math.random() * 12) + 1
+    let key = `${typeList[type]}_${(parseInt(Math.random().toFixed(randomNum).split('.')[1]) + Date.now()).toString(36).split('.')[0]}`
     return key
 }
 
