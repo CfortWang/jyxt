@@ -3,29 +3,19 @@ import md5 from 'js-md5';
 import { processCreate, processEdit } from './process'
 import { requestType, requestPath } from './requestType'
 
-// export function Update (name, where, cond) {
-//     let cont = {}
-//     cont['tableName'] = name
-//     cont['paramWhere'] = where
-//     cont['paramCond'] = cond
-//     return post('update', JSON.stringify(cont))
-// }
-
-const post = (method, data) => {
+// 请求方式默认POST
+const post = (method, data, type = 'post') => {
     let path = requestType[method]
     let requestData = ''
+    let requestParams = null
     // 部分接口保留参数，用于后续接口传参
     let retainData = null
 
-    const process = {
+    const processType = {
         createProcess: processCreate,
         setProcess: processEdit
     }
-    let isProcess = Object.keys(process).includes(method)
-
-    if (typeof data == "object" && !isProcess) {
-        data = JSON.stringify(data)
-    }
+    let isProcess = Object.keys(processType).includes(method)
 
     // 原有逻辑,根据 data 值判断
     // if (data && data.slice(2, 1) == "l") {
@@ -41,31 +31,26 @@ const post = (method, data) => {
     // }
 
     // 改为根据 method 判断是否对数据做特殊处理
-    if (method === 'str' && data) {
-        // 往主管表提交数据
-        data = '{"str":"' + data + '"}'
-        requestData = dealData(data)
-    } else if (method === 'sql' && data) {
-        // sql 类型参数补全
-        data = '{"sql":"' + data + '"}'
-        requestData = dealData(data)
+    if (type === 'get') {
+        requestParams = data
     } else if (isProcess) {
         // 创建流程及编辑流程时数据特殊处理
         requestData = process[method](data)
         retainData = requestData.customParams
-        console.log(requestData)
+        // console.log(requestData)
     } else { //对象转字符串
-        requestData = dealData(data)
+        requestData = dealData(method, data)
     }
-
-    
 
     let isSpecial = Object.keys(requestPath).includes(method)
     let requestUrl = isSpecial ? requestPath[method] : `business/v3/sys/universal/${ path }`
     return request({
         url: requestUrl,
-        method: 'post',
+        method: type,
         data: requestData,
+        params: requestParams,
+        // 开启表单提交加载
+        isLoading: true,
         retainData
     })
 }
@@ -77,7 +62,15 @@ const sig = sql => {
     return md5(rul + '' + salt)
 }
 
-const dealData = data => {
+const dealData = (method, data) => {
+    // 序列化
+    if (typeof data == 'object') {
+        data = JSON.stringify(data)
+    }
+    // 对需要拼接key值的方法做处理
+    let strType = ['str', 'sql']
+    let isStr = strType.includes(method)
+    data = isStr ? `{"${method}":"${data}"}` : data
     //加密，获取md5密文
     let md5 = sig(data)
     // 结果拼接

@@ -1,4 +1,7 @@
 {
+    "[css]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
     "eslintIntegration": true,
     "tabWidth": 4,
     "printWidth": 120,
