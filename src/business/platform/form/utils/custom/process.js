@@ -1,4 +1,5 @@
 import { startNode, endNode, normalNode, btn, btnType, processData } from './processData'
+import { processPermission } from './processPermission'
 
 // 创建流程所需所有key类型
 const typeList = {
@@ -208,6 +209,12 @@ export const processEdit = params => {
         node.users[0].calcs[0].description = formData.executor[index].desc2
         node.users[0].calcs[0].executorVar.name = formData.executor[index].name
         node.form.formValue = formData.formKey[index]
+        // 填充权限信息
+        processPermission[index].formKey = formData.formKey[index]
+        processPermission[index].flowKey = keys.process
+        processPermission[index].nodeId = keys.activity[index]
+        node.form.editFormRights = processPermission[index]
+
         node.attributes.nodeId = keys.activity[index]
         // 填充节点操作按钮
         formData.btnList[index].forEach(i => {
