@@ -425,7 +425,6 @@
         components: { BpmnFormrender, homeCalendar },
         name: 'calendar',
         data() {
-            const { testingList } = this.$store.getters
             return {
                 taskId: '', // 编辑dialog需要使用
                 waiJian: '', // 编辑dialog需要使用
@@ -459,8 +458,7 @@
                 orverPagination: { page: 1, limit: 10 },
                 sorts: {},
                 timer: null,
-                processName: '',
-                testingList
+                processName: ''
             }
         },
         mounted: function () {
@@ -684,10 +682,8 @@
             },
             // 获取检测流程对应的检测项目名称
             getProjectName(v) {
-                if (!this.testingList.length) {
-                    this.testingList = this.$store.getters.testingList
-                }
-                let res = this.testingList.find(item => item.processKey === v)
+                const { testingList } = this.$store.getters
+                let res = testingList.find(item => item.processKey === v)
                 return res ? res.name : ''
             }
         }

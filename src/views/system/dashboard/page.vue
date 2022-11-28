@@ -510,7 +510,7 @@
                     return
                 } else {
                     // let sql = 'select xiang_mu_ming_ as name, liu_cheng_bian_ha as processKey from t_jcxmlcpzb'
-                    let sql = 'select jian_ce_xiang_mu_ as name, defkey_ as processKey from t_mjjcnlfw order by xiang_mu_bian_hao + 0 asc'
+                    let sql = 'select jian_ce_xiang_mu_ as name, defkey_ as processKey from t_mjjcnlfw where length(defkey_) > 0 order by xiang_mu_bian_hao + 0 asc'
                     curdPost('sql', sql).then(res => {
                         const { data } = res.variables
                         this.$store.dispatch('ibps/param/setTestingList', data)

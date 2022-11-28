@@ -77,9 +77,7 @@
         },
         mixins: [FixHeight],
         data() {
-            const { testingList } = this.$store.getters
             return {
-                testingList,
                 dialogFormVisible: false, // 弹窗
                 bpmnFormrenderDialogVisible: false, // 表单
                 editId: '', // 编辑dialog需要使用
@@ -408,10 +406,8 @@
             },
             // 获取检测流程对应的检测项目名称
             getProjectName(v) {
-                if (!this.testingList.length) {
-                    this.testingList = this.$store.getters.testingList
-                }
-                let res = this.testingList.find(item => item.processKey === v)
+                const { testingList } = this.$store.getters
+                let res = testingList.find(item => item.processKey === v)
                 return res ? res.name : ''
             }
         }
