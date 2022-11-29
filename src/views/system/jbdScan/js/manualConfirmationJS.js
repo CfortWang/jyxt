@@ -181,25 +181,17 @@ export default {
                     cfNew["shou_yang_ri_qi_"] = uuidList[num]
                     cfNewList.push(cfNew)
                     let uuid = cfNew["shou_yang_ri_qi_"];
-                    // console.log(cfNewList, 111111111111111)
                     repostCurd('add', '{"tableName":"t_mjypcfwz","paramWhere":' + JSON.stringify(cfNewList) + '}').then(res => {
-                      // alert('样品货位占位时重新生成货位')
                       let selectsql = "select id_ from t_mjypcfwz where shou_yang_ri_qi_='" + uuid + "'";
-                      // console.log('zzj selectsql',selectsql)
                       repostCurd('sql', selectsql).then(res => {
                         let dataid = res.variables.data[0].id_;
-                        // console.log(res.variables.data)
                         let abc = '{"biao_zhi_uuid_":"' + uuid + '"}'
                         // console.log('zzj abc ',abc)
                         if (changeWeizhi && !changesyWeizhi) {
-                          // alert(1)
                           repostCurd('update', '{"tableName":"t_mjypdjb","paramWhere":' + abc + ',"paramCond":' + '{"shou_yang_wei_zhi":"' + dataid + '"}}').then(res => {
-                            // alert('yang状态更新成功')
                           })
                         } else {
-                          // alert(2)
                           repostCurd('update', '{"tableName":"t_mjypdjb","paramWhere":' + abc + ',"paramCond":' + '{"liu_yang_wei_zhi_":"' + dataid + '"}}').then(res => {
-                            // alert('yang状态更新成功')
                           })
                         }
                       })
@@ -232,7 +224,6 @@ export default {
             let mjwtsqbIdList = []
             let mjfbbList = []
             let mjfbbWJList = []
-            // console.log('wjAllList',wjAllList)
             for (let i in wjAllList) {
               repostCurd('select', '{"tableName":"t_mjwtsqb","paramWhere":' + wjAllList[i] + '}').then(response => {
                 mjfbbWJList.push('{"wei_tuo_wai_jian_":"' + response.variables.data[0].id_ + '"}')
@@ -274,34 +265,24 @@ export default {
                 index = mjypbList[0].jian_ce_xiang_mu2.split(",").length - 1
               }
               for (var i in mjypbList) {
-                let str = mjypbList[i].jian_ce_xiang_mu2.split(",")
-                // index += str.length-1
-                for (var p in str) {
-                  // console.log('坐标',i,p)
-                  let temp = index - p
-                  let rwzb = {}
-                  let wz_ = ypInfoList[i].shi_fou_liu_yang_ == "是" ? ypInfoList[i].liu_yang_wei_zhi_ : ypInfoList[i].shou_yang_wei_zhi //	对应的样品存放位置
-                  rwzb["jian_ce_xiang_mu_"] = str[p] //	取当前检测项目
-                  rwzb["yang_pin_bian_hao"] = mjypbList[i].yang_pin_bian_hao //	取对应的样品编号
-                  rwzb["yang_pin_ming_che"] = mjypbList[i].yang_pin_ming_che //	对应的样品名称
-                  rwzb["yang_pin_dai_ci_"] = mjypbList[i].dai_ci_ //	对应的样品代次
-                  rwzb["yang_pin_pi_hao_"] = mjypbList[i].pi_hao_ //	对应的样品批号
-                  rwzb["yang_pin_shu_lian"] = mjypbList[i].shu_liang_ //	对应的样品数量
-                  rwzb["bug_ri_qi_"] = mjypbList[i].song_yang_ri_qi_ //  对应的送样日期
-                  rwzb["cun_fang_wei_zhi_"] = wz_
-                  rwzb["wei_tuo_wai_jian_"] = mjypbList[i].wai_jian_ //	检测申请单id
-                  rwzb["he_tong_wai_jian_"] = mjwtsqbAllResult[i].he_tong_bian_hao_ //合同id
-                  rwzb["song_yang_ri_qi_"] = mjypbList[i].biao_zhi_uuid_ // 收样日期
-                  rwzb["wei_tuo_ren_"] = mjwtsqbAllResult[i].lian_xi_ren_ // 委托人
-                  rwzb["bao_gao_jian_ce_s"] = this_.dateFormat() // 检测时间
-                  rwzb["zhan_shi_biao_wai"] = mjwtsqbAllResult[i].ye_mian_zong_zhua
-                  rwzb["zhuang_tai_"] = "任务待分配" //	状态
-                  rwzb["shi_fou_fen_bao_"] = mjfbbList[0][temp].shi_fou_fen_bao_ // 是否分包
-                  rwzb["qi_wang_wan_cheng"] = mjfbbList[0][temp].wan_cheng_shi_jia // 期望完成时间
-                  rwzb["gong_xian_zhi_"] = mjypbList[i].yang_pin_lei_xin			// 供限值
-                  rwb.push(rwzb)
-                }
-                index += str.length
+                let rwzb = {}
+                let wz_ = ypInfoList[i].shi_fou_liu_yang_ == "是" ? ypInfoList[i].liu_yang_wei_zhi_ : ypInfoList[i].shou_yang_wei_zhi //	对应的样品存放位置
+                rwzb["yang_pin_bian_hao"] = mjypbList[i].yang_pin_bian_hao //	取对应的样品编号
+                rwzb["yang_pin_ming_che"] = mjypbList[i].yang_pin_ming_che //	对应的样品名称
+                rwzb["yang_pin_dai_ci_"] = mjypbList[i].dai_ci_ //	对应的样品代次
+                rwzb["yang_pin_pi_hao_"] = mjypbList[i].pi_hao_ //	对应的样品批号
+                rwzb["yang_pin_shu_lian"] = mjypbList[i].shu_liang_ //	对应的样品数量
+                rwzb["bug_ri_qi_"] = mjypbList[i].song_yang_ri_qi_ //  对应的送样日期
+                rwzb["cun_fang_wei_zhi_"] = wz_
+                rwzb["wei_tuo_wai_jian_"] = mjypbList[i].wai_jian_      //	检测申请单id
+                rwzb["he_tong_wai_jian_"] = mjwtsqbAllResult[i].he_tong_bian_hao_ //合同id
+                rwzb["song_yang_ri_qi_"] = mjypbList[i].biao_zhi_uuid_  // 收样日期
+                rwzb["wei_tuo_ren_"] = mjwtsqbAllResult[i].lian_xi_ren_ // 委托人
+                rwzb["bao_gao_jian_ce_s"] = this_.dateFormat()          // 检测时间
+                rwzb["zhan_shi_biao_wai"] = mjwtsqbAllResult[i].ye_mian_zong_zhua
+                rwzb["zhuang_tai_"] = "任务待分配"                       //	状态
+                rwzb["gong_xian_zhi_"] = mjypbList[i].yang_pin_lei_xin			// 供限值
+                rwb.push(rwzb)
               }
               // console.log('任务表：',rwb)
 
@@ -345,27 +326,6 @@ export default {
         return arr.indexOf(item, 0) === index;
       });
     },
-    /* 提交数据
-     commitData(val){
-       for(let item of val) {
-              let dataWhere = [] //ajax的修改字段
-              dataWhere.push('{"tableName":"t_gdyrqcyp" + "," + "paramWhere":"id_:'+item.id_ +'" +","+    "shu_liang_":"'+ item.shu_liang_ +'"  +","+  "lingYongRen":"' + item.ling_yong_ren_ + '"  +","+  "cunFangWeiZhi":"' + item.cun_fang_wei_zhi_ + '"  +","+  "sign":"out"}')
-                // dataWhere.push('{"yangPinBianHao":"'+ item.yang_pin_bian_hao +'"  +","+  "lingYongRen":"' + item.ling_yong_ren_ + '"  +","+  "cunFangWeiZhi":"' + item.cun_fang_wei_zhi_ + '"  +","+  "shuLiang":"' + item.shu_liang_ + '"}')
-
-             // repostCurd('updateSample',"{data:'"+JSON.stringify(dataWhere)+"'}").then(response =>{
-             //   console.log(response)
-             // })
-
-             // this.Update('t_gdyrqcyp',{"id_":item.id_},"{data:'"+JSON.stringify(dataWhere)+"'}").then(response => {
-             //            this.$emit('callback', true)
-             //            this.visible = false
-             //            this.$message({
-             //                      message: '样品出库操作成功!',
-             //                      type: 'success'
-             //                    });
-             //          })
-                }
-     },*/
     Update(name, where, cond) {
       let cont = {}
       cont['tableName'] = name

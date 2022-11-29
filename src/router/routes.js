@@ -205,7 +205,7 @@ const ziliao = [
     path: '/ziliao',
     name: 'ziliao',
     meta: {
-      //title: ' '
+      title: '明鉴实验室管理平台'
     },
     //component: _import('/system/ziliao'),
     component: _import('/component/ziliao'),
