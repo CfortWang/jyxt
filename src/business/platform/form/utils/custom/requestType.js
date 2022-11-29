@@ -27,5 +27,7 @@ export const requestPath = {
     // 创建流程
     createProcess: 'business/v3/bpm/modeler/save',
     // 设置流程
-    setProcess: 'business/v3/bpm/definition/saveSetting/vo'
+    setProcess: 'business/v3/bpm/definition/saveSetting/vo',
+    // 获取流水号
+    getId: 'platform/v3/identity/getNextIdByAlias'
 }

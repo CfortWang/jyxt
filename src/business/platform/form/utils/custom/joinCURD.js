@@ -35,7 +35,7 @@ const post = (method, data, type = 'post') => {
         requestParams = data
     } else if (isProcess) {
         // 创建流程及编辑流程时数据特殊处理
-        requestData = process[method](data)
+        requestData = processType[method](data)
         retainData = requestData.customParams
         // console.log(requestData)
     } else { //对象转字符串
