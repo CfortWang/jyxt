@@ -33,8 +33,8 @@
         name: 'topBar',
         props: {
             info: {
-                type: Array,
-                default: []
+                type: Object,
+                default: {}
             }
         },
         components: {},

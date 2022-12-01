@@ -139,7 +139,7 @@
                 (select count(id_) as total, count(jian_ce_zhuang_ta = '已完成' or null) as finished from t_jchzb where create_time_ LIKE '${this.month}%') jc,
                 (select count(id_) as task, count(zhuang_tai_ = '任务已完成' or null) as finished from t_rwfpb where create_time_ LIKE '${this.month}%') rw,
                 (select count(id_) as report, count(zhuang_tai_ = '报告待审核' or null) as process, count(zhuang_tai_ = '报告待审批' or null) as approval from t_mjjcbg where create_time_ LIKE '${this.month}%') bg`
-                console.log(sql)
+                // console.log(sql)
                 curdPost('sql', sql).then(res => {
                     const data = res.variables.data
                     console.log(data)
@@ -338,7 +338,7 @@
                 }
                 if (type === 'quarter') {
                     let year = current.getFullYear()
-                    let month = current.getMonth() + 1
+                    let month = current.getMonth()
                     const dateList = [
                         {
                             start: `${year}-01-01`,

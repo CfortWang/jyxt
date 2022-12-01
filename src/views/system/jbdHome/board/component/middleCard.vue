@@ -21,6 +21,7 @@
                     :config="tableData"
                     style="width: 100%; height: 100%"
                 />
+                <div v-else :class="$style.no_data">暂无数据</div>
             </div>
         </div>
         <dv-decoration-10 :dur="15"/>
@@ -87,6 +88,11 @@
             background-color: rgba(6, 30, 93, 0.5);
             &:last-child {
                 width: 49%;
+            }
+            .no_data {
+                font-size: 20px;
+                text-align: center;
+                margin-top: 20px;
             }
         }
     }
