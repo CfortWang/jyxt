@@ -2,8 +2,19 @@
   <!-- 月度检测完成情况(环形图) -->
   <div  class="monthlyStatus">
     <dv-border-box-7 backgroundColor="rgba(6, 30, 93, 0.5)" >
-        <div class="monthlyStatus_title">月度检测情况统计</div>
-        <div class="monthlyStatus_content" ref="MonthlyStatus_refs"></div>
+      <div class="monthlyStatus_title">
+        <span class="monthlyStatus">月度检测情况统计</span>
+        <el-date-picker
+          class="chooseMonth"
+          v-model="NowTime"
+          type="month"
+          @change="changeTime"
+          format="yyyy-MM" 
+          value-format="yyyy-MM"
+          placeholder="请选择时间">
+        </el-date-picker>
+      </div>
+      <div class="monthlyStatus_content" ref="MonthlyStatus_refs"></div>
     </dv-border-box-7>  
   </div>
 </template>
@@ -14,55 +25,50 @@ export default {
   data(){
     return{
       monthlyStatus:null,
-      testedData:[]
+      NowTime:''
     }
   },
   created(){
-    this.getTestedData()
-    this.getTestTotalData()
-
+    this.getNowTime()
   },
   mounted(){
-    this.enmonthlyStatusData()
-
+    this.getCheckSampleData()
   },
   methods:{
-    
-    // SELECT * FROM t_mjypb WHERE yang_pin_bian_hao IN (SELECT yang_pin_bian_hao FROM t_jchzb WHERE jian_ce_zhuang_ta = '已完成')
-
-    //获取检测样品任务总数
-    getTestTotalData(){
-
-      let sql1 = "select * from t_mjypb" 
-      curdPost('sql',sql1).then(response => { 
-        let  data = response.variables.data
-       
-        // console.log('检测样品任务总数',data.length)
-        let obj = {};
-        let newArray = data.reduce((cur,next) => {
-            obj[next.yang_pin_bian_hao] ? "" : obj[next.yang_pin_bian_hao] = true && cur.push(next);
-            return cur;
-        },[])
-         this.testedData = newArray.length
-        // console.log("检测样品任务总数3333", this.testedData)
-      })
-      //定义一个对象：任务总量
-      let newObj = {name:"任务总量",value:this.testedData}
-      // console.log("检测样品任务总数444", newObj)
+    //页面进来显示当前时间
+    getNowTime(){
+      const nowDate = new Date();
+      const date = {
+        year: nowDate.getFullYear(),
+        month: nowDate.getMonth() + 1,
+      }
+      this.NowTime = date.year + '-' + date.month
     },
-
-    //已经完成检测的样品
-    getTestedData(){
-      let sql2 = "select * from t_mjypb where yang_pin_bian_hao in (select yang_pin_bian_hao from t_jchzb where jian_ce_zhuang_ta = '已完成')" 
-      curdPost('sql',sql2).then(response => { 
-      let  data = response.variables.data
-      // this.testedData 
-      // console.log('已经完成检测数据',data.length)
-
-      })
-      
+    //用户操作改变时间
+    changeTime(e){
+      // console.log('改变时间',e) //2022-07
+      let year = e.slice(0,4)
+      let month = e.slice(5,7)
+      this.NowTime = year + '-' + month
+      this.getCheckSampleData()
     },
-    enmonthlyStatusData(){
+    //查询函数
+    getCheckSampleData(){
+      let sql1 = "select yang_pin_bian_hao,DATE_FORMAT(create_time_,'%Y-%m-%d') AS detectionTime FROM t_mjjcbg WHERE yang_pin_bian_hao != ''  AND create_time_ LIKE '"+this.NowTime+'%'+"' GROUP BY yang_pin_bian_hao"
+      let sql2="select yang_pin_bian_hao,DATE_FORMAT(MIN(create_time_),'%Y-%m-%d') AS detectionTime FROM t_jchzb WHERE jian_ce_zhuang_ta != '已完成' AND yang_pin_bian_hao !=''  AND create_time_ LIKE '"+this.NowTime+'%'+"' GROUP BY yang_pin_bian_hao"
+      Promise.all([
+        curdPost('sql', sql1),
+        curdPost('sql', sql2),
+      ]).then(([ res1, res2]) => {
+        let data1 = res1.variables.data.length
+        let data2 = res2.variables.data.length
+        let data3 = data1+ data2
+        // console.log('hhhhhhhhhh',data1,data2,data3)
+        this.enmonthlyStatusData(data1,data2,data3)
+      })
+    },
+    //检测量统计图
+    enmonthlyStatusData(data1,data2,data3){
       var monthlyStatus = this.$echarts.init(this.$refs.MonthlyStatus_refs);
       var monthlyStatusOption ={
         grid:{
@@ -73,7 +79,7 @@ export default {
         },
         title: {
           text: '检测任务总量',
-          subtext: '424',
+          subtext: `${data3}`,
           // center: ["40%", "48%"],
           x: "50%",     //X坐标   
           y: "42%",    //Y坐标
@@ -118,8 +124,6 @@ export default {
         //   }
         // },
         series: [
-       
-        
           {
             name: 'Access From',
             type: 'pie',
@@ -144,8 +148,8 @@ export default {
               show: false
             },
             data: [
-              { value: 297, name: '已检测' },
-              { value: 127, name: '未检测' }
+              { value: data1, name: '已检测' },
+              { value: data2, name: '未检测' }
             ]
           }
        ]
@@ -176,11 +180,23 @@ export default {
   .monthlyStatus_title{
     width: 100%;
     height: 50px;
-    line-height: 50px;
-    text-align: center;
-    font-weight: 600;
-    font-size: 20px;
-    color:'#fff';
+    position: relative;
+    .monthlyStatus{
+      line-height: 50px;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      margin-left: -60px;
+      margin-top: -25px;
+      color: '#fff';
+      font-size:20px;
+      font-weight:600;
+    }
+    .chooseMonth{
+      width: 120px;
+      line-height: 50px;
+      margin-left: 10px;
+    }
   }
   .monthlyStatus_content{
     width: 100%;

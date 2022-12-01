@@ -2,29 +2,107 @@
   <!-- 年度检测完成情况(环形图) -->
   <div  class="annualStatus">
     <dv-border-box-7 backgroundColor="rgba(6, 30, 93, 0.5)" >
-        <div class="annualStatus_title">年度检测情况统计</div>
-        <div class="annualStatus_content" ref="AnnualStatus_refs"></div>
+      <div class="annualStatus_title">
+        <span class="annualStatus">年度检测情况统计</span>
+        <el-date-picker
+          class="chooseMonth"
+          v-model="NowTime"
+          type="year"
+          @change="changeTime"
+          format="yyyy" 
+          value-format="yyyy"
+          placeholder="请选择时间">
+        </el-date-picker>
+      </div>
+      <div class="annualStatus_content" ref="AnnualStatus_refs"></div>
     </dv-border-box-7>  
   </div>
 </template>
 
 <script>
+import curdPost from '@/business/platform/form/utils/custom/joinCURD.js'
 export default {
   data(){
     return{
       annualStatus:null,
-      annualTotal:0,
+      NowTime:''
     }
   },
   created(){
-
+    this.getNowTime()
   },
   mounted(){
-    this.annualStatusData()
-
+    this.getCheckSampleData()
   },
   methods:{
-    annualStatusData(){
+    //页面进来显示当前时间
+    getNowTime(){
+      const nowDate = new Date();
+      const date = {
+        year: nowDate.getFullYear()
+        // month: nowDate.getMonth() + 1,
+      }
+      // this.NowTime = date.year
+      this.NowTime = date.year  + '-' 
+    },
+    //用户操作改变时间
+    changeTime(e){
+      // console.log('改变时间',e) //2022-07
+      let year = e.slice(0,4)
+      let month = e.slice(5,7)
+      this.NowTime = year
+      // this.NowTime = year + '-' + month
+      this.getCheckSampleData()
+    },
+    //查询函数
+    getCheckSampleData(){
+      let sql1 = "select yang_pin_bian_hao,DATE_FORMAT(create_time_,'%Y-%m-%d') AS detectionTime FROM t_mjjcbg WHERE yang_pin_bian_hao != ''  AND create_time_ LIKE '"+this.NowTime+'%'+"' GROUP BY yang_pin_bian_hao"
+      let sql2="select yang_pin_bian_hao,DATE_FORMAT(MIN(create_time_),'%Y-%m-%d') AS detectionTime FROM t_jchzb WHERE jian_ce_zhuang_ta != '已完成' AND yang_pin_bian_hao !=''  AND create_time_ LIKE '"+this.NowTime+'%'+"' GROUP BY yang_pin_bian_hao"
+      Promise.all([
+        curdPost('sql', sql1),
+        curdPost('sql', sql2),
+      ]).then(([ res1, res2]) => {
+        let data1 = res1.variables.data.length
+        let data2 = res2.variables.data.length
+        let data3 = data1+ data2
+        // console.log('hhhhhhhhhh',data1,data2,data3)
+        this.annualStatusData(data1,data2,data3)
+      })
+    },
+     //页面进来显示当前时间
+    //  getNowTime(){
+    //   const nowDate = new Date();
+    //   const date = {
+    //     year: nowDate.getFullYear(),
+    //     month: nowDate.getMonth() + 1,
+    //   }
+    //   this.NowTime = date.year + '-' + date.month
+    // },
+    //用户操作改变时间
+    // changeTime(e){
+    //   // console.log('改变时间',e) //2022-07
+    //   let year = e.slice(0,4)
+    //   let month = e.slice(5,7)
+    //   this.NowTime = year + '-' + month
+    //   this.getCheckSampleData()
+    // },
+    //查询函数
+    // getCheckSampleData(){
+    //   let sql1 = "select yang_pin_bian_hao,DATE_FORMAT(create_time_,'%Y-%m-%d') AS detectionTime FROM t_mjjcbg WHERE yang_pin_bian_hao != ''  AND create_time_ LIKE '"+this.NowTime+'%'+"' GROUP BY yang_pin_bian_hao"
+    //   let sql2="select yang_pin_bian_hao,DATE_FORMAT(MIN(create_time_),'%Y-%m-%d') AS detectionTime FROM t_jchzb WHERE jian_ce_zhuang_ta != '已完成' AND yang_pin_bian_hao !=''  AND create_time_ LIKE '"+this.NowTime+'%'+"' GROUP BY yang_pin_bian_hao"
+    //   Promise.all([
+    //     curdPost('sql', sql1),
+    //     curdPost('sql', sql2),
+    //   ]).then(([ res1, res2]) => {
+    //     let data1 = res1.variables.data.length
+    //     let data2 = res2.variables.data.length
+    //     let data3 = data1+ data2
+    //     // console.log('hhhhhhhhhh',data1,data2,data3)
+    //     this.annualStatusData(data1,data2,data3)
+    //   })
+    // },
+    //年度统计情况图表
+    annualStatusData(data1,data2,data3){
       var annualStatus = this.$echarts.init(this.$refs.AnnualStatus_refs);
       var annualStatusOption ={
         grid:{
@@ -35,7 +113,7 @@ export default {
         },
         title: {
           text: '检测任务总量',
-          subtext: 424,
+          subtext: `${data3}`,
           // center: ["40%", "48%"],
           x: "50%",     //X坐标   
           y: "42%",    //Y坐标
@@ -106,8 +184,8 @@ export default {
               show: false
             },
             data: [
-              { value: 297, name: '已检测' },
-              { value: 127, name: '未检测' },
+              { value: data1, name: '已检测' },
+              { value: data2, name: '未检测' },
              
             ]
           }
@@ -138,12 +216,25 @@ export default {
   .annualStatus_title{
     width: 100%;
     height: 50px;
-    line-height: 50px;
-    text-align: center;
-    font-weight: 600;
-    font-size: 20px;
-    color: '#fff';
+    position: relative;
+    .annualStatus{
+      line-height: 50px;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      margin-left: -60px;
+      margin-top: -25px;
+      color: '#fff';
+      font-size:20px;
+      font-weight:600;
+    }
+    .chooseMonth{
+      width: 120px;
+      line-height: 50px;
+      margin-left: 10px;
+    }
   }
+  
   .annualStatus_content{
     width: 100%;
     height: calc(100% - 50px);

@@ -7,23 +7,31 @@
            <!-- 标题装饰组件 -->
           <header-decoration :titleName="outputData.headerName"/> 
           <!-- 返回按钮 -->
-          <div class="goBackButton" @click.prevent="goBack()" >
+          <div 
+            class="goBackButton" 
+            @click.prevent="goBack()" 
+            style="width: 12%;
+            height:2.825rem;
+            line-height: 2.825rem;
+            text-align:center;
+            position: absolute;
+            left: 20%;
+            top:4%;" >
             <dv-border-box-8>返回</dv-border-box-8>
           </div>
           <!-- 显示数据上一次更新的时间 -->
           <div
-             style="width: 18%;
-              cursor: pointer;
-              height:2.825rem;
-              line-height: 2.825rem;
-              text-align:center;
-              margin-left:70%;
-              margin-top:-60px;
-              flex: 1;
-              position: absolute;
-              color: #FFFFFF;"
-              >
-                <dv-border-box-8 >上一次更新时间:{{this.sendTime}}</dv-border-box-8>
+            class="changeTime"
+            style="width: 18%;
+            cursor: pointer;
+            height:2.825rem;
+            line-height: 2.825rem;
+            text-align:center;
+            position: absolute;
+            left: 70%;
+            top:4%;
+            color: #FFFFFF;">
+              <dv-border-box-8 >上一次更新时间:{{this.sendTime}}</dv-border-box-8>
           </div>
           <!-- 样品头部数据总览 -->
           <div class="overView">
@@ -140,19 +148,7 @@ export default {
     .headerContent{
       width: 100%;
       height: 19%;
-      // border: 1px solid rgb(197, 17, 41);
-      .goBackButton{ 
-        width: 10%;
-        cursor: pointer;
-        height:2.825rem;
-        line-height: 2.825rem;
-        text-align:center;
-        margin-left:20%;
-        margin-top:-60px;
-        flex: 1;
-        position: absolute;
-        color: #FFFFFF;
-      }
+      position:relative
       .overView{
         width: 100%;
         height: 80px;

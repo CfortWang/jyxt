@@ -9,6 +9,8 @@
           v-model="NowTime"
           type="month"
           @change="changeTime"
+          format="yyyy-MM" 
+          value-format="yyyy-MM"
           placeholder="请选择时间">
         </el-date-picker>
       </div>
@@ -22,211 +24,209 @@
  <script>
  import curdPost from '@/business/platform/form/utils/custom/joinCURD.js'
  export default {
-   data(){ 
-     return{
-       NowTime: '',
-       entrustNumber:null,
-       //已委托未收到样品数据
-       notReceivedNumber:[],
-       //留样样品数据
-       retentionData:[],
-       //对应月份的每一天的数组
-       days:[],
-       //月份天数
-       day:0,
-      //需要填充的数组
-      newArrayNum:[]
-       
- 
- }
-   },
-   created(){
-    
-   },
-   mounted() {
+  data(){ 
+    return{
+      NowTime: '',
+      entrustNumber:null,
+      days:[],
+      //月份天数
+      day:0,
+      //填充数量的数组
+      filledNum:[],
+    }
+  },
+  created(){
+  },
+  mounted() {
     this.getNowTime()
-   
-   },
- methods:{
-   //样品相关数据时间控件 :页面进来显示当前时间
-   getNowTime(){
+  },
+  methods:{
+    //样品相关数据时间控件 :页面进来显示当前时间
+    getNowTime(){
       const nowDate = new Date();
       const date = {
         year: nowDate.getFullYear(),
         month: nowDate.getMonth() + 1,
-    }
+      }
       this.NowTime = date.year + '-' + date.month
       // console.log('页面第一次进来显示时间',date.year,date.month)
       //进来获取当前时间 之后获取当前月份天数 传给
+      // console.log('页面显示的时间',this.NowTime)  //2022-11
+      //把页面第一次进来的 当前年度月份 传给该方法处理 得到day及days
       this.getDaysInMonth(date.year,date.month)
       
     },
-   
-
-  //手动操作时间控件改变时间
-  changeTime(e){
-    // console.log('改变时间',e)
+    //手动操作时间控件改变时间
+    changeTime(e){
+    // console.log('改变时间',e) //2022-07
     let year = e.slice(0,4)
     let month = e.slice(5,7)
+    this.NowTime = year + '-' + month
+    // console.log('用户操作之后 页面显示的时间',this.NowTime,year,month) //2022-11 2022 11
+    //把年度月份传给getDaysInMonth()之前，先清理上一次数据
+    // this.entrustNumber.diswpose()  //这个方法干嘛的？？ 为啥清不掉entrustNumberInit()方法的数据
+    this.days=[]
+    //在这里打印一下this.days数组
+    // console.log('用户操作了时间控件之后打印this.days数组',this.days)
+    //把用户操作时间控件改变的时间 的年度月份 传给该方法处理 得到day及days
     this.getDaysInMonth(year,month)
-  },
-  //用户操作获取月份对应天数,
-  getDaysInMonth(year,month){
+
+    },
+    //拿到当前年度 月份 获取当前月份的天数day及【天数数组】days
+    getDaysInMonth(year,month){
     let temp = new Date(year,month,0);
     this.day = temp.getDate(); 
-    // console.log('当前月份：',month,',天数',this.day);
+    // console.log('处理好的年 月 月份天数',year,month,this.day);   //2022 11 30
+    //把月份对应天数转化为数组
     for( let i=1;i <= this.day ;i++){
       this.days.push(i)
     }
     // console.log('月份每一天',this.days)
-    // console.log('当前月天数',this.day)
-    this.getUnqualifiedData(this.day)
-  },
-   
-  
-   
-   //3.已经收到不合格xx
-   getUnqualifiedData(dayNum){
-     let sql3 = "select * from t_mjypdjb where yan_shou_zhuang_t = '残缺'"
-       curdPost('sql',sql3).then(response => { 
-       this.unqualifiedData = response.variables.data
-       let data = response.variables.data
-       let newArray = data.reduce((total, cur, index) => {
-        let hasValue = total.findIndex(current => {
-          return current.shou_yang_ri_qi_ === cur.shou_yang_ri_qi_;
-        });
-        hasValue === -1 && total.push(cur);
-        hasValue !== -1 && (total[hasValue].shou_yang_shu_lia = total[hasValue].shou_yang_shu_lia + cur.shou_yang_shu_lia);
-        return total;
-      }, []);
-      //console.log('日期数量11111111',newArray);
-      //创建一个长度为当前月份天数的数组
-      this.newArrayNum = Array(dayNum)
-      this.newArrayNum = this.newArrayNum.fill(0)
-      //console.log('创建对应月份的数组',this.newArrayNum)
-      //遍历拿到的数组，截取出月份对应的 // 2022-11-01
-      newArray.forEach(item =>{
-        let key = item.shou_yang_ri_qi_.slice(8,10) < 10 ?item.shou_yang_ri_qi_.slice(9,10) :item.shou_yang_ri_qi_.slice(8,10)
-        let value =parseInt(item.shou_yang_shu_lia)
-        this.newArrayNum.splice(key - 1,1,value)
-      })
-      //console.log('处理好的数据',this.newArrayNum)
-      //拿到月份数组和y轴数量数组
-      this.entrustNumberInit(this.days,this.newArrayNum)
+    this.getCheckSampleData(this.day)
 
-       })
-   },
-   //4.留样样品数据xx
-    getRetentionData(){
-     let sql4 = "select  * from (select * from t_mjypdjb where  liu_yang_ri_qi_ ='' ) a where   a.shi_fou_liu_yang_ != '否'"
-       curdPost('sql',sql4).then(response => { 
-       this.retentionData = response.variables.data
-       // console.log('留样样品数据aa',this.retentionData)
-       })
- 
     },
-   
-   //委托样品图表
-   entrustNumberInit(dayArray,numAray){
-     var entrustNumber = this.$echarts.init(this.$refs.Number_refs);
-     var entrustNumberOption = {
-         xAxis:{
-           type: "category",
-           //获取当前月的日期1到30日
-          //  data: ["1号", "2号", "3号", "4号", "5号", "6号", "7号","8号","9号","10号",
-          //  "11号","12号","13号", "14号", "15号", "16号", "17号", "18号", "19号","20号",
-          //  "21号","22号","23号","24号","25号","26号","27号","28号","29号","30号"],
-          data: dayArray,
-           splitLine:{
-             show:false
-           },
-           axisLine: {
-             lineStyle: {
-               type: 'solid',
-               color: 'white',//坐标线的颜色
-                 
-             }
-           },
-           axisLabel: {
-             style: {
-                 fill: '#fff'
-             }
-         },
-         },
-         yAxis: {
-           type: "value",
-           name:'数量',
-           axisLine: {
-             lineStyle: {
-               type: 'solid',
-               color: 'white',//坐标线的颜色
-                 
-             }
-           },
-           //去除网格线
-           splitLine: {
-             show: false
-         },
-         },
-         // title: {
-         //   text: '委托样品数量柱形图',
-         // },
-         grid:{
-           left:'2%',
-           right:"5%",
-           top:'15%',
-           bottom:'2%',
-           containLabel:true
-         
-         },
-         // tooltip悬浮提示框
-         tooltip:{
-           show:true
-         },
-         //图例的位置
- 
-         legend: {
-           show:true, 
-           orient: 'horizontal',  //horizontal 水平排列
-           top:'0%',
-           left:'center',
-           lineStyle:{
- 
-           },
-           textStyle: {
-             color: '#fff',
-         },
-         },
-         //隐藏刻度线
-         axisTick:{
-               show:false,
-             },
-       
-         series: [
-           {
-             type:"bar",
-             name:'不合格样品',
-             label: {
-               show: true,
-               position: 'top',
-               color:'#fff'
-             },
-            
-             //data: [120, 200, 150, 80, 70, 110, 130,120, 200, 150, 80, 70, 110, 130,120, 200, 150, 80, 70, 110, 130,120, 200, 150, 80, 70, 110, 130,167,128],
-             data:numAray,
-            //柱子的颜色
-             itemStyle:{
-               show:true,
-               color:'rgba(0, 186, 255, 0.4)'
-               
-             },
-           },
-          
-         ],
-     }
-       entrustNumber.setOption(entrustNumberOption)
-   }
- }
+    //已检测 未检测 检测汇总表记录的是样品的检测项目,一个检测项目对应一条数据，
+    //当一个样品的编号对应的多条检测项目数据的“jian_ce_zhaung_ta”为 已完成，就表示该样品被归到已检的样品中
+    //(这样的话一个样品有多项检测，意味着一个样品有多个检测日期)
+    getCheckSampleData(dayNum){
+      let sql1 = "select yang_pin_bian_hao,DATE_FORMAT(create_time_,'%Y-%m-%d') AS detectionTime FROM t_mjjcbg WHERE yang_pin_bian_hao != ''  AND create_time_ LIKE '"+this.NowTime+'%'+"' GROUP BY yang_pin_bian_hao"
+      let sql2="select yang_pin_bian_hao,DATE_FORMAT(MIN(create_time_),'%Y-%m-%d') AS detectionTime FROM t_jchzb WHERE jian_ce_zhuang_ta != '已完成' AND yang_pin_bian_hao !=''  AND create_time_ LIKE '"+this.NowTime+'%'+"' GROUP BY yang_pin_bian_hao"
+      Promise.all([
+        curdPost('sql', sql1),
+        curdPost('sql', sql2),
+      ]).then(([ res1, res2]) => {
+        let data1 = res1.variables.data
+        let data2 = res2.variables.data
+        // console.log('已检测样品',data1)
+        const detection = this.dealingData(data1,dayNum)    //dealingData()方法处理返回的数据 this.filledNum;
+        const undetected = this.dealingData(data2,dayNum)
+        this.entrustNumberInit(this.days,detection,undetected)
+        
+
+      })
+    },
+    //处理数据
+    dealingData(data,dayNum){
+      let result = data.reduce((obj, item) => {
+          let find = obj.find(i => i.detectionTime === item.detectionTime);
+          let  CheckedArray= {
+            detectionTime:item.detectionTime,
+            count: 1
+          };
+          find ? find.count++ : obj.push(CheckedArray);
+          return obj;
+        }, []);
+        // console.log('12345678',result);
+        this.filledNum = Array(dayNum).fill(0)
+        //遍历拿到的数组，截取出月份对应的 // 2022-11-01
+        result.forEach(item =>{
+          let key = item.detectionTime.slice(8,10) < 10 ?item.detectionTime.slice(9,10) :item.detectionTime.slice(8,10)
+          let value =parseInt(item.count)
+          this.filledNum.splice(key - 1,1,value)
+        })
+        return this.filledNum;
+    },
+
+    //检测样品图表
+    entrustNumberInit(dayArray,detection,undetected){
+      // console.log('拿到日期数组',dayArray)
+      this.entrustNumber = this.$echarts.init(this.$refs.Number_refs);
+      var entrustNumberOption = {
+          xAxis:{
+            type: "category",
+            //当前月的每一天 数组
+            data: dayArray,
+            splitLine:{
+              show:false
+            },
+            axisLine: {
+              lineStyle: {
+                type: 'solid',
+                color: 'white',//坐标线的颜色   
+              }
+            },
+            axisLabel: {
+              style: {
+                  fill: '#fff'
+              }
+            },
+          },
+          yAxis: {
+            type: "value",
+            name:'数量',
+            axisLine: {
+              lineStyle: {
+                type: 'solid',
+                color: 'white',//坐标线的颜色
+              }
+            },
+            splitLine: {
+              show: false
+            },
+          },
+          grid:{
+            left:'2%',
+            right:"5%",
+            top:'15%',
+            bottom:'2%',
+            containLabel:true
+          },
+          // tooltip悬浮提示框
+          tooltip:{
+            show:true
+          },
+          //图例的位置
+          legend: {
+            show:true, 
+            orient: 'horizontal',  //horizontal 水平排列
+            top:'0',
+            left:'center',
+            lineStyle:{},
+            textStyle: {
+              color: '#fff',
+            },
+          },
+          //隐藏刻度线
+          axisTick:{
+            show:false,
+          },
+          series: [
+            {
+              type:"bar",
+              name:'已检测样品',
+              //显示数字的颜色
+              label: {
+                show: true,
+                position: 'top',
+                color:'#fff'
+              },
+              //柱子的颜色
+              itemStyle:{
+                show:true,
+                color:'rgba(0, 186, 255, 0.4)',
+              },
+              data:detection 
+            },
+            {
+              type:"line",
+              name:'未检测样品',
+              label: {
+                show: true,
+                position: 'top',
+                color:'#f5f12a'
+              },
+              //柱子的颜色
+              itemStyle:{
+                show:true,
+                color:'rgba(245, 241, 42, 0.4)',
+              },
+              data:undetected 
+            },
+          ],
+      }
+      this.entrustNumber.setOption(entrustNumberOption)
+    }
+  }
  }
  </script>
  
@@ -259,7 +259,6 @@
       color: '#fff';
       font-size:20px;
       font-weight:600;
-
     }
     .chooseMonth{
       width: 120px;

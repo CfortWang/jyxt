@@ -47,6 +47,7 @@ export default {
   },
   methods:{
     //实际收到数据：登记表里面样品类型数据
+    //SELECT a.yang_pin_lei_xing,b.lei_xing_ FROM t_mjypdjb a JOIN t_yplxb  b ON a.yang_pin_lei_xing = b.id_
     getData(){
       let sql = "select * from t_mjypdjb" 
       curdPost('sql',sql).then(response => { 
