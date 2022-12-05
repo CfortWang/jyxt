@@ -68,7 +68,7 @@ const dealData = (method, data) => {
         data = JSON.stringify(data)
     }
     // 对需要拼接key值的方法做处理
-    let strType = ['str', 'sql']
+    let strType = ['sql']
     let isStr = strType.includes(method)
     data = isStr ? `{"${method}":"${data}"}` : data
     //加密，获取md5密文
