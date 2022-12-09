@@ -4,8 +4,8 @@
     class="form-renderer-dialog"
     style="box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);background-color: #FFFFFF; margin-left: 20px;margin-right: 20px;"
   >
-  <el-divider  v-if="editFromType == 'add'" content-position="left">添加记录</el-divider>
-  <el-divider  v-else-if="editFromType == 'edit'" content-position="left">编辑记录</el-divider>
+    <el-divider  v-if="editFromType == 'add'" content-position="left">添加记录</el-divider>
+    <el-divider  v-else-if="editFromType == 'edit'" content-position="left">编辑记录</el-divider>
     <el-divider  v-else-if="editFromType == 'consult'" content-position="left">查阅记录</el-divider>
     <ibps-formrender
       v-if="formDef"
@@ -34,7 +34,7 @@
         <span class="ibps-pr-10">&nbsp;</span>
       </template>
 
-<!--      查阅按钮用toolbarsConsult-->
+      <!--      查阅按钮用toolbarsConsult-->
       <ibps-toolbar
         :actions="editFromType != 'consult' ? toolbars : toolbarsConsult"
         @action-event="handleActionEvent"
@@ -86,7 +86,6 @@ export default {
     }
   },
  created() {
-    console.log(this.editFromType)
    this.geFormData()
   },
   destroyed() {
@@ -96,7 +95,6 @@ export default {
   },
   methods: {
     handleActionEvent({ key }) {
-      console.log(key)
       switch (key) {
         case 'confirm':
           this.handleConfirm(key)
@@ -159,7 +157,6 @@ export default {
     geFormData(){
       this.formDefData = JSON.parse(JSON.stringify(this.formDef))
       this.formData = JSON.parse(JSON.stringify(this.data))
-      console.log(this.formDefData)
     },
     loadFormData() {
       this.$nextTick(()=>{

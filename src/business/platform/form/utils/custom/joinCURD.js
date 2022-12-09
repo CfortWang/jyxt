@@ -49,8 +49,8 @@ const post = (method, data, type = 'post') => {
         method: type,
         data: requestData,
         params: requestParams,
-        // 开启表单提交加载
-        isLoading: true,
+        // 开启表单提交加载，查询接口除外（sql,select）
+        isLoading: !['sql', 'select'].includes(method),
         retainData
     })
 }
