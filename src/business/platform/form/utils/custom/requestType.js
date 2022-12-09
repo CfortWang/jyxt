@@ -8,6 +8,8 @@ export const requestType = {
     update: 'updateDataContextTable',
     // 批量修改
     updates: 'updateDatasContextTable',
+    // 批量修改 修改多条数据各自对应的值
+    updatesByWhere: 'updatesBatchContextTable',
     batchDelete: 'batchDelete',
     // 主管提醒（第一滴血）
     str: 'crudZhuGuan',
