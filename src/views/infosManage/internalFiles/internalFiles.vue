@@ -19,7 +19,7 @@
                         :search-form="listConfig.searchForm" :pk-key="pkKey" :columns="listConfig.columns"
                         :loading="loading" @action-event="handleAction">
                         <template slot="wenjinachayue" slot-scope="scope">
-                            <ibps-attachment :value="scope.row.zi_duan_er_" readonly allow-download :download="true" />
+                            <ibps-attachment :value="scope.row.zi_duan_er_" readonly allow-download :download="false" />
                         </template>
                     </ibps-crud>
                 </template>
@@ -86,12 +86,12 @@ export default {
                     forms: [
                         { prop: 'fileCode', label: '文件编号' },
                         { prop: 'fileName', label: '文件名称' },
-                        { prop: 'deptName', label: '部门' },
+                        // { prop: 'deptName', label: '部门' },
                     ]
                 },
                 // 表格字段配置
                 columns: [
-                    { prop: 'zi_duan_yi_', label: '部门' },
+                    // { prop: 'zi_duan_yi_', label: '部门' },
                     { prop: 'wen_jian_bian_hao', label: '文件编号' },
                     { prop: 'wen_jian_ming_che', label: '文件名称' },
                     { prop: 'ban_ben_hao_', label: '版本号' },
