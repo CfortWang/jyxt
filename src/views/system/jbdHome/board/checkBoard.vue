@@ -239,7 +239,8 @@
             // 获取中间图表数据
             getMiddleData() {
                 // 获取检测数据
-                const sql1 = `select tm.jian_ce_xiang_mu_, tm.jian_ce_lei_bie_, IFNULL(rw.qi_wang_wan_cheng, '') as qi_wang_wan_cheng, rw.zhuang_tai_, ipe.NAME_ from t_rwfpb rw, ibps_party_employee ipe, t_mjjcnlfw tm where rw.jian_ce_yuan_ = ipe.ID_ and rw.jian_ce_xiang_mu_ = tm.id_ and rw.create_time_ like '${this.month}%'`
+                // const sql1 = `select tm.jian_ce_xiang_mu_, tm.jian_ce_lei_bie_, IFNULL(rw.qi_wang_wan_cheng, '') as qi_wang_wan_cheng, rw.zhuang_tai_, ipe.NAME_ from t_rwfpb rw, ibps_party_employee ipe, t_mjjcnlfw tm where rw.jian_ce_yuan_ = ipe.ID_ and rw.jian_ce_xiang_mu_ = tm.id_ and rw.create_time_ like '${this.month}%'`
+                const sql1 = `select tm.jian_ce_xiang_mu_, tm.jian_ce_lei_bie_, IFNULL(rwz.wan_cheng_shi_jia, '') as qi_wang_wan_cheng, rw.zhuang_tai_, ipe.NAME_ from t_rwfpb rw, ibps_party_employee ipe, t_mjjcnlfw tm, t_mjrwfpzb rwz where rwz.jian_ce_yuan_ = ipe.ID_ and rwz.ren_wu_bian_hao_ = tm.id_ and rw.id_ = rwz.wai_jian_ and rw.create_time_ like '${this.month}%'`
                 // 获取检测受理类型数据
                 const sql2 = `select count(tm.jian_ce_lei_bie_ = '理化' or null) as lh, count(tm.jian_ce_lei_bie_ = '微生物' or null) as wsw, count(tm.jian_ce_lei_bie_ = '细胞活率' or null) as xbhl, count(tm.jian_ce_lei_bie_ = '残留检测' or null) as cljc, count(tm.jian_ce_lei_bie_ = '细胞鉴别' or null) as xbjb from t_jchzb tj, t_mjjcnlfw tm where tj.jian_ce_xiang_mu_ = tm.id_ and tj.create_time_ like '${this.month}%'`
 
