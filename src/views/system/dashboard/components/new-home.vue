@@ -60,6 +60,13 @@
                             />
 
                             <el-table-column
+                                prop="submitBy"
+                                show-overflow-tooltip
+                                width="100"
+                                label="任务发起人"
+                            />
+
+                            <el-table-column
                                 show-overflow-tooltip
                                 width="145"
                                 label="时间"
@@ -533,9 +540,21 @@
             getWait() {
                 this.waitLoading = true
                 pending(this.getFormatParams(null, this.pagination)).then(response => {
-                    if (response.data.dataResult) {
-                        this.pendingData = response.data.dataResult
-                        this.pendingPage = response.data.pageResult
+                    let {dataResult, pageResult} = response.data
+                    if (dataResult && dataResult.length) {
+                        let instList = []
+                        dataResult.forEach(item => {
+                            instList.push(item.bpmnInstId)
+                        })
+                        let sql = `select b.create_by_,a.name_ from ibps_bpm_inst b left join ibps_party_employee a on a.id_ = b.create_by_ where b.bpmn_inst_id_ in (${instList.join(',')})`
+                        curdPost('sql', sql).then(res => {
+                            const data = res.variables && res.variables.data
+                            data.forEach((item, index) => {
+                                dataResult[index].submitBy = item.name_
+                            })
+                            this.pendingData = dataResult
+                            this.pendingPage = pageResult
+                        })
                     }
                     this.waitLoading = false
                 }).catch(() => {
@@ -563,7 +582,7 @@
             getMessage() {
                 // console.log("当前用户id",this.$store.getters.userId)
                 // console.log(this.$store)
-                console.log('当前用户信息', this.$store.getters.userInfo.employee)
+                // console.log('当前用户信息', this.$store.getters.userInfo.employee)
                 // getNews().then(response => {
                 //     this.newsData = response.data;
                 //     this.loading = false
@@ -601,7 +620,7 @@
                 let sql = "select td.*,ie.NAME_ from t_dxtz td,ibps_party_employee ie  where td.bian_zhi_ren_ = ie.id_ and  td.fa_song_fang_shi_ like  '%公告%' ORDER BY create_time_ desc"
 
                 curdPost('sql', sql).then(res => {
-                    console.log(res)
+                    // console.log(res)
                     if (res.state == 200) {
                         let dbData = res.variables.data
                         this.newsDataCms = dbData
