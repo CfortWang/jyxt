@@ -62,3 +62,14 @@ export function deleteMe(data){
     params: data
   })
 }
+
+/*
+无效接口，去除引用警告
+*/
+export function remove(data){
+    return request({
+        url:JCWTD_URL + '/delete',
+        method: 'post',
+        params: data
+    })
+}

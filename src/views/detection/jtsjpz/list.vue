@@ -24,7 +24,8 @@
       <template slot="dsBuMenSelect">
         <el-select v-model="bianZhiBuMenId" clearable placeholder="请选择" style="width:120px">
           <el-option
-            v-for="item in buMenList"
+            v-for="(item, index) in buMenList"
+            :key="index"
             :label="item.label"
             :value="item.value"
           />
@@ -57,7 +58,8 @@
       <template slot="dsDuiXiangSelect">
         <el-select v-model="duiXiang" clearable placeholder="请选择" style="width:120px">
           <el-option
-            v-for="item in duiXiangList"
+            v-for="(item, index) in duiXiangList"
+            :key="index"
             :label="item.label"
             :value="item.value"
           />

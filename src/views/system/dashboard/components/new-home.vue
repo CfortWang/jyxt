@@ -193,6 +193,23 @@
 
                             <el-table-column
                                 show-overflow-tooltip
+                                label="任务发起人"
+                                width="100"
+                            >
+                                <template slot-scope="scope">
+                                    {{ scope.row.createBy | getUserName(userList)}}
+                                </template>
+                            </el-table-column>
+
+                            <!-- <el-table-column
+                                prop="submitBy"
+                                show-overflow-tooltip
+                                width="100"
+                                label="任务发起人2"
+                            /> -->
+
+                            <el-table-column
+                                show-overflow-tooltip
                                 width="145"
                                 label="办理时间"
                             >
@@ -431,6 +448,12 @@
     export default {
         components: { BpmnFormrender, homeCalendar },
         name: 'calendar',
+        filters: {
+            getUserName (v, list) {
+                let user = list.find(i => i.id_ === v)
+                return user ? user.name_ : ''
+            }
+        },
         data() {
             return {
                 taskId: '', // 编辑dialog需要使用
@@ -470,6 +493,11 @@
         },
         mounted: function () {
             this.loadData()
+
+            let sql = `select id_, name_ from ibps_party_employee where status_ = 'actived'`
+            curdPost('sql', sql).then(res => {
+                this.userList = res.variables && res.variables.data
+            })
             if (this.timer) {
                 clearInterval(this.timer)
             }
@@ -546,7 +574,7 @@
                         dataResult.forEach(item => {
                             instList.push(item.bpmnInstId)
                         })
-                        let sql = `select b.create_by_,a.name_ from ibps_bpm_inst b left join ibps_party_employee a on a.id_ = b.create_by_ where b.bpmn_inst_id_ in (${instList.join(',')})`
+                        let sql = `select b.bpmn_inst_id_, b.create_by_, a.name_ from ibps_bpm_inst b left join ibps_party_employee a on a.id_ = b.create_by_ where b.bpmn_inst_id_ in (${instList.join(',')}) order by find_in_set(b.bpmn_inst_id_,'${instList.join(',')}')`
                         curdPost('sql', sql).then(res => {
                             const data = res.variables && res.variables.data
                             data.forEach((item, index) => {
@@ -570,9 +598,21 @@
             getOrver() {
                 this.orverLoading = true
                 handledTask(this.getFormatParams(1, this.orverPagination)).then(response => {
-                    if (response.data.dataResult.length > 0) {
-                        this.handledData = response.data.dataResult
-                        this.orverPage = response.data.pageResult
+                    let {dataResult, pageResult} = response.data
+                    if (dataResult && dataResult.length) {
+                        // let instList = []
+                        // dataResult.forEach(item => {
+                        //     instList.push(item.bpmnInstId)
+                        // })
+                        // let sql = `select b.bpmn_inst_id_, b.create_by_, a.name_ from ibps_bpm_inst b left join ibps_party_employee a on a.id_ = b.create_by_ where b.bpmn_inst_id_ in (${instList.join(',')}) order by find_in_set(b.bpmn_inst_id_,'${instList.join(',')}')`
+                        // curdPost('sql', sql).then(res => {
+                        //     const data = res.variables && res.variables.data
+                        //     data.forEach((item, index) => {
+                        //         dataResult[index].submitBy = item.name_
+                        //     })
+                        // })
+                        this.handledData = dataResult
+                        this.orverPage = pageResult
                     }
                     this.orverLoading = false
                 }).catch(() => {

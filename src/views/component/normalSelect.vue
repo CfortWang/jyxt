@@ -5,7 +5,7 @@
         v-model="selected"
         filterable
         :multiple="field.field_options.custom_class === 'multiple'"
-        :disabled="field.disabled" 
+        :disabled="field.disabled"
         placeholder="请选择"
     >
         <el-option
