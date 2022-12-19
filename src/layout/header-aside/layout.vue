@@ -247,13 +247,13 @@
         computed: {
             ...mapState('ibps', {
                 // sysName:state=>state.menu.sysName,
-                keepAlive: (state) => state.page.keepAlive,
-                grayActive: (state) => state.gray.active,
-                transitionActive: (state) => state.transition.active,
-                asideCollapse: (state) => state.menu.asideCollapse,
-                asideTransition: (state) => state.menu.asideTransition,
-                system: (state) => state.system.system,
-                subsystemList: (state) => state.system.subsystemList
+                keepAlive: state => state.page.keepAlive,
+                grayActive: state => state.gray.active,
+                transitionActive: state => state.transition.active,
+                asideCollapse: state => state.menu.asideCollapse,
+                asideTransition: state => state.menu.asideTransition,
+                system: state => state.system.system,
+                subsystemList: state => state.system.subsystemList
             }),
             ...mapGetters('ibps', {
                 themeActiveSetting: 'theme/activeSetting'
