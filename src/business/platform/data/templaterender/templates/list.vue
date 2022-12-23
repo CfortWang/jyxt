@@ -41,6 +41,7 @@
           :inline="listConfig.searchForm.inline"
           :label-width="listConfig.searchForm.labelWidth"
           :item-width="listConfig.searchForm.itemWidth"
+          @search="search"
         />
       </template>
       <!--数字-->
