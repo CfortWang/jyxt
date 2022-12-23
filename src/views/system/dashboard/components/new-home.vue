@@ -20,60 +20,47 @@
                             @row-click="handleLinkClick"
                             :row-class-name="tableRowClassName"
                         >
-                            <el-table-column show-overflow-tooltip label="年份" width="60">
-                                <template slot-scope="scope">
-                                    {{ getParenthesesStr(scope.row.subject)[0] }}
-                                </template>
-                            </el-table-column>
+                            <!-- <el-table-column show-overflow-tooltip label="年份" width="60">
+                                <template slot-scope="scope">{{ getParenthesesStr(scope.row.subject)[0] }}</template>
+                            </el-table-column> -->
                             <el-table-column
                                 prop="subject"
                                 label="事务名称"
                                 show-overflow-tooltip
                             >
-                                <template slot-scope="scope">
-                                    {{ scope.row.subject.split('(')[0] }}
-                                </template>
+                                <template slot-scope="scope">{{ scope.row.subject.split('(')[0] }}</template>
                             </el-table-column>
-
                             <el-table-column
                                 show-overflow-tooltip
-                                width="100"
+                                width="80"
                                 label="状态"
                             >
-                                <template slot-scope="scope">
-                                    {{ '待' + scope.row.name }}
-                                </template>
+                                <template slot-scope="scope">{{ '待' + scope.row.name }}</template>
                             </el-table-column>
-
                             <el-table-column
                                 prop="startDept"
                                 show-overflow-tooltip
-                                width="80"
+                                width="100"
                                 label="发起部门"
                             />
-
-                            <el-table-column
-                                prop="forwardBy"
-                                show-overflow-tooltip
-                                width="100"
-                                label="任务提交人"
-                            />
-
                             <el-table-column
                                 prop="submitBy"
                                 show-overflow-tooltip
                                 width="100"
                                 label="任务发起人"
                             />
-
+                            <el-table-column
+                                prop="forwardBy"
+                                show-overflow-tooltip
+                                width="100"
+                                label="任务提交人"
+                            />
                             <el-table-column
                                 show-overflow-tooltip
                                 width="145"
                                 label="时间"
                             >
-                                <template slot-scope="scope">
-                                    {{ scope.row.createTime.slice(0, 16) }}
-                                </template>
+                                <template slot-scope="scope">{{ scope.row.createTime.slice(0, 16) }}</template>
                             </el-table-column>
                         </el-table>
                         <div>
@@ -99,7 +86,6 @@
                     @close="visible => (dialogFormVisible = visible)"
                 />
             </el-col>
-
             <el-col :span="12" class="firstcol">
                 <!-- 展开工作栏-->
                 <div
@@ -141,81 +127,54 @@
                             size="mini"
                             @row-click="handleLinkClickOrver"
                         >
-                            <el-table-column
+                            <!-- <el-table-column
                                 show-overflow-tooltip
                                 label="年份"
                                 width="60"
                             >
-                                <template slot-scope="scope">
-                                    {{ getParenthesesStr(scope.row.subject)[0] }}
-                                </template>
-                            </el-table-column>
-
+                                <template slot-scope="scope">{{ getParenthesesStr(scope.row.subject)[0] }}</template>
+                            </el-table-column> -->
                             <el-table-column
                                 prop="subject"
                                 label="事务名称"
                                 show-overflow-tooltip
                             >
-                                <template slot-scope="scope">
-                                    {{ scope.row.subject.split('(')[0] }}
-                                </template>
+                                <template slot-scope="scope">{{ scope.row.subject.split('(')[0] }}</template>
                             </el-table-column>
-
                             <el-table-column
                                 show-overflow-tooltip
                                 label="状态"
-                                width="100"
+                                width="80"
                             >
-                                <template slot-scope="scope">
-                                    {{ scope.row.curNode ? scope.row.status == 'running' ? '已发起' : '已' + scope.row.curNode : contOfValue(scope.row.status) }}
-                                </template>
+                                <template slot-scope="scope">{{ scope.row.curNode ? scope.row.status == 'running' ? '已发起' : '已' + scope.row.curNode : contOfValue(scope.row.status) }}</template>
                             </el-table-column>
-
                             <el-table-column
                                 show-overflow-tooltip
                                 label="发起部门"
-                                width="80"
+                                width="100"
                             >
-                                <template slot-scope="scope">
-                                    {{ getParenthesesStr(scope.row.subject)[1] }}
-                                </template>
+                                <template slot-scope="scope">{{ getParenthesesStr(scope.row.subject)[1] }}</template>
                             </el-table-column>
-
                             <el-table-column
                                 show-overflow-tooltip
                                 label="任务提交人"
                                 width="100"
                             >
-                                <template slot-scope="scope">
-                                    {{ getParenthesesStr(scope.row.subject)[2] }}
-                                </template>
+                                <template slot-scope="scope">{{ getParenthesesStr(scope.row.subject)[2] }}</template>
                             </el-table-column>
-
                             <el-table-column
                                 show-overflow-tooltip
                                 label="任务发起人"
                                 width="100"
                             >
-                                <template slot-scope="scope">
-                                    {{ scope.row.createBy | getUserName(userList)}}
-                                </template>
+                                <template slot-scope="scope">{{ scope.row.createBy | getUserName(userList)}}</template>
                             </el-table-column>
-
-                            <!-- <el-table-column
-                                prop="submitBy"
-                                show-overflow-tooltip
-                                width="100"
-                                label="任务发起人2"
-                            /> -->
-
                             <el-table-column
                                 show-overflow-tooltip
                                 width="145"
                                 label="办理时间"
                             >
-                                <template slot-scope="scope">
-                                    {{ scope.row.createTime.slice(0, 16) }}
-                                </template>
+                                <template slot-scope="scope">{{ scope.row.createTime.slice(0, 16) }}</template>
                             </el-table-column>
                         </el-table>
                         <div>
@@ -445,6 +404,12 @@
     import BpmnFormrender from '@/business/platform/bpmn/form/dialog'
     import ActionUtils from '@/utils/action'
 
+    const taskState = {
+        running: '已发起',
+        end: '已结束',
+        manualend: '已结束'
+    }
+
     export default {
         components: { BpmnFormrender, homeCalendar },
         name: 'calendar',
@@ -488,7 +453,8 @@
                 orverPagination: { page: 1, limit: 10 },
                 sorts: {},
                 timer: null,
-                processName: ''
+                processName: '',
+                userList: []
             }
         },
         mounted: function () {
@@ -552,17 +518,10 @@
                 this.pagination.page = val
                 this.getWait()
             },
-            /* 将状态码遍历成结果*/
+            /* 转换状态码*/
             contOfValue(cont) {
-                if (cont == 'running') {
-                    return '已发起'
-                } else if (cont == 'end') {
-                    return '已结束'
-                } else if (cont == 'manualend') {
-                    return '已结束'
-                } else {
-                    return '暂停'
-                }
+                let s = taskState[cont]
+                return s ? s : '暂停'
             },
             /* 待办任务*/
             getWait() {
