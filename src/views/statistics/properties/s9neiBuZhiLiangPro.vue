@@ -41,14 +41,14 @@
               <br>
               计划内质量控制计划总数 ：<el-tag>{{data.t_mjzlkzxbNum.number[2]}} 次</el-tag>
               <br>
-              计划内质量控制计划完成率 ：<el-tag>{{data.t_mjzlkzxbNum.number[2]==null||data.t_mjzlkzxbNum.number[2]==0?"0.00":(data.t_mjzlkzxbNum.number[1]/data.t_mjzlkzxbNum.number[2]*100).toFixed(2)}} %</el-tag>
+              计划内质量控制计划完成率 ：<el-tag>{{data.t_mjzlkzxbNum.number[1]==null||data.t_mjzlkzxbNum.number[1]==0?"0.00":(data.t_mjzlkzxbNum.number[2]/data.t_mjzlkzxbNum.number[1]*100).toFixed(2)}} %</el-tag>
               <br>
               <br>
               计划外质量控制计划完成数量 ：<el-tag>{{data.t_mjzlkzxbNum.numberAll[1]}} 次</el-tag>
               <br>
               计划外质量控制计划总数 ：<el-tag>{{data.t_mjzlkzxbNum.numberAll[2]}} 次</el-tag>
               <br>
-              计划外质量控制计划完成率 ：<el-tag>{{data.t_mjzlkzxbNum.numberAll[2]==null||data.t_mjzlkzxbNum.numberAll[2]==0?"0.00":(data.t_mjzlkzxbNum.numberAll[1]/data.t_mjzlkzxbNum.numberAll[2]*100).toFixed(2)}} %</el-tag>
+              计划外质量控制计划完成率 ：<el-tag>{{data.t_mjzlkzxbNum.numberAll[1]==null||data.t_mjzlkzxbNum.numberAll[1]==0?"0.00":(data.t_mjzlkzxbNum.numberAll[2]/data.t_mjzlkzxbNum.numberAll[1]*100).toFixed(2)}} %</el-tag>
               <br>
             <br>
               <!-- <div v-for="(item,i) in data.t_complaintNum.number" :key="i">

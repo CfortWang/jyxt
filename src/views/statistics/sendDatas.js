@@ -471,11 +471,11 @@ export default {
                         //         e =Math.floor(mjzlkzxbNum[0]/mjzlkzxbSNum[0] * 10000) / 100
                         // }
                         numData.push('计划内')
-                        numData.push(mjzlkzxbSNum[0])
                         numData.push(mjzlkzxbNum[0])
+                        numData.push(mjzlkzxbSNum[0])
                         numAData.push('计划外')
-                        numAData.push(mjzlkzjlbSNum[0])
                         numAData.push(mjzlkzjlbNum[0])
+                        numAData.push(mjzlkzjlbSNum[0])
                         barData.push(numData)
                         barData.push(numAData)
                         a=mjzlkzxbSNum[0]+mjzlkzjlbSNum[0]

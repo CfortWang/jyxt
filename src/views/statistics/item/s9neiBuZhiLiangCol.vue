@@ -96,9 +96,9 @@
                 },
                 formatter: function (datas) {
                     console.log(datas,'sdsdds')
-                    var res=datas[0].data[0]+"<BR>"+'已完成：'+datas[0].data[1]+"<BR>"
-                    res+='总计划：'+datas[0].data[2]+"<BR>"
-                    res+='百分比:'+(datas[0].data[2]==null||datas[0].data[2]==0?"0.00":(datas[0].data[1]/datas[0].data[2]*100).toFixed(2))+"%"
+                    var res=datas[0].data[0]+"<BR>"+'已完成：'+datas[0].data[2]+"<BR>"
+                    res+='总计划：'+datas[0].data[1]+"<BR>"
+                    res+='百分比:'+(datas[0].data[1]==null||datas[0].data[1]==0?"0.00":(datas[0].data[2]/datas[0].data[1]*100).toFixed(2))+"%"
                     return res
                 }
             },
