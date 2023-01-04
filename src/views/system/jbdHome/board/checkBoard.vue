@@ -40,6 +40,7 @@
 <script>
     import screenfull from 'screenfull'
     import curdPost from '@/business/platform/form/utils/custom/joinCURD.js'
+    import { acceptList } from './data.js'
     export default {
         name: 'checkBoard',
         components: {
@@ -132,17 +133,17 @@
                 let quarter = this.getDateRange('quarter')
                 let week = this.getDateRange('week')
                 // 获取委托数及受理数
-                const sql = `select wt.month as month, wt.accepted as accepted, wt2.today as today, wt2.week as week, wt2.quarter as quarter, jc.total as jcTotal, jc.finished as jcFinish, rw.task as task, rw.finished as rwFinish, bg.report as report, bg.process as process,bg.approval as approval
+                const sql = `select wt.month as month, wt.accepted as accepted, wt2.today as today, wt2.week as week, wt2.quarter as quarter, jc.total as jcTotal, jc.finished as jcFinish, rw.task as task, rw.finished as rwFinish, bg.report as report, bg.process as process, bg.approval as approval, bg.finished as bgFinish
                 from
                 (select count(id_) as month, count(zhuang_tai_ = '委托结束' or null) as accepted from t_mjwtsqb where create_time_ LIKE '${this.month}%') wt,
                 (select count(create_time_ like '${this.today}' or null) as today, count(create_time_ between '${week.start}' and '${week.end}' or null) as week, count(create_time_ between '${quarter.start}' and '${quarter.end}' or null) as quarter from t_mjwtsqb) wt2,
                 (select count(id_) as total, count(jian_ce_zhuang_ta = '已完成' or null) as finished from t_jchzb where create_time_ LIKE '${this.month}%') jc,
                 (select count(id_) as task, count(zhuang_tai_ = '任务已完成' or null) as finished from t_rwfpb where create_time_ LIKE '${this.month}%') rw,
-                (select count(id_) as report, count(zhuang_tai_ = '报告待审核' or null) as process, count(zhuang_tai_ = '报告待审批' or null) as approval from t_mjjcbg where create_time_ LIKE '${this.month}%') bg`
+                (select count(id_) as report, count(zhuang_tai_ = '报告待审核' or null) as process, count(zhuang_tai_ = '报告待审批' or null) as approval, count(zhuang_tai_ = '完成' or zhuang_tai_ = '待发放' or null) as finished from t_mjjcbg where create_time_ LIKE '${this.month}%') bg`
                 // console.log(sql)
                 curdPost('sql', sql).then(res => {
                     const data = res.variables.data
-                    console.log(data)
+                    // console.log(data)
                     
                     if ( data && data.length ) {
                         const { month, accepted, approval, jcFinish, jcTotal, process, report, rwFinish, task, today, week, quarter } = data[0]
@@ -242,7 +243,12 @@
                 // const sql1 = `select tm.jian_ce_xiang_mu_, tm.jian_ce_lei_bie_, IFNULL(rw.qi_wang_wan_cheng, '') as qi_wang_wan_cheng, rw.zhuang_tai_, ipe.NAME_ from t_rwfpb rw, ibps_party_employee ipe, t_mjjcnlfw tm where rw.jian_ce_yuan_ = ipe.ID_ and rw.jian_ce_xiang_mu_ = tm.id_ and rw.create_time_ like '${this.month}%'`
                 const sql1 = `select tm.jian_ce_xiang_mu_, tm.jian_ce_lei_bie_, IFNULL(rwz.wan_cheng_shi_jia, '') as qi_wang_wan_cheng, rw.zhuang_tai_, ipe.NAME_ from t_rwfpb rw, ibps_party_employee ipe, t_mjjcnlfw tm, t_mjrwfpzb rwz where rwz.jian_ce_yuan_ = ipe.ID_ and rwz.ren_wu_bian_hao_ = tm.id_ and rw.id_ = rwz.wai_jian_ and rw.create_time_ like '${this.month}%'`
                 // 获取检测受理类型数据
-                const sql2 = `select count(tm.jian_ce_lei_bie_ = '理化' or null) as lh, count(tm.jian_ce_lei_bie_ = '微生物' or null) as wsw, count(tm.jian_ce_lei_bie_ = '细胞活率' or null) as xbhl, count(tm.jian_ce_lei_bie_ = '残留检测' or null) as cljc, count(tm.jian_ce_lei_bie_ = '细胞鉴别' or null) as xbjb from t_jchzb tj, t_mjjcnlfw tm where tj.jian_ce_xiang_mu_ = tm.id_ and tj.create_time_ like '${this.month}%'`
+                let sqlStr = ''
+                acceptList.forEach((item, index) => {
+                    sqlStr += `count(tm.jian_ce_lei_bie_ = '${item}' or null) as r${index}${index === acceptList.length - 1 ? '' : ', '}`
+                })
+                const sql2 = `select ${sqlStr} from t_jchzb tj, t_mjjcnlfw tm where tj.jian_ce_xiang_mu_ = tm.id_ and tj.create_time_ like '${this.month}%'`
+                // console.log(sqlStr, sql2)
 
                 Promise.all([
                     curdPost('sql', sql1),
@@ -257,7 +263,16 @@
                         this.middleCardData.tableData.data.push(Object.values(item))
                     })
 
-                    this.middleCardData.acceptData = Object.values(data2[0])
+                    let result = []
+                    let tempRes = Object.values(data2[0])
+                    acceptList.forEach((item, index) => {
+                        let o = {
+                            name: item,
+                            value: tempRes[index]
+                        }
+                        result.push(o)
+                    })
+                    this.middleCardData.acceptData = result
                     this.middleCardData.flag = true
                 }).catch(error => {
                     console.log(error)
@@ -383,7 +398,7 @@
         z-index: 999;
         :global {
             #dv-full-screen-container {
-                background-image: url('../datav/img/bg.png');
+                background-image: url('./img/bg.png');
                 background-size: 100% 100%;
                 box-shadow: 0 0 3px blue;
                 display: flex;

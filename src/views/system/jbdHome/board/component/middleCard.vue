@@ -86,8 +86,8 @@
             width: 24%;
             height: 100%;
             background-color: rgba(6, 30, 93, 0.5);
-            &:last-child {
-                width: 49%;
+            &:first-child, &:last-child {
+                width: 36%;
             }
             .no_data {
                 font-size: 20px;

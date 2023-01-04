@@ -1,6 +1,6 @@
 import echarts from "echarts"
 
-export const acceptOption = {
+export const acceptOption1 = {
     // 图表标题
     title: {
         show: true,
@@ -107,6 +107,130 @@ export const acceptOption = {
     tooltip: {
         show: true,
         trigger: 'axis'
+    }
+}
+
+export const acceptList = [
+    '细胞鉴别',
+    '无菌检查',
+    '支原体检查',
+    '成瘤性检查',
+    '致瘤性检查',
+    '细胞活性检测',
+    '生物学有效性',
+    '免疫学反应检测',
+    '细菌内毒素检测',
+    '残留物检测',
+    '制剂检查',
+    '免疫细胞检测',
+    '细胞内、外源病毒因子检查',
+    '其他检测'
+]
+
+const colors = [
+    '#d20962',
+    '#f47721',
+    '#7ac143',
+    '#00a78e',
+    '#00bce4',
+    '#7d3f98',
+    '#037ef3',
+    '#f85a40',
+    '#00c16e',
+    '#ffd900',
+    '#0cb9c1',
+    '#7552cc'
+]
+
+let colorList = []
+
+const getOptions = () => {
+    let res = []
+    colorList = []
+    acceptList.forEach(item => {
+        let random =  parseInt(Math.random() * 12)
+        let obj = {
+            name: item,
+            textStyle: {
+                color: colors[random]
+            }
+        }
+        res.push(obj)
+        colorList.push(colors[random])
+    })
+    return res
+}
+
+export const acceptOption = {
+    title: {
+        show: true,
+        text: '检测类型',
+        textStyle: {
+            color: '#fff',
+            fontSize: 20,
+            fontWeight: '600'
+        },
+        textAlign: 'center',
+        left: '50%',
+        top: '20px'
+    },
+    legend: {
+        type: 'scroll',
+        orient: 'vertical',
+        show: true,
+        // left: 'center',
+        // bottom: 10,
+        right: 10,
+        top: 50,
+        formatter: ['{a|{name}}'].join('\n'),
+        textStyle: {
+            rich: {
+                a: {
+                    width: 80,
+                    overflow: 'break',
+                    lineHeight: 12
+                }
+            }
+        },
+        z: 3,
+        itemWidth: 25,
+        itemHeight: 14,
+        itemGap: 10,
+        data: getOptions()
+    },
+    series: [
+        {
+            name: '任务完成情况',
+            type: 'pie',
+            radius: '55%',
+            center: ['40%', '50%'],
+            data: [],
+            itemStyle: {
+                emphasis: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                },
+                normal: {
+                    label: {
+                        show: true,
+                        position: 'outer',
+                        // formatter: `占比：{d}%\n\n\r{b}:{c}`,
+                        formatter: `{b}:{c}`,
+                        fontSize: 12
+                    },
+                    labelLine: {
+                        show: true
+                    }
+                }
+            }
+        }
+    ],
+    color: colorList,
+    tooltip: {
+        show: true,
+        trigger: 'item',
+        formatter: '任务情况<br/>{b}：{c}<br/>占比：{d}%'
     }
 }
 
