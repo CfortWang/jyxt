@@ -146,7 +146,7 @@
                     // console.log(data)
                     
                     if ( data && data.length ) {
-                        const { month, accepted, approval, jcFinish, jcTotal, process, report, rwFinish, task, today, week, quarter } = data[0]
+                        const { month, accepted, approval, jcFinish, jcTotal, process, report, rwFinish, task, today, week, quarter, bgFinish } = data[0]
                         this.middleCardData.taskData = [month, jcTotal, task, report]
                         let result = [
                             {
@@ -217,7 +217,7 @@
                                     },
                                     {
                                         label: '已完成',
-                                        value: report - approval - process
+                                        value: bgFinish
                                     },
                                     {
                                         label: '待审批',
