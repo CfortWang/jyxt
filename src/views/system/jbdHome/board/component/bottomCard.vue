@@ -12,10 +12,10 @@
                 <div id="trust"></div>
             </div>
             <dv-decoration-2 :reverse="true" :dur="4" style="width:5px;height:100%;" />
-            <!-- <div :class="$style.item">
+            <div :class="$style.item">
                 <div id="sample"></div>
             </div>
-            <dv-decoration-2 :reverse="true" :dur="6" style="width:5px;height:100%;" /> -->
+            <dv-decoration-2 :reverse="true" :dur="6" style="width:5px;height:100%;" />
             <div :class="$style.item">
                 <div id="month"></div>
             </div>
@@ -58,7 +58,7 @@
         methods: {
             init() {
                 const trust = echarts.init(document.getElementById('trust'))
-                // const sample = echarts.init(document.getElementById('sample'))
+                const sample = echarts.init(document.getElementById('sample'))
                 const month = echarts.init(document.getElementById('month'))
                 const year = echarts.init(document.getElementById('year'))
 
@@ -67,12 +67,12 @@
                 trustOption.series[1].data = this.info.accepted
                 monthOption.series[0].data = this.info.task
                 monthOption.series[1].data = this.info.complete
-                // sampleOption.series[0].data = this.info.sample
+                sampleOption.series[0].data = this.info.sample
                 yearOption.series[0].data = this.info.year
 
                 // 渲染
                 trust.setOption(trustOption)
-                // sample.setOption(sampleOption)
+                sample.setOption(sampleOption)
                 month.setOption(monthOption)
                 year.setOption(yearOption)
             }
@@ -87,7 +87,7 @@
         width: 100%;
         height: 100%;
         .item {
-            width: 32.5%;
+            width: 24%;
             height: 100%;
             background-color: rgba(6, 30, 93, 0.5);
             > div {
