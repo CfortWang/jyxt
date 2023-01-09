@@ -181,7 +181,7 @@
                 return this.getFormStep()
             },
             enableWatermark() {
-      return this.formDefData ? (this.formDefData.attrs.watermark || false) : false
+                return this.formDefData ? (this.formDefData.attrs.watermark || false) : false
             },
             watermarkText() {
                 if (this.enableWatermark) {

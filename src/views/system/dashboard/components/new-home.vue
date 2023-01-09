@@ -32,7 +32,7 @@
                             </el-table-column>
                             <el-table-column
                                 show-overflow-tooltip
-                                width="80"
+                                width="100"
                                 label="状态"
                             >
                                 <template slot-scope="scope">{{ '待' + scope.row.name }}</template>
@@ -144,7 +144,7 @@
                             <el-table-column
                                 show-overflow-tooltip
                                 label="状态"
-                                width="80"
+                                width="100"
                             >
                                 <template slot-scope="scope">{{ scope.row.curNode ? scope.row.status == 'running' ? '已发起' : '已' + scope.row.curNode : contOfValue(scope.row.status) }}</template>
                             </el-table-column>

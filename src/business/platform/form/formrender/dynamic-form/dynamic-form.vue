@@ -11,6 +11,7 @@
                         v-if="titleList.length > 0 && formParams.formAttrs.customClass.includes('true')"
                         :list="titleList"
                         :form="form"
+                        class="relevanceTable"
                     />
                     <Statis-or-record-table
                         v-if="StaOrRec.length > 0"
@@ -740,5 +741,9 @@
                 }
             }
         }
+    }
+
+    .relevanceTable{
+        margin-top: 30px;
     }
 </style>
