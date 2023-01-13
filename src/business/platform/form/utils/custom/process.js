@@ -209,11 +209,11 @@ export const processEdit = params => {
         node.users[0].calcs[0].description = formData.executor[index].desc2
         node.users[0].calcs[0].executorVar.name = formData.executor[index].name
         node.form.formValue = formData.formKey[index]
-        // 填充权限信息
-        processPermission[index].formKey = formData.formKey[index]
-        processPermission[index].flowKey = keys.process
-        processPermission[index].nodeId = keys.activity[index]
-        node.form.editFormRights = processPermission[index]
+        // 填充权限信息 -> 改为由表单统一限制
+        // processPermission[index].formKey = formData.formKey[index]
+        // processPermission[index].flowKey = keys.process
+        // processPermission[index].nodeId = keys.activity[index]
+        // node.form.editFormRights = processPermission[index]
 
         node.attributes.nodeId = keys.activity[index]
         // 填充节点操作按钮
