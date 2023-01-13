@@ -1068,7 +1068,9 @@ export const processPermission = [
                     "code": "jchjb",
                     "name": "jchjb",
                     "read": [{ "type": "all" }],
-                    "edit": [{ "type": "all" }]
+                    "edit": [{ "type": "all" }],
+                    "required": [{ "type": "none" }],
+                    "hide": [{ "type": "none" }]
                 }
             ],
             "button": [],
@@ -1088,6 +1090,8 @@ export const processPermission = [
                     "isMain": "N",
                     "read": [{ "type": "all" }],
                     "edit": [{ "type": "all" }],
+                    "required": [{ "type": "none" }],
+                    "hide": [{ "type": "none" }],
                     "buttons": [],
                     "fields": subfield1
                 }
@@ -1113,13 +1117,17 @@ export const processPermission = [
                     "code": "jcsysbb",
                     "name": "jcsysbb",
                     "read": [{ "type": "all" }],
-                    "edit": [{ "type": "all" }]
+                    "edit": [{ "type": "all" }],
+                    "required": [{ "type": "none" }],
+                    "hide": [{ "type": "none" }]
                 },
                 {
                     "code": "mjsjhcb",
                     "name": "mjsjhcb",
                     "read": [{ "type": "all" }],
-                    "edit": [{ "type": "all" }]
+                    "edit": [{ "type": "all" }],
+                    "required": [{ "type": "none" }],
+                    "hide": [{ "type": "none" }]
                 }
             ],
             "button": [
@@ -1168,6 +1176,8 @@ export const processPermission = [
                     "isMain": "N",
                     "read": [{ "type": "all" }],
                     "edit": [{ "type": "all" }],
+                    "required": [{ "type": "none" }],
+                    "hide": [{ "type": "none" }],
                     "buttons": [
                         {
                             "type": "add",
@@ -1190,6 +1200,8 @@ export const processPermission = [
                     "isMain": "N",
                     "read": [{ "type": "all" }],
                     "edit": [{ "type": "all" }],
+                    "required": [{ "type": "none" }],
+                    "hide": [{ "type": "none" }],
                     "buttons": [
                         {
                             "type": "add",
@@ -1228,13 +1240,17 @@ export const processPermission = [
                     "code": "jcsysbb",
                     "name": "jcsysbb",
                     "read": [{ "type": "all" }],
-                    "edit": [{ "type": "none" }]
+                    "edit": [{ "type": "none" }],
+                    "required": [{ "type": "none" }],
+                    "hide": [{ "type": "none" }]
                 },
                 {
                     "code": "mjsjhcb",
                     "name": "mjsjhcb",
                     "read": [{ "type": "all" }],
-                    "edit": [{ "type": "none" }]
+                    "edit": [{ "type": "none" }],
+                    "required": [{ "type": "none" }],
+                    "hide": [{ "type": "none" }]
                 }
             ],
             "button": [
@@ -1283,6 +1299,8 @@ export const processPermission = [
                     "isMain": "N",
                     "read": [{ "type": "all" }],
                     "edit": [{ "type": "none" }],
+                    "required": [{ "type": "none" }],
+                    "hide": [{ "type": "none" }],
                     "buttons": [
                         {
                             "type": "add",
