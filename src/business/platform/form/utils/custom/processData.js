@@ -36,9 +36,9 @@ export const endNode = {
 }
 
 export const normalNode = {
-    "node_name": "数据输入",
+    "node_name": "",
     "node_type": "userTask",
-    "id": "Activity_0vjg8z9",
+    "id": "",
     "parentId": null,
     "users": [
         {
@@ -110,7 +110,7 @@ export const normalNode = {
         "rejectType": "all",
         "postHandler": "",
         "buttonInitialized": true,
-        "nodeId": "Activity_0vjg8z9"
+        "nodeId": ""
     }
 }
 
